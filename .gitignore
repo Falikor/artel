@@ -1,0 +1,54 @@
+# Local configuration, credentials and daemon state
+/config/*
+!/config/*.sample
+/config.json
+/tmp/
+/memory/
+/logs/
+/.artel-maintenance/
+/.artel-update.lock
+/office_dashboard/*.json
+/office_dashboard/*.json.*
+.env
+.env.*
+!.env.example
+*.log
+*.log.*
+*.pid
+*.pem
+*.key
+*.p12
+*.pfx
+*.jks
+
+# Generated releases, presentations, screenshots and backups
+/output/
+/.presentation-build/
+/backups/
+/artel-backups/
+*.tar.gz
+*.zip
+
+# Source asset files have a separate distribution license. Keep local copies.
+/office_dashboard/assets/*
+!/office_dashboard/assets/LICENSE_EN.txt
+!/office_dashboard/assets/README.md
+
+# Python, editor and operating-system caches
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.venv/
+venv/
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Local assistant settings can contain workstation-specific paths and secrets
+/.codex/
+/.agents/

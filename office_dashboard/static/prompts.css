@@ -1,0 +1,36 @@
+.prompts-page { padding-bottom: 32px; }
+.prompts-page .page-heading h2 { margin: 0 0 8px; font-size: 26px; line-height: 1.25; letter-spacing: -.6px; }
+.prompts-page .page-heading p { max-width: 72ch; margin: 0 0 24px; color: var(--muted); line-height: 1.6; }
+.prompt-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 14px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.prompt-toolbar label { font-size: 13px; font-weight: 600; }
+.prompt-toolbar select { width: min(100%, 360px); }
+.prompt-toolbar .muted { font-size: 12px; flex: 1; }
+#promptLoadStatus { margin: 16px 0; }
+.prompt-editor-grid { display: grid; grid-template-columns: minmax(240px, .8fr) minmax(320px, 1.2fr); gap: 32px; }
+.prompt-editor-grid section { min-width: 0; }
+.prompt-editor-grid h3 { font-size: 17px; font-weight: 650; margin: 10px 0 20px; }
+.prompt-editor-grid label { display: block; font-size: 13px; font-weight: 600; margin: 20px 0 8px; }
+.prompt-editor-grid :is(select, input, textarea) { width: 100%; box-sizing: border-box; }
+.prompt-editor-grid textarea { font: 14px/1.65 var(--ui, system-ui); resize: vertical; min-height: 160px; }
+.prompt-editor-grid .form-hint { margin-top: 8px; }
+.prompt-preview-action { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 16px; }
+.prompt-preview { margin: 20px 0 0; }
+.prompt-preview h4 { font-size: 14px; margin: 0; font-weight: 600; }
+.prompt-preview pre { font-size: 12px; max-height: 360px; }
+.prompt-savebar { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; padding: 20px 0; margin-top: 24px; border-top: 1px solid var(--line); }
+.prompt-savebar > div { min-width: 0; }
+#promptSaveStatus { font-size: 13px; font-weight: 550; margin: 0 0 6px; overflow-wrap: anywhere; }
+.prompt-savebar .form-actions { margin-left: auto; }
+.prompt-footnote { font-size: 12px; line-height: 1.65; color: var(--muted); max-width: 90ch; margin: 0; }
+.section-pagination { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 16px 0 0; }
+.section-pagination-count { font-size: 12px; line-height: 1.5; color: var(--muted); }
+.section-pagination .btn { min-height: 40px; }
+@media (max-width: 760px) {
+  .prompt-editor-grid { grid-template-columns: minmax(0,1fr); gap: 18px; }
+  .prompt-stage { border-top: 1px solid var(--line); padding-top: 12px; }
+  .prompt-toolbar label { flex-basis: 100%; }
+  .prompt-toolbar select { width: auto; flex: 1; }
+  .prompt-toolbar .muted { flex-basis: 100%; order: 3; }
+  .prompt-savebar .form-actions { width: 100%; margin: 0; }
+  .prompts-page .page-heading h2 { font-size: 23px; }
+}

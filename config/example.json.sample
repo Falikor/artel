@@ -1,0 +1,69 @@
+{
+  "jira": {
+    "url": "https://jira.example.com",
+    "project": "HRPPA",
+    "epic_name": "AI-команда",
+    "epic_link_field": "Epic Link",
+    "status_analysis": [
+      "Анализ"
+    ],
+    "status_ready": [
+      "Ревью"
+    ]
+  },
+  "general": {
+    "name": "Олег",
+    "repo_path": "/Users/me/work/hrppa-backend",
+    "poll_interval_seconds": 600,
+    "gigacode_path": "gigacode",
+    "compare_url": "https://bitbucket.example.com/projects/HR/repos/backend/compare/diff?sourceBranch={branch}&targetBranch={base}",
+    "base_branch": "develop",
+    "base_branch_create_from": "master",
+    "role": "backend"
+  },
+  "review": {
+    "enabled": true,
+    "extra_args": [
+      "--model",
+      "GigaChat-2-Max"
+    ],
+    "max_rework_rounds": 1
+  },
+  "memory": {
+    "enabled": true,
+    "auto_append": true
+  },
+  "explore": {
+    "statuses": [
+      "TO DO",
+      "Backlog"
+    ]
+  },
+  "jenkins": {
+    "url": "https://jenkins.example.com",
+    "user": "robot",
+    "job_name": "hrppa/deploy"
+  },
+  "retro": {
+    "enabled": true,
+    "window": "01:00-05:00",
+    "every_days": 7
+  },
+  "bitbucket": {
+    "enabled": false,
+    "url": "https://bitbucket.example.com",
+    "project": "HR",
+    "repo": "backend",
+    "bot_user": "artel-bot",
+    "batch_comments": true,
+    "poll_interval_seconds": 600,
+    "max_per_cycle": 1
+  },
+  "dependencies": {
+    "enabled": true,
+    "external_ready_label": "backend-ready",
+    "allow_code_branch": true,
+    "dev_application_type": "stash",
+    "dev_data_type": "pullrequest"
+  }
+}

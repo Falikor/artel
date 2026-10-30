@@ -1,0 +1,110 @@
+{
+  "jira": {
+    "url": "https://jira.example.com",
+    "project": "HRPPA",
+    "epic_name": "AI-команда",
+    "epic_link_field": "Epic Link",
+    "status_analysis": [
+      "Анализ"
+    ],
+    "status_ready": [
+      "Ревью"
+    ],
+    "ci_field": "12345"
+  },
+  "general": {
+    "name": "Олег",
+    "poll_interval_seconds": 600,
+    "gigacode_path": "gigacode",
+    "ci_id": "CI03191860",
+    "base_branch": "develop",
+    "base_branch_create_from": "master"
+  },
+  "review": {
+    "enabled": true,
+    "extra_args": [
+      "--model",
+      "GigaChat-2-Max"
+    ],
+    "max_rework_rounds": 1
+  },
+  "memory": {
+    "enabled": true,
+    "auto_append": true
+  },
+  "explore": {
+    "statuses": [
+      "TO DO",
+      "Backlog"
+    ]
+  },
+  "jenkins": {
+    "url": "https://jenkins.example.com",
+    "user": "robot"
+  },
+  "services": [
+    {
+      "name": "back",
+      "repo_path": "/Users/me/work/hr-back",
+      "labels": [
+        "back",
+        "backend"
+      ],
+      "keywords": [
+        "бек",
+        "бэк",
+        "beck",
+        "back",
+        "backend",
+        "бэкенд"
+      ],
+      "jenkins": {
+        "job_name": "hr/deploy-back"
+      },
+      "compare_url": "https://bitbucket.example.com/projects/HR/repos/hr-back/compare/diff?sourceBranch={branch}&targetBranch={base}",
+      "bitbucket": {
+        "repo": "hr-back"
+      },
+      "role": "backend"
+    },
+    {
+      "name": "web",
+      "repo_path": "/Users/me/work/hr-web",
+      "labels": [
+        "web",
+        "front"
+      ],
+      "keywords": [
+        "web",
+        "веб",
+        "фронт",
+        "front",
+        "frontend"
+      ],
+      "jenkins": {
+        "job_name": "hr/deploy-web"
+      },
+      "compare_url": "https://bitbucket.example.com/projects/HR/repos/hr-web/compare/diff?sourceBranch={branch}&targetBranch={base}",
+      "base_branch": "main",
+      "base_branch_create_from": "main",
+      "bitbucket": {
+        "repo": "hr-web"
+      },
+      "role": "frontend"
+    }
+  ],
+  "bitbucket": {
+    "enabled": false,
+    "url": "https://bitbucket.example.com",
+    "project": "HR",
+    "bot_user": "artel-bot",
+    "batch_comments": true
+  },
+  "dependencies": {
+    "enabled": true,
+    "external_ready_label": "backend-ready",
+    "allow_code_branch": true,
+    "dev_application_type": "stash",
+    "dev_data_type": "pullrequest"
+  }
+}
