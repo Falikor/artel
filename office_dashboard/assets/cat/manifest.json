@@ -1,0 +1,190 @@
+{
+  "version": 1,
+  "engine": "pixijs",
+  "image": "atlas.png",
+  "columns": 7,
+  "rows": 7,
+  "cell": {
+    "width": 256,
+    "height": 256
+  },
+  "seamlessLoop": false,
+  "frameDurationMs": 248,
+  "animations": [
+    {
+      "id": "abyssinian-cat-idle",
+      "label": "Abyssinian Cat Idle",
+      "row": 0,
+      "frames": 7,
+      "playback": "loop",
+      "durationsMs": [
+        152,
+        153,
+        152,
+        153,
+        152,
+        153,
+        152
+      ],
+      "phaseLabels": [
+        "breathing out",
+        "breathing out",
+        "breathing in",
+        "breathing in",
+        "breathing out",
+        "breathing out",
+        "standing still"
+      ]
+    },
+    {
+      "id": "abyssinian-cat-jump",
+      "label": "Abyssinian Cat Jump",
+      "row": 1,
+      "frames": 7,
+      "playback": "once",
+      "durationsMs": [
+        467,
+        166,
+        467,
+        300,
+        300,
+        267,
+        33
+      ],
+      "phaseLabels": [
+        "standing",
+        "takeoff",
+        "apex",
+        "",
+        "descent",
+        "",
+        ""
+      ]
+    },
+    {
+      "id": "abyssinian-cat-walk-left",
+      "label": "Abyssinian Cat Walk Left",
+      "row": 2,
+      "frames": 7,
+      "playback": "loop",
+      "durationsMs": [
+        129,
+        128,
+        129,
+        128,
+        129,
+        128,
+        129
+      ],
+      "phaseLabels": [
+        "right foot contact",
+        "right foot contact",
+        "",
+        "left foot contact",
+        "left foot contact",
+        "",
+        "right foot contact"
+      ]
+    },
+    {
+      "id": "abyssinian-cat-walk-right",
+      "label": "Abyssinian Cat Walk Right",
+      "row": 3,
+      "frames": 7,
+      "playback": "loop",
+      "durationsMs": [
+        133,
+        134,
+        133,
+        133,
+        133,
+        134,
+        133
+      ],
+      "phaseLabels": [
+        "left foot contact",
+        "left foot contact",
+        "right foot contact",
+        "right foot contact",
+        "left foot contact",
+        "right foot contact",
+        "right foot contact"
+      ]
+    },
+    {
+      "id": "abyssinian-cat-walk-forward",
+      "label": "Abyssinian Cat Walk Forward",
+      "row": 4,
+      "frames": 7,
+      "playback": "loop",
+      "durationsMs": [
+        281,
+        281,
+        281,
+        281,
+        281,
+        281,
+        281
+      ],
+      "phaseLabels": [
+        "standing",
+        "front foot contact",
+        "back foot contact",
+        "back foot contact",
+        "front foot contact",
+        "back foot contact",
+        "back foot contact"
+      ]
+    },
+    {
+      "id": "abyssinian-cat-walk-backward",
+      "label": "Abyssinian Cat Walk Backward",
+      "row": 5,
+      "frames": 7,
+      "playback": "loop",
+      "durationsMs": [
+        248,
+        247,
+        248,
+        247,
+        248,
+        247,
+        248
+      ],
+      "phaseLabels": [
+        "back foot contact",
+        "front foot contact",
+        "back foot contact",
+        "front foot contact",
+        "back foot contact",
+        "back foot contact",
+        "back foot contact"
+      ]
+    },
+    {
+      "id": "abyssinian-cat-sleep",
+      "label": "Abyssinian Cat Sleep",
+      "row": 6,
+      "frames": 7,
+      "playback": "once",
+      "durationsMs": [
+        167,
+        33,
+        33,
+        100,
+        634,
+        1000,
+        33
+      ],
+      "phaseLabels": [
+        "sleeping",
+        "sleeping",
+        "sleeping",
+        "sleeping",
+        "sleeping",
+        "sleeping",
+        "sleeping"
+      ]
+    }
+  ]
+}

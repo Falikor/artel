@@ -19,21 +19,21 @@ const DEBUG = new URLSearchParams(location.search).has('debug');
 const WORKING = new Set(['generating', 'rework', 'reviewing', 'retro']);
 
 const STAGE = {
-  starting:   { label: 'Запуск',             color: '#7dd3fc' },
-  polling:    { label: 'Опрос Jira',         color: '#a5b4fc' },
-  idle:       { label: 'Ждёт задач',         color: '#94a3b8' },
-  generating: { label: 'GigaCode пишет код', color: '#facc15' },
-  reviewing:  { label: 'Независимое ревью',  color: '#2dd4bf' },
-  rework:     { label: 'Доработка по ревью', color: '#fde047' },
-  exploring:  { label: 'Изучает бэклог',     color: '#a78bfa' },
-  retro:      { label: 'Ретроспектива',      color: '#f0abfc' },
-  git:        { label: 'Git: коммит и пуш',  color: '#fb923c' },
-  jenkins:    { label: 'Jenkins: деплой',    color: '#c084fc' },
-  jira:       { label: 'Jira: смена статуса', color: '#60a5fa' },
-  success:    { label: 'Готово',             color: '#4ade80' },
-  error:      { label: 'Ошибка',             color: '#f87171' },
-  stopped:    { label: 'Остановлен',         color: '#64748b' },
-  lost:       { label: 'Нет сигнала',        color: '#ef4444' },
+  starting:   { label: tr("Запуск", "Starting"),             color: '#7dd3fc' },
+  polling:    { label: tr("Опрос Jira", "Polling Jira"),         color: '#a5b4fc' },
+  idle:       { label: tr("Ждёт задач", "Waiting for tasks"),         color: '#94a3b8' },
+  generating: { label: tr("GigaCode пишет код", "GigaCode is coding"), color: '#facc15' },
+  reviewing:  { label: tr("Независимое ревью", "Independent review"),  color: '#2dd4bf' },
+  rework:     { label: tr("Доработка по ревью", "Addressing review"), color: '#fde047' },
+  exploring:  { label: tr("Изучает бэклог", "Exploring backlog"),     color: '#a78bfa' },
+  retro:      { label: tr("Ретроспектива", "Retrospective"),      color: '#f0abfc' },
+  git:        { label: tr("Git: коммит и пуш", "Git: commit and push"),  color: '#fb923c' },
+  jenkins:    { label: tr("Jenkins: деплой", "Jenkins: deploy"),    color: '#c084fc' },
+  jira:       { label: tr("Jira: смена статуса", "Jira: change status"), color: '#60a5fa' },
+  success:    { label: tr("Готово", "Done"),             color: '#4ade80' },
+  error:      { label: tr("Ошибка", "Error"),             color: '#f87171' },
+  stopped:    { label: tr("Остановлен", "Stopped"),         color: '#64748b' },
+  lost:       { label: tr("Нет сигнала", "No heartbeat"),        color: '#ef4444' },
 };
 
 // ------------------------------------------------------------------ карта офиса
@@ -119,35 +119,35 @@ const WINDOWS = [[905, 962], [1015, 962]];
 const REST_AT_DESK = [8, 20];   // секунд за столом между занятиями в простое
 // Реплики в простое: мысли вслух (SOLO) и мини-диалоги «вопрос → ответ» (DIALOGS)
 const SOLO = [
-  'Скоро обед?', 'Хочу в отпуск…', 'Ох уж этот баг…', 'Кто опять сломал develop?', 'У меня локально всё работало',
-  'Это не баг, это фича', 'Пятница, деплой… нет уж', 'Тесты напишу. Завтра', 'Опять мерж-конфликт', 'Jenkins снова красный',
-  'Где мой кофе?', 'Работает — не трогай', 'Кто писал этот легаси?', 'Ещё одна планёрка?', 'Ревьюер молчит третий день',
-  'Почему в проде, а не на деве?', 'ИФТ опять лежит', 'Обновить зависимости… или не надо', 'Кажется, я понял задачу. Или нет',
-  'Сначала кофе, потом код', 'Стендап через пять минут', 'Хоть бы до обеда без тикетов', 'Кто трогал конфиг?',
-  'Миграция прошла? Тьфу-тьфу', 'Рефакторинг… когда-нибудь', 'А документацию кто напишет?', 'Сегодня без багов. Наверное',
-  'Пойду проверю логи', 'Сколько можно перезапускать пайплайн', 'Где-то потерялась запятая',
+  tr("Скоро обед?", "Lunch soon?"), tr("Хочу в отпуск…", "I need a vacation…"), tr("Ох уж этот баг…", "That bug again…"), tr("Кто опять сломал develop?", "Who broke develop again?"), tr("У меня локально всё работало", "It worked on my machine"),
+  tr("Это не баг, это фича", "It is a feature, not a bug"), tr("Пятница, деплой… нет уж", "Friday deploy… no thanks"), tr("Тесты напишу. Завтра", "Tests? Tomorrow."), tr("Опять мерж-конфликт", "Another merge conflict"), tr("Jenkins снова красный", "Jenkins is red again"),
+  tr("Где мой кофе?", "Where is my coffee?"), tr("Работает — не трогай", "If it works, leave it alone"), tr("Кто писал этот легаси?", "Who wrote this legacy code?"), tr("Ещё одна планёрка?", "Another meeting?"), tr("Ревьюер молчит третий день", "Three days waiting for review"),
+  tr("Почему в проде, а не на деве?", "Why only in production?"), tr("ИФТ опять лежит", "Integration environment is down"), tr("Обновить зависимости… или не надо", "Update dependencies… or maybe not"), tr("Кажется, я понял задачу. Или нет", "I think I get it. Maybe."),
+  tr("Сначала кофе, потом код", "Coffee first, code later"), tr("Стендап через пять минут", "Standup in five minutes"), tr("Хоть бы до обеда без тикетов", "No tickets before lunch, please"), tr("Кто трогал конфиг?", "Who changed the config?"),
+  tr("Миграция прошла? Тьфу-тьфу", "Migration done? Fingers crossed"), tr("Рефакторинг… когда-нибудь", "Refactoring… someday"), tr("А документацию кто напишет?", "Who will write the docs?"), tr("Сегодня без багов. Наверное", "No bugs today. Probably."),
+  tr("Пойду проверю логи", "Let me check the logs"), tr("Сколько можно перезапускать пайплайн", "How many pipeline retries?"), tr("Где-то потерялась запятая", "A comma is missing somewhere"),
 ];
 const DIALOGS = [
-  ['Скоро обед?', 'Через полчаса!'], ['Кто сломал develop?', 'Точно не я'], ['Кофе будешь?', 'Давай!'],
-  ['Тесты прошли?', 'Почти все…'], ['Как отпуск?', 'Слишком быстро кончился'], ['Видел новый эпик?', 'Лучше бы не видел'],
-  ['Опять баг в проде', 'Классика'], ['Пойдём на обед?', 'Только задачу закрою'], ['Ревью посмотришь?', 'После кофе'],
-  ['Jenkins опять красный', 'Перезапусти — поможет'], ['Когда релиз?', 'Вчера'], ['Ты трогал конфиг?', 'Он сам!'],
-  ['Хочу в отпуск', 'И я. В горы'], ['Ох уж этот баг…', 'Дай угадаю: null?'], ['Пятничный деплой?', 'Только через мой труп'],
-  ['Стендап скоро?', 'Уже идёт…'],
+  [tr("Скоро обед?", "Lunch soon?"), tr("Через полчаса!", "In half an hour!")], [tr("Кто сломал develop?", "Who broke develop?"), tr("Точно не я", "Definitely not me")], [tr("Кофе будешь?", "Want a coffee?"), tr("Давай!", "Yes, please!")],
+  [tr("Тесты прошли?", "Did the tests pass?"), tr("Почти все…", "Almost all…")], [tr("Как отпуск?", "How was your vacation?"), tr("Слишком быстро кончился", "Over too soon")], [tr("Видел новый эпик?", "Seen the new epic?"), tr("Лучше бы не видел", "Wish I had not")],
+  [tr("Опять баг в проде", "Another production bug"), tr("Классика", "Classic")], [tr("Пойдём на обед?", "Shall we get lunch?"), tr("Только задачу закрою", "Let me finish this task")], [tr("Ревью посмотришь?", "Can you review this?"), tr("После кофе", "After coffee")],
+  [tr("Jenkins опять красный", "Jenkins is red again"), tr("Перезапусти — поможет", "Try running it again")], [tr("Когда релиз?", "When is the release?"), tr("Вчера", "Yesterday")], [tr("Ты трогал конфиг?", "Did you change the config?"), tr("Он сам!", "It changed itself!")],
+  [tr("Хочу в отпуск", "I need a vacation"), tr("И я. В горы", "Me too. In the mountains")], [tr("Ох уж этот баг…", "That bug again…"), tr("Дай угадаю: null?", "Let me guess: null?")], [tr("Пятничный деплой?", "Friday deploy?"), tr("Только через мой труп", "Over my dead body")],
+  [tr("Стендап скоро?", "Standup soon?"), tr("Уже идёт…", "It has already started…")],
 ];
 const VISIT_DIALOGS = [
-  ['Как успехи?', 'Почти готово'], ['Долго ещё?', 'Ещё пара тестов'], ['Помочь?', 'Не отвлекай :)'],
-  ['Ого, сколько кода', 'GigaCode старается'], ['Обедать идёшь?', 'Только допишу'],
+  [tr("Как успехи?", "How is it going?"), tr("Почти готово", "Almost done")], [tr("Долго ещё?", "How much longer?"), tr("Ещё пара тестов", "Just a couple more tests")], [tr("Помочь?", "Need help?"), tr("Не отвлекай :)", "Let me focus :)")],
+  [tr("Ого, сколько кода", "That is a lot of code"), tr("GigaCode старается", "GigaCode is working hard")], [tr("Обедать идёшь?", "Coming to lunch?"), tr("Только допишу", "Let me finish this")],
 ];
 const LINES = {
-  laugh: ['ха-ха!', 'ахаха', 'хех', 'ну ты даёшь'],
-  out: ['Пойду прогуляюсь', 'Я за кофе', 'Подышу воздухом', 'Схожу на обед'],
-  back: ['Я вернулся', 'Что пропустил?'],
-  cheer: ['Ура!', 'Отлично!', 'Красавчик!', 'Задеплоили!'],
-  game: ['Гол!', 'Ещё катку!', 'Нечестно!', 'Я тебя сделаю', 'Это был лаг!', 'Реванш!', 'Йес!'],
-  gameStart: ['Сыграем в приставку?', 'Кто на катку?', 'Перерыв — FIFA?'],
-  pat: [['Молодец, хорошо закрыл!', 'Спасибо :)'], ['Так держать!', 'Стараюсь!'], ['Красава!', 'Да ладно…']],
-  give: [['Держи, тебе посылка', 'О, спасибо!'], ['Это тебе с ресепшена', 'Наконец-то!'], ['Твой мерч приехал', 'Огонь!']],
+  laugh: [tr("ха-ха!", "ha-ha!"), tr("ахаха", "hahaha"), tr("хех", "heh"), tr("ну ты даёшь", "you are something else")],
+  out: [tr("Пойду прогуляюсь", "Going for a walk"), tr("Я за кофе", "Off for coffee"), tr("Подышу воздухом", "Getting some fresh air"), tr("Схожу на обед", "Going to lunch")],
+  back: [tr("Я вернулся", "I am back"), tr("Что пропустил?", "What did I miss?")],
+  cheer: [tr("Ура!", "Hooray!"), tr("Отлично!", "Great!"), tr("Красавчик!", "Nice work!"), tr("Задеплоили!", "Deployed!")],
+  game: [tr("Гол!", "Goal!"), tr("Ещё катку!", "One more game!"), tr("Нечестно!", "Not fair!"), tr("Я тебя сделаю", "I will beat you"), tr("Это был лаг!", "That was lag!"), tr("Реванш!", "Rematch!"), tr("Йес!", "Yes!")],
+  gameStart: [tr("Сыграем в приставку?", "Fancy a console game?"), tr("Кто на катку?", "Who wants to play?"), tr("Перерыв — FIFA?", "Break time — FIFA?")],
+  pat: [[tr("Молодец, хорошо закрыл!", "Great work on that task!"), tr("Спасибо :)", "Thanks :)")], [tr("Так держать!", "Keep it up!"), tr("Стараюсь!", "Doing my best!")], [tr("Красава!", "Well done!"), tr("Да ладно…", "Oh, stop…")]],
+  give: [[tr("Держи, тебе посылка", "Here is your package"), tr("О, спасибо!", "Oh, thanks!")], [tr("Это тебе с ресепшена", "This came for you at reception"), tr("Наконец-то!", "Finally!")], [tr("Твой мерч приехал", "Your merch is here"), tr("Огонь!", "Awesome!")]],
 };
 const pick = (arr) => arr[Math.floor(Math.random() * arr.length)];
 // Имя демона: задаётся в дашборде (names.json) или в конфиге (general.name); иначе — ключ проекта
@@ -159,7 +159,7 @@ function fmtTokens(n) {
   return (n / 1e6).toFixed(n < 1e7 ? 2 : 1).replace(/\.?0+$/, '') + 'M';
 }
 // Под одним Jira-проектом может быть несколько сервисов, поэтому демона идентифицирует КЭ
-const projectKey = (d) => (d.ci_id ? `КЭ ${d.ci_id}` : d.project || String(d.id || '').toUpperCase());
+const projectKey = (d) => (d.ci_id ? `${tr('КЭ', 'CI')} ${d.ci_id}` : d.project || String(d.id || '').toUpperCase());
 const displayName = (d) => d.name || projectKey(d);
 const rnd = (a, b) => a + Math.random() * (b - a);
 function nearestNode(pos) {

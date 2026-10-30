@@ -3,9 +3,11 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Артель — рабочее пространство</title>
-<meta name="description" content="Рабочее пространство автономной разработки: демоны, задачи, логи и знания команды.">
+<title data-i18n-en="Artel — workspace">Артель — рабочее пространство</title>
+<meta name="description" content="Рабочее пространство автономной разработки: демоны, задачи, логи и знания команды." data-i18n-content="A workspace for autonomous development: daemons, tasks, logs, and shared knowledge.">
 <link id="themeFavicon" rel="icon" type="image/svg+xml" href="/static/favicon.svg">
+<script src="/static/js/core/i18n.js"></script>
+<script src="/static/js/core/server-messages.js"></script>
 <script src="/static/js/core/theme.js"></script>
 <link rel="stylesheet" href="/static/style.css">
 <link rel="stylesheet" href="/static/office.css">
@@ -14,163 +16,164 @@
 <link rel="stylesheet" href="/static/theme.css">
 <link rel="stylesheet" href="/static/building.css">
 <link rel="stylesheet" href="/static/prompts.css">
+<link rel="stylesheet" href="/static/i18n.css">
 </head>
 <body>
-<a class="skip-link" href="#mainContent">К содержимому</a>
+<a class="skip-link" href="#mainContent" data-i18n-en="Skip to content">К содержимому</a>
 <header class="top">
   <div class="top-bar">
-    <div class="brand"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><path d="M19 2h10l2 6 6-2 7 7-2 6 6 2v10l-6 2 2 6-7 7-6-2-2 6H19l-2-6-6 2-7-7 2-6-6-2V21l6-2-2-6 7-7 6 2z" transform="translate(2 0) scale(.92)" fill="currentColor"/><path d="m14 34 10-21 10 21M18 27h12" fill="none" stroke="var(--card)" stroke-width="4" stroke-linejoin="round"/></svg><h1>Артель</h1><span class="sub">Рабочее пространство</span></div>
-    <div class="top-status"><select id="themeSelect" class="theme-select" aria-label="Тема оформления"><option value="system">Системная</option><option value="light">Светлая</option><option value="dark">Тёмная</option></select><span id="demoBadge" class="demo-badge" hidden>Демонстрация</span><div class="summary" id="summary"></div><div class="conn" id="conn" title="Соединение с сервером"><i></i><span>подключение…</span></div></div>
+    <div class="brand"><svg class="logo" viewBox="0 0 48 48" aria-hidden="true"><path d="M19 2h10l2 6 6-2 7 7-2 6 6 2v10l-6 2 2 6-7 7-6-2-2 6H19l-2-6-6 2-7-7 2-6-6-2V21l6-2-2-6 7-7 6 2z" transform="translate(2 0) scale(.92)" fill="currentColor"/></path><path d="m14 34 10-21 10 21M18 27h12" fill="none" stroke="var(--card)" stroke-width="4" stroke-linejoin="round"/></path></svg><h1 data-i18n-en="Artel">Артель</h1><span class="sub" data-i18n-en="Workspace">Рабочее пространство</span></div>
+    <div class="top-status"><div class="ui-preferences"><select id="languageSelect" class="language-select" aria-label="Язык интерфейса" data-i18n-aria-label="Interface language"><option value="ru" lang="ru">Русский</option><option value="en" lang="en">English</option></select><select id="themeSelect" class="theme-select" aria-label="Тема оформления" data-i18n-aria-label="Appearance"><option value="system" data-i18n-en="System">Системная</option><option value="light" data-i18n-en="Light">Светлая</option><option value="dark" data-i18n-en="Dark">Тёмная</option></select></div><span id="demoBadge" class="demo-badge" hidden data-i18n-en="Demo">Демонстрация</span><div class="summary" id="summary"></div><div class="conn" id="conn" title="Соединение с сервером" data-i18n-title="Server connection"><i></i><span data-i18n-en="connecting…">подключение…</span></div></div>
   </div>
-  <nav class="views" aria-label="Основные разделы">
-    <button class="view-tab on" data-view="office" aria-current="page">Команда</button>
-    <button class="view-tab" data-view="stats">Статистика</button>
-    <button class="view-tab" data-view="requirements">Переделки</button>
-    <button class="view-tab" data-view="analytics">Аналитика</button>
-    <button class="view-tab" data-view="retro">Ретроспективы</button>
-    <button class="view-tab" data-view="memory">Память</button>
-    <button class="view-tab" data-view="prompts">Промпты</button>
+  <nav class="views" aria-label="Основные разделы" data-i18n-aria-label="Main navigation">
+    <button class="view-tab on" data-view="office" aria-current="page" data-i18n-en="Team">Команда</button>
+    <button class="view-tab" data-view="stats" data-i18n-en="Statistics">Статистика</button>
+    <button class="view-tab" data-view="requirements" data-i18n-en="Rework">Переделки</button>
+    <button class="view-tab" data-view="analytics" data-i18n-en="Analytics">Аналитика</button>
+    <button class="view-tab" data-view="retro" data-i18n-en="Retrospectives">Ретроспективы</button>
+    <button class="view-tab" data-view="memory" data-i18n-en="Memory">Память</button>
+    <button class="view-tab" data-view="prompts" data-i18n-en="Prompts">Промпты</button>
   </nav>
 </header>
 <div id="mainContent" class="app-main" role="main" tabindex="-1">
 <div id="teamTools" class="team-tools">
-  <label class="search-field"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m16 16 4 4"/></svg><input id="buildingSearch" type="search" placeholder="Найти демона, офис или задачу" aria-label="Найти демона, офис или задачу"></label>
-  <select id="buildingFilter" aria-label="Статус демонов"><option value="all">Все состояния</option><option value="busy">В работе</option><option value="attention">Требуют внимания</option><option value="idle">Ожидают задачи</option><option value="offline">Отключены</option></select>
+  <label class="search-field"><svg width="18" height="18" viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/></circle><path d="m16 16 4 4"/></path></svg><input id="buildingSearch" type="search" placeholder="Найти демона, офис или задачу" aria-label="Найти демона, офис или задачу" data-i18n-placeholder="Find a daemon, office, or task" data-i18n-aria-label="Find a daemon, office, or task"></label>
+  <select id="buildingFilter" aria-label="Статус демонов" data-i18n-aria-label="Daemon status"><option value="all" data-i18n-en="All states">Все состояния</option><option value="busy" data-i18n-en="Working">В работе</option><option value="attention" data-i18n-en="Needs attention">Требуют внимания</option><option value="idle" data-i18n-en="Idle">Ожидают задачи</option><option value="offline" data-i18n-en="Offline">Отключены</option></select>
   <span id="buildingResultCount" role="status" aria-live="polite"></span>
 </div>
 
 <p id="sceneAssetStatus" class="asset-status" role="status" hidden></p>
-<section id="building" class="building" aria-label="Квартал Артели">
-  <div class="building-head"><div><h2>Команда и офисы</h2><p>Наведите на этаж, чтобы увидеть офис. Откройте его из предпросмотра.</p></div><span id="buildingTotals"></span></div>
+<section id="building" class="building" aria-label="Квартал Артели" data-i18n-aria-label="Artel district">
+  <div class="building-head"><div><h2 data-i18n-en="Team and offices">Команда и офисы</h2><p data-i18n-en="Hover over a floor to preview its office, then open it from the preview.">Наведите на этаж, чтобы увидеть офис. Откройте его из предпросмотра.</p></div><span id="buildingTotals"></span></div>
   <div class="city-navigation">
-    <nav id="cityBuildings" class="city-buildings" aria-label="Корпуса Артели"></nav>
-    <button id="cityRenameOpen" type="button" class="btn city-rename-open" aria-expanded="false" aria-controls="cityNameForm">Названия корпусов</button>
+    <nav id="cityBuildings" class="city-buildings" aria-label="Корпуса Артели" data-i18n-aria-label="Artel buildings"></nav>
+    <button id="cityRenameOpen" type="button" class="btn city-rename-open" aria-expanded="false" aria-controls="cityNameForm" data-i18n-en="Building names">Названия корпусов</button>
   </div>
   <form id="cityNameForm" class="city-name-form" hidden>
-    <label>Корпус<select id="cityNameBuilding" name="building"></select></label>
-    <label>Название<input id="cityNameInput" name="name" required autocomplete="off" aria-describedby="cityNameHelp"></label>
-    <div class="city-name-actions"><button id="cityNameSave" type="submit" class="btn primary">Сохранить</button><button id="cityNameCancel" type="button" class="btn">Отмена</button></div>
-    <p id="cityNameHelp">До 60 символов. Офисы и закреплённые места останутся прежними.</p>
+    <label><span data-i18n-en="Building">Корпус</span><select id="cityNameBuilding" name="building"></select></label>
+    <label><span data-i18n-en="Name">Название</span><input id="cityNameInput" name="name" required autocomplete="off" aria-describedby="cityNameHelp"></label>
+    <div class="city-name-actions"><button id="cityNameSave" type="submit" class="btn primary" data-i18n-en="Save">Сохранить</button><button id="cityNameCancel" type="button" class="btn" data-i18n-en="Cancel">Отмена</button></div>
+    <p id="cityNameHelp" data-i18n-en="Up to 60 characters. Offices and assigned seats stay unchanged.">До 60 символов. Офисы и закреплённые места останутся прежними.</p>
   </form>
   <p id="cityNameStatus" class="city-name-status" role="status" aria-live="polite"></p>
   <div id="cityStage" class="city-stage">
     <div id="cityViewport" class="city-map-viewport">
-      <div id="cityLabels" class="city-labels" role="group" aria-label="Корпуса на карте"></div>
-      <canvas id="cityCanvas" tabindex="0" aria-label="Карта квартала Артели" aria-describedby="cityMapHelp cityHint"></canvas>
-      <div class="city-caption"><span class="city-location">Квартал Артели</span><span id="cityDistrictSummary">Каждый этаж — ваша команда</span></div>
+      <div id="cityLabels" class="city-labels" role="group" aria-label="Корпуса на карте" data-i18n-aria-label="Buildings on the map"></div>
+      <canvas id="cityCanvas" tabindex="0" aria-label="Карта квартала Артели" aria-describedby="cityMapHelp cityHint" data-i18n-aria-label="Artel district map"></canvas>
+      <div class="city-caption"><span class="city-location" data-i18n-en="Artel district">Квартал Артели</span><span id="cityDistrictSummary" data-i18n-en="Your team on every floor">Каждый этаж — ваша команда</span></div>
     </div>
-    <div class="city-map-controls" role="group" aria-label="Управление картой">
+    <div class="city-map-controls" role="group" aria-label="Управление картой" data-i18n-aria-label="Map controls">
       <div class="city-zoom-controls">
-        <button id="cityZoomOut" class="btn" type="button" aria-label="Отдалить карту" title="Отдалить (−)">−</button>
-        <output id="cityZoomValue" aria-label="Масштаб карты" aria-live="off">100%</output>
-        <button id="cityZoomIn" class="btn" type="button" aria-label="Приблизить карту" title="Приблизить (+)">+</button>
+        <button id="cityZoomOut" class="btn" type="button" aria-label="Отдалить карту" title="Отдалить (−)" data-i18n-aria-label="Zoom out" data-i18n-title="Zoom out (−)">−</button>
+        <output id="cityZoomValue" aria-label="Масштаб карты" aria-live="off" data-i18n-aria-label="Map zoom">100%</output>
+        <button id="cityZoomIn" class="btn" type="button" aria-label="Приблизить карту" title="Приблизить (+)" data-i18n-aria-label="Zoom in" data-i18n-title="Zoom in (+)">+</button>
       </div>
-      <button id="cityReset" class="btn" type="button" title="Показать все корпуса (Home)">Весь квартал</button>
-      <button id="cityMotion" class="btn city-motion" type="button" aria-pressed="false">Пауза сцены</button>
-      <p id="cityMapHelp" class="city-map-help"><span class="city-help-pointer">Колесо — масштаб · Перетаскивание — перемещение</span><span class="city-help-touch">Двигайте карту пальцем · Сводите и разводите два пальца</span><span class="sr-only"> На клавиатуре: плюс и минус — масштаб, стрелки — перемещение, Home — весь квартал. Офисы можно выбрать в списке под картой.</span></p>
+      <button id="cityReset" class="btn" type="button" title="Показать все корпуса (Home)" data-i18n-title="Show all buildings (Home)" data-i18n-en="Whole district">Весь квартал</button>
+      <button id="cityMotion" class="btn city-motion" type="button" aria-pressed="false" data-i18n-en="Pause scene">Пауза сцены</button>
+      <p id="cityMapHelp" class="city-map-help"><span class="city-help-pointer" data-i18n-en="Scroll to zoom · Drag to pan">Колесо — масштаб · Перетаскивание — перемещение</span><span class="city-help-touch" data-i18n-en="Drag to pan · Pinch to zoom">Двигайте карту пальцем · Сводите и разводите два пальца</span><span class="sr-only" data-i18n-en="Keyboard: plus and minus to zoom, arrow keys to pan, Home to show the district. Select offices in the list below the map."> На клавиатуре: плюс и минус — масштаб, стрелки — перемещение, Home — весь квартал. Офисы можно выбрать в списке под картой.</span></p>
     </div>
-    <aside id="cityPreview" class="city-preview" aria-label="Предпросмотр офиса" hidden></aside>
+    <aside id="cityPreview" class="city-preview" aria-label="Предпросмотр офиса" hidden data-i18n-aria-label="Office preview"></aside>
   </div>
-  <p id="cityHint" class="city-hint">Выберите этаж на фасаде или в списке ниже</p>
-  <nav id="cityFloors" class="city-floors" aria-label="Офисы и этажи корпусов"></nav>
-  <details id="officeDirectory" class="office-directory"><summary>Управление офисами и рассадкой</summary>
-    <p id="buildingStatus" role="status" aria-live="polite">Перетащите демона в другой офис или нажмите «Переселить».</p>
+  <p id="cityHint" class="city-hint" data-i18n-en="Select a floor on the building or in the list below">Выберите этаж на фасаде или в списке ниже</p>
+  <nav id="cityFloors" class="city-floors" aria-label="Офисы и этажи корпусов" data-i18n-aria-label="Offices and building floors"></nav>
+  <details id="officeDirectory" class="office-directory"><summary data-i18n-en="Manage offices and seating">Управление офисами и рассадкой</summary>
+    <p id="buildingStatus" role="status" aria-live="polite" data-i18n-en="Drag a daemon to another office or select “Move”.">Перетащите демона в другой офис или нажмите «Переселить».</p>
     <div id="buildingRooms" class="building-rooms"></div>
   </details>
 </section>
-<div id="officeNav" class="office-nav" hidden><button id="backBuilding" class="btn">← Всё здание</button><strong id="officeTitle"></strong><select id="officeSelect" aria-label="Выбрать офис"></select><button id="officeStats" class="btn">Статистика офиса</button><button id="motionToggle" class="btn" type="button" aria-pressed="false">Пауза анимации</button><span id="otherOffices"></span></div>
-<section class="layout" id="officeLayout" aria-label="Офис и команда" hidden>
+<div id="officeNav" class="office-nav" hidden><button id="backBuilding" class="btn" data-i18n-en="← All buildings">← Всё здание</button><strong id="officeTitle"></strong><select id="officeSelect" aria-label="Выбрать офис" data-i18n-aria-label="Select an office"></select><button id="officeStats" class="btn" data-i18n-en="Office statistics">Статистика офиса</button><button id="motionToggle" class="btn" type="button" aria-pressed="false" data-i18n-en="Pause animation">Пауза анимации</button><span id="otherOffices"></span></div>
+<section class="layout" id="officeLayout" aria-label="Офис и команда" hidden data-i18n-aria-label="Office and team">
   <section class="stage" id="stage">
-    <canvas id="scene" aria-label="Анимированный офис: каждый персонаж — инстанс демона"></canvas>
+    <canvas id="scene" aria-label="Анимированный офис: каждый персонаж — инстанс демона" data-i18n-aria-label="Animated office: each character represents a daemon instance"></canvas>
     <div class="tags" id="tags"></div>
     <div class="notice" id="notice" hidden></div>
   </section>
 
   <aside class="panel">
     <div class="panel-head">
-      <h2>Демоны офиса</h2>
-      <div class="hint">Выберите демона, чтобы открыть логи и управление</div>
+      <h2 data-i18n-en="Office daemons">Демоны офиса</h2>
+      <div class="hint" data-i18n-en="Select a daemon to see its logs and controls">Выберите демона, чтобы открыть логи и управление</div>
     </div>
     <div class="cards" id="cards"></div>
-    <div class="memo" id="memo" hidden><span class="heart">♥</span> В Артели живёт Кокошка — она гуляет, где хочет</div>
+    <div class="memo" id="memo" hidden><span class="heart">♥</span> <span data-i18n-en="Kokoshka lives in Artel and roams wherever she likes">В Артели живёт Кокошка — она гуляет, где хочет</span></div>
     <div class="legend" id="legend"></div>
   </aside>
 </section>
 
 <section class="stats" id="stats" hidden>
   <div class="stats-inner">
-    <div class="page-heading"><h2>Статистика</h2><p>Результаты задач, расход токенов и стоимость работы.</p></div>
+    <div class="page-heading"><h2 data-i18n-en="Statistics">Статистика</h2><p data-i18n-en="Task outcomes, token usage, and running costs.">Результаты задач, расход токенов и стоимость работы.</p></div>
     <div class="filters">
-      <div class="seg" id="statsPeriods" role="group" aria-label="Период"></div>
-      <select id="statsOffice" aria-label="Офис статистики"></select><span class="muted">По текущему составу офиса</span>
-      <select id="statsDemon" aria-label="Демон"></select>
-      <input id="statsSearch" type="search" aria-label="Поиск задач и сообщений" placeholder="Поиск: задача или сообщение">
-      <button id="statsCsv" class="btn">Скачать CSV</button>
+      <div class="seg" id="statsPeriods" role="group" aria-label="Период" data-i18n-aria-label="Period"></div>
+      <select id="statsOffice" aria-label="Офис статистики" data-i18n-aria-label="Office statistics filter"></select><span class="muted" data-i18n-en="Based on current office members">По текущему составу офиса</span>
+      <select id="statsDemon" aria-label="Демон" data-i18n-aria-label="Daemon"></select>
+      <input id="statsSearch" type="search" aria-label="Поиск задач и сообщений" placeholder="Поиск: задача или сообщение" data-i18n-aria-label="Search tasks and messages" data-i18n-placeholder="Search tasks or messages">
+      <button id="statsCsv" class="btn" data-i18n-en="Download CSV">Скачать CSV</button>
     </div>
     <p id="statsStatus" role="status" aria-live="polite"></p>
     <div id="statsBody"></div>
   </div>
 </section>
 <section id="prompts" class="prompts-page workspace" hidden aria-labelledby="promptsTitle">
-  <div class="page-heading"><h2 id="promptsTitle">Поведение демонов</h2><p>Выберите роль и инструкции, которые GigaCode получает при работе над задачей.</p></div>
-  <div class="prompt-toolbar"><label for="promptDaemon">Демон</label><select id="promptDaemon" aria-describedby="promptDaemonHint"><option value="">Загрузка демонов…</option></select><span id="promptDaemonHint" class="muted">У каждого демона свои настройки.</span><button id="promptReload" type="button" class="btn">Обновить</button></div>
+  <div class="page-heading"><h2 id="promptsTitle" data-i18n-en="Daemon behavior">Поведение демонов</h2><p data-i18n-en="Choose the role and instructions GigaCode receives when working on a task.">Выберите роль и инструкции, которые GigaCode получает при работе над задачей.</p></div>
+  <div class="prompt-toolbar"><label for="promptDaemon" data-i18n-en="Daemon">Демон</label><select id="promptDaemon" aria-describedby="promptDaemonHint"><option value="" data-i18n-en="Loading daemons…">Загрузка демонов…</option></select><span id="promptDaemonHint" class="muted" data-i18n-en="Each daemon has its own settings.">У каждого демона свои настройки.</span><button id="promptReload" type="button" class="btn" data-i18n-en="Refresh">Обновить</button></div>
   <p id="promptLoadStatus" class="form-status" role="status" aria-live="polite"></p>
-  <div id="promptEmpty" class="workspace-empty" hidden><strong>Сначала добавьте демона</strong><p>Создайте JSON-конфиг в папке config. Здесь появятся и работающие, и ещё не запущенные демоны.</p></div>
+  <div id="promptEmpty" class="workspace-empty" hidden><strong data-i18n-en="Add a daemon to get started">Сначала добавьте демона</strong><p data-i18n-en="Create a JSON configuration in the config folder. Both running daemons and those not yet started will appear here.">Создайте JSON-конфиг в папке config. Здесь появятся и работающие, и ещё не запущенные демоны.</p></div>
   <form id="promptForm" hidden>
     <div class="prompt-editor-grid">
       <section class="prompt-role" aria-labelledby="promptRoleTitle">
-        <h3 id="promptRoleTitle">Роль и общие правила</h3>
-        <label for="promptProfile">Профиль поведения</label><select id="promptProfile"></select>
+        <h3 id="promptRoleTitle" data-i18n-en="Role and general rules">Роль и общие правила</h3>
+        <label for="promptProfile" data-i18n-en="Behavior profile">Профиль поведения</label><select id="promptProfile"></select>
         <p id="promptProfileHint" class="form-hint"></p>
-        <label for="promptSubagent">Субагент-исполнитель</label><input id="promptSubagent" type="text" maxlength="80" pattern="[a-zA-Z][a-zA-Z0-9_-]{0,79}" required spellcheck="false" autocomplete="off" aria-describedby="promptSubagentHint">
-        <p id="promptSubagentHint" class="form-hint">Имя установленного субагента GigaCode, без начального /. Используется для выполнения и доработки задачи.</p>
-        <label for="promptInstructions">Общие инструкции</label><textarea id="promptInstructions" rows="9" maxlength="6000" placeholder="Например: добавляй регрессионные тесты для каждого исправленного дефекта." aria-describedby="promptInstructionsHint"></textarea>
-        <p id="promptInstructionsHint" class="form-hint">Дополняют выбранный профиль на всех этапах. Оставьте пустым, если дополнительных правил нет.</p>
+        <label for="promptSubagent" data-i18n-en="Execution subagent">Субагент-исполнитель</label><input id="promptSubagent" type="text" maxlength="80" pattern="[a-zA-Z][a-zA-Z0-9_-]{0,79}" required spellcheck="false" autocomplete="off" aria-describedby="promptSubagentHint">
+        <p id="promptSubagentHint" class="form-hint" data-i18n-en="Name of an installed GigaCode subagent, without a leading /. Used to implement and revise tasks.">Имя установленного субагента GigaCode, без начального /. Используется для выполнения и доработки задачи.</p>
+        <label for="promptInstructions" data-i18n-en="General instructions">Общие инструкции</label><textarea id="promptInstructions" rows="9" maxlength="6000" placeholder="Например: добавляй регрессионные тесты для каждого исправленного дефекта." aria-describedby="promptInstructionsHint" data-i18n-placeholder="For example: add regression tests for every bug fix."></textarea>
+        <p id="promptInstructionsHint" class="form-hint" data-i18n-en="Extend the selected profile at every stage. Leave blank if no additional rules are needed.">Дополняют выбранный профиль на всех этапах. Оставьте пустым, если дополнительных правил нет.</p>
       </section>
       <section class="prompt-stage" aria-labelledby="promptStageTitle">
-        <h3 id="promptStageTitle">Инструкции для этапа</h3>
-        <label for="promptStage">Этап работы</label><select id="promptStage"></select>
+        <h3 id="promptStageTitle" data-i18n-en="Stage instructions">Инструкции для этапа</h3>
+        <label for="promptStage" data-i18n-en="Work stage">Этап работы</label><select id="promptStage"></select>
         <p id="promptStageHint" class="form-hint"></p>
-        <label for="promptStageInstructions">Дополнительные указания</label><textarea id="promptStageInstructions" rows="12" maxlength="6000" placeholder="Опишите особенности работы на этом этапе." aria-describedby="promptStageCount"></textarea>
+        <label for="promptStageInstructions" data-i18n-en="Additional instructions">Дополнительные указания</label><textarea id="promptStageInstructions" rows="12" maxlength="6000" placeholder="Опишите особенности работы на этом этапе." aria-describedby="promptStageCount" data-i18n-placeholder="Describe any specific instructions for this stage."></textarea>
         <p id="promptStageCount" class="form-hint"></p>
-        <div class="prompt-preview-action"><button id="promptPreviewButton" type="button" class="btn">Предпросмотр инструкций</button><span class="form-hint">Без запуска демона</span></div>
-        <section id="promptPreview" class="prompt-preview" aria-labelledby="promptPreviewTitle" hidden><h4 id="promptPreviewTitle">Настраиваемая часть запроса</h4><p class="form-hint">К ней добавляются задача, контекст репозитория и обязательные правила завершения.</p><pre id="promptPreviewText" tabindex="0"></pre></section>
+        <div class="prompt-preview-action"><button id="promptPreviewButton" type="button" class="btn" data-i18n-en="Preview instructions">Предпросмотр инструкций</button><span class="form-hint" data-i18n-en="Does not start the daemon">Без запуска демона</span></div>
+        <section id="promptPreview" class="prompt-preview" aria-labelledby="promptPreviewTitle" hidden><h4 id="promptPreviewTitle" data-i18n-en="Customizable prompt section">Настраиваемая часть запроса</h4><p class="form-hint" data-i18n-en="The task, repository context, and required completion rules are added to this section.">К ней добавляются задача, контекст репозитория и обязательные правила завершения.</p><pre id="promptPreviewText" tabindex="0"></pre></section>
       </section>
     </div>
-    <div class="prompt-savebar"><div><p id="promptSaveStatus" role="status" aria-live="polite"></p><p id="promptApplied" class="form-hint"></p></div><div class="form-actions"><button id="promptDefaults" type="button" class="btn">Из конфига</button><button id="promptDiscard" type="button" class="btn" disabled>Отменить правки</button><button id="promptSave" type="submit" class="btn primary" disabled>Сохранить</button></div></div>
-    <p class="prompt-footnote">Сохранённые настройки применяются после текущей работы. Текст передаётся в GigaCode как инструкции, а выбор задач Jira, проверки, публикация и сигналы SUCCESS / BLOCKED продолжают управляться Артелью.</p>
+    <div class="prompt-savebar"><div><p id="promptSaveStatus" role="status" aria-live="polite"></p><p id="promptApplied" class="form-hint"></p></div><div class="form-actions"><button id="promptDefaults" type="button" class="btn" data-i18n-en="From config">Из конфига</button><button id="promptDiscard" type="button" class="btn" disabled data-i18n-en="Discard changes">Отменить правки</button><button id="promptSave" type="submit" class="btn primary" disabled data-i18n-en="Save">Сохранить</button></div></div>
+    <p class="prompt-footnote" data-i18n-en="Saved settings take effect after the current work finishes. Text is passed to GigaCode as instructions. Artel continues to manage Jira task selection, checks, publishing, and SUCCESS / BLOCKED signals.">Сохранённые настройки применяются после текущей работы. Текст передаётся в GigaCode как инструкции, а выбор задач Jira, проверки, публикация и сигналы SUCCESS / BLOCKED продолжают управляться Артелью.</p>
   </form>
 </section>
 <section id="workspace" class="workspace" hidden>
   <h2 id="workspaceTitle"></h2><p id="workspaceHint" class="muted"></p>
   <div class="filters">
-    <select id="workspaceDays" aria-label="Период"><option value="7">7 дней</option><option value="30" selected>30 дней</option><option value="90">90 дней</option><option value="0">Всё время</option></select>
-    <select id="workspaceOffice" aria-label="Офис"><option value="">Все офисы</option></select>
-    <select id="workspaceDaemon" aria-label="Демон"><option value="">Все демоны</option></select>
-    <select id="memoryFilter" aria-label="Статус памяти" hidden><option value="">Вся память</option><option value="disputed">Спорные записи</option><option value="candidate">Кандидаты</option><option value="confirmed">Подтверждённые</option><option value="rejected">Отклонённые</option></select>
-    <input id="workspaceSearch" type="search" aria-label="Поиск в текущем разделе" placeholder="Задача, урок, ветка…">
-    <button id="workspaceRefresh" class="btn">Обновить</button>
+    <select id="workspaceDays" aria-label="Период" data-i18n-aria-label="Period"><option value="7" data-i18n-en="7 days">7 дней</option><option value="30" selected data-i18n-en="30 days">30 дней</option><option value="90" data-i18n-en="90 days">90 дней</option><option value="0" data-i18n-en="All time">Всё время</option></select>
+    <select id="workspaceOffice" aria-label="Офис" data-i18n-aria-label="Office"><option value="" data-i18n-en="All offices">Все офисы</option></select>
+    <select id="workspaceDaemon" aria-label="Демон" data-i18n-aria-label="Daemon"><option value="" data-i18n-en="All daemons">Все демоны</option></select>
+    <select id="memoryFilter" aria-label="Статус памяти" hidden data-i18n-aria-label="Memory status"><option value="" data-i18n-en="All memory">Вся память</option><option value="disputed" data-i18n-en="Disputed entries">Спорные записи</option><option value="candidate" data-i18n-en="Candidates">Кандидаты</option><option value="confirmed" data-i18n-en="Confirmed">Подтверждённые</option><option value="rejected" data-i18n-en="Rejected">Отклонённые</option></select>
+    <input id="workspaceSearch" type="search" aria-label="Поиск в текущем разделе" placeholder="Задача, урок, ветка…" data-i18n-aria-label="Search this section" data-i18n-placeholder="Task, lesson, branch…">
+    <button id="workspaceRefresh" class="btn" data-i18n-en="Refresh">Обновить</button>
   </div>
-  <p class="muted">Фильтр офиса использует текущую рассадку демонов.</p>
+  <p class="muted" data-i18n-en="The office filter uses current daemon seating.">Фильтр офиса использует текущую рассадку демонов.</p>
   <p id="workspaceStatus" role="status" aria-live="polite"></p><div id="workspaceBody"></div>
 </section>
 </div>
 <div class="chart-tip" id="chartTip" hidden></div>
 
 <dialog class="drawer" id="drawer" hidden aria-labelledby="drawerTitle">
-  <header class="drawer-head"><div><div class="drawer-title" id="drawerTitle"></div><p id="drawerMeta" class="muted"></p></div><button class="close" id="drawerClose" aria-label="Закрыть панель демона">×</button></header>
-  <div class="tabs" id="drawerTabs" role="tablist" aria-label="Разделы демона"></div>
+  <header class="drawer-head"><div><div class="drawer-title" id="drawerTitle"></div><p id="drawerMeta" class="muted"></p></div><button class="close" id="drawerClose" aria-label="Закрыть панель демона" data-i18n-aria-label="Close daemon panel">×</button></header>
+  <div class="tabs" id="drawerTabs" role="tablist" aria-label="Разделы демона" data-i18n-aria-label="Daemon sections"></div>
   <div id="drawerBody" class="drawer-body">
-    <section id="drawerActions" hidden aria-label="Управление демоном"></section>
-    <details id="featurePanel" class="retry-panel"><summary>Функции демона</summary><p>Изменения применятся после текущей работы. «По конфигу» возвращает настройки файла и окружения.</p><div id="featureRows"></div><p id="featureStatus" role="status"></p></details>
-    <details id="retryPanel" class="retry-panel"><summary>Повторные попытки</summary><p>Решения действуют перед следующей попыткой. Текущая работа не прерывается. Разрешение повтора не обходит JQL.</p><div id="retryRows"></div><form id="retryBlockForm"><label>Исключить задачу<input id="retryIssue" aria-label="Ключ задачи для исключения" placeholder="ARTEL-123" required></label><button class="btn" type="submit">Исключить</button></form><p id="retryStatus" role="status"></p></details>
-    <form id="moveOffice" class="move-office"><h3>Размещение</h3><p class="muted">Выберите офис. Закреплённое место сохранится после перезапуска.</p><label>Офис<select id="moveOfficeSelect" aria-label="Поселить в офис"></select></label><input id="newOfficeName" aria-label="Название нового офиса" placeholder="Название нового офиса" maxlength="60" hidden><button class="btn primary" type="submit">Сохранить размещение</button><span id="moveOfficeStatus" role="status"></span></form>
+    <section id="drawerActions" hidden aria-label="Управление демоном" data-i18n-aria-label="Daemon controls"></section>
+    <details id="featurePanel" class="retry-panel"><summary data-i18n-en="Daemon features">Функции демона</summary><p data-i18n-en="Changes apply after the current work finishes. “From config” restores file and environment settings.">Изменения применятся после текущей работы. «По конфигу» возвращает настройки файла и окружения.</p><div id="featureRows"></div><p id="featureStatus" role="status"></p></details>
+    <details id="retryPanel" class="retry-panel"><summary data-i18n-en="Retries">Повторные попытки</summary><p data-i18n-en="Decisions take effect before the next attempt. Current work is not interrupted. Allowing a retry does not bypass JQL.">Решения действуют перед следующей попыткой. Текущая работа не прерывается. Разрешение повтора не обходит JQL.</p><div id="retryRows"></div><form id="retryBlockForm"><label><span data-i18n-en="Exclude a task">Исключить задачу</span><input id="retryIssue" aria-label="Ключ задачи для исключения" placeholder="ARTEL-123" required data-i18n-aria-label="Issue key to exclude"></label><button class="btn" type="submit" data-i18n-en="Exclude">Исключить</button></form><p id="retryStatus" role="status"></p></details>
+    <form id="moveOffice" class="move-office"><h3 data-i18n-en="Office placement">Размещение</h3><p class="muted" data-i18n-en="Choose an office. The assigned seat is preserved across restarts.">Выберите офис. Закреплённое место сохранится после перезапуска.</p><label><span data-i18n-en="Office">Офис</span><select id="moveOfficeSelect" aria-label="Поселить в офис" data-i18n-aria-label="Move to office"></select></label><input id="newOfficeName" aria-label="Название нового офиса" placeholder="Название нового офиса" maxlength="60" hidden data-i18n-aria-label="New office name" data-i18n-placeholder="New office name"><button class="btn primary" type="submit" data-i18n-en="Save placement">Сохранить размещение</button><span id="moveOfficeStatus" role="status"></span></form>
     <div class="char-pick" id="drawerChars" hidden></div>
     <div id="cliStatus" class="cli-status" role="status" hidden></div>
-    <section id="cliMonitor" class="cli-monitor" hidden aria-label="Хронология выполнения"><p id="monitorStatus" role="status"></p><ol id="monitorEvents"></ol></section>
-    <pre class="log" id="drawerLog" tabindex="0" aria-label="Журнал демона"></pre>
+    <section id="cliMonitor" class="cli-monitor" hidden aria-label="Хронология выполнения" data-i18n-aria-label="Execution timeline"><p id="monitorStatus" role="status"></p><ol id="monitorEvents"></ol></section>
+    <pre class="log" id="drawerLog" tabindex="0" aria-label="Журнал демона" data-i18n-aria-label="Daemon log"></pre>
   </div>
-  <footer id="drawerToolbar" class="drawer-toolbar"><button id="drawerFollow" class="btn" type="button" aria-pressed="true">Автопрокрутка</button><button id="drawerCopy" class="btn" type="button">Копировать</button><span id="drawerNotice" role="status" aria-live="polite"></span></footer>
+  <footer id="drawerToolbar" class="drawer-toolbar"><button id="drawerFollow" class="btn" type="button" aria-pressed="true" data-i18n-en="Auto-scroll">Автопрокрутка</button><button id="drawerCopy" class="btn" type="button" data-i18n-en="Copy">Копировать</button><span id="drawerNotice" role="status" aria-live="polite"></span></footer>
 </dialog>
 
 <!-- Порядок важен: общая глобальная область, см. js/office/scene-map.js -->

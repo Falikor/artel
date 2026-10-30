@@ -1,0 +1,392 @@
+{
+  "version": "2.0.0",
+  "scene": {
+    "width": 1254,
+    "height": 1254,
+    "background": "scene/character_free_all_doors_open.png",
+    "preservedOutsidePatches": true,
+    "editedRegions": [
+      {
+        "left": 400,
+        "top": 318,
+        "width": 75,
+        "height": 108
+      },
+      {
+        "left": 789,
+        "top": 477,
+        "width": 135,
+        "height": 110
+      },
+      {
+        "left": 550,
+        "top": 1015,
+        "width": 145,
+        "height": 87
+      },
+      {
+        "left": 535,
+        "top": 685,
+        "width": 240,
+        "height": 320
+      },
+      {
+        "left": 775,
+        "top": 675,
+        "width": 410,
+        "height": 315
+      }
+    ],
+    "originalBackground": "../02_ANIMATION/character_free_restoration_plate.png"
+  },
+  "frameCount": 24,
+  "doors": [
+    {
+      "id": "manager_office",
+      "name": "Кабинет руководителя",
+      "kind": "right_hinged",
+      "image": "doors/manager_office/atlas.png",
+      "atlas": "doors/manager_office/atlas.json",
+      "frameSize": {
+        "w": 128,
+        "h": 160
+      },
+      "anchor": {
+        "x": 92,
+        "y": 136
+      },
+      "scenePosition": {
+        "x": 372,
+        "y": 283
+      },
+      "depthY": 420,
+      "clearance": {
+        "left": 412,
+        "top": 410,
+        "width": 46,
+        "height": 22
+      },
+      "waypoints": {
+        "corridor": {
+          "x": 435,
+          "y": 462
+        },
+        "room": {
+          "x": 435,
+          "y": 300
+        }
+      },
+      "autoCloseDelayMs": 1100,
+      "maxConcurrentTraversals": 1,
+      "animations": {
+        "closed": {
+          "frames": [
+            0
+          ],
+          "durationsMs": [
+            100
+          ],
+          "loop": true
+        },
+        "open": {
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "durationsMs": [
+            100,
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            160
+          ],
+          "loop": false,
+          "completionState": "open",
+          "events": [
+            {
+              "name": "passage_ready",
+              "frame": 7,
+              "phase": "completion"
+            }
+          ]
+        },
+        "opened": {
+          "frames": [
+            7
+          ],
+          "durationsMs": [
+            100
+          ],
+          "loop": true
+        },
+        "close": {
+          "frames": [
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1,
+            0
+          ],
+          "durationsMs": [
+            160,
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            100
+          ],
+          "loop": false,
+          "completionState": "closed"
+        }
+      },
+      "eventsNote": "Passage permitted only after full opening completes; keep reservations until actor clears doorway.",
+      "foreground": "doors/manager_office/frame_foreground.png"
+    },
+    {
+      "id": "meeting_room",
+      "name": "Переговорная",
+      "kind": "paired_sliding",
+      "image": "doors/meeting_room/atlas.png",
+      "atlas": "doors/meeting_room/atlas.json",
+      "frameSize": {
+        "w": 256,
+        "h": 192
+      },
+      "anchor": {
+        "x": 128,
+        "y": 168
+      },
+      "scenePosition": {
+        "x": 727,
+        "y": 414
+      },
+      "depthY": 583,
+      "clearance": {
+        "left": 798,
+        "top": 571,
+        "width": 115,
+        "height": 24
+      },
+      "waypoints": {
+        "corridor": {
+          "x": 855,
+          "y": 630
+        },
+        "room": {
+          "x": 855,
+          "y": 528
+        }
+      },
+      "autoCloseDelayMs": 1100,
+      "maxConcurrentTraversals": 1,
+      "animations": {
+        "closed": {
+          "frames": [
+            0
+          ],
+          "durationsMs": [
+            100
+          ],
+          "loop": true
+        },
+        "open": {
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "durationsMs": [
+            100,
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            160
+          ],
+          "loop": false,
+          "completionState": "open",
+          "events": [
+            {
+              "name": "passage_ready",
+              "frame": 7,
+              "phase": "completion"
+            }
+          ]
+        },
+        "opened": {
+          "frames": [
+            7
+          ],
+          "durationsMs": [
+            100
+          ],
+          "loop": true
+        },
+        "close": {
+          "frames": [
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1,
+            0
+          ],
+          "durationsMs": [
+            160,
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            100
+          ],
+          "loop": false,
+          "completionState": "closed"
+        }
+      },
+      "eventsNote": "Passage permitted only after full opening completes; keep reservations until actor clears doorway.",
+      "foreground": "doors/meeting_room/frame_foreground.png"
+    },
+    {
+      "id": "office_entrance",
+      "name": "Вход в офис",
+      "kind": "paired_sliding",
+      "image": "doors/office_entrance/atlas.png",
+      "atlas": "doors/office_entrance/atlas.json",
+      "frameSize": {
+        "w": 256,
+        "h": 192
+      },
+      "anchor": {
+        "x": 128,
+        "y": 168
+      },
+      "scenePosition": {
+        "x": 494,
+        "y": 934
+      },
+      "depthY": 1102,
+      "clearance": {
+        "left": 560,
+        "top": 1090,
+        "width": 123,
+        "height": 26
+      },
+      "waypoints": {
+        "corridor": {
+          "x": 622,
+          "y": 1144
+        },
+        "room": {
+          "x": 622,
+          "y": 970
+        }
+      },
+      "autoCloseDelayMs": 1100,
+      "maxConcurrentTraversals": 1,
+      "animations": {
+        "closed": {
+          "frames": [
+            0
+          ],
+          "durationsMs": [
+            100
+          ],
+          "loop": true
+        },
+        "open": {
+          "frames": [
+            0,
+            1,
+            2,
+            3,
+            4,
+            5,
+            6,
+            7
+          ],
+          "durationsMs": [
+            100,
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            160
+          ],
+          "loop": false,
+          "completionState": "open",
+          "events": [
+            {
+              "name": "passage_ready",
+              "frame": 7,
+              "phase": "completion"
+            }
+          ]
+        },
+        "opened": {
+          "frames": [
+            7
+          ],
+          "durationsMs": [
+            100
+          ],
+          "loop": true
+        },
+        "close": {
+          "frames": [
+            7,
+            6,
+            5,
+            4,
+            3,
+            2,
+            1,
+            0
+          ],
+          "durationsMs": [
+            160,
+            90,
+            90,
+            90,
+            90,
+            90,
+            90,
+            100
+          ],
+          "loop": false,
+          "completionState": "closed"
+        }
+      },
+      "eventsNote": "Passage permitted only after full opening completes; keep reservations until actor clears doorway.",
+      "foreground": "doors/office_entrance/frame_foreground.png"
+    }
+  ],
+  "coordinates": "Scene pixels, top-left origin, Y down; entrance corridor=exterior, room=office. Waypoints are character foot positions.",
+  "doorController": "tools/door-controller.mjs"
+}

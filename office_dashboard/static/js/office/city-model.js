@@ -10,10 +10,10 @@ function cityAddress(room, fallback=1) {
   return {building:Math.floor((level-1)/CITY_FLOORS)+1, floor:(level-1)%CITY_FLOORS+1};
 }
 function cityAddressLabel(room, fallback=1) {
-  const a=cityAddress(room,fallback);return `${cityRoomBuildingTitle(room,fallback)} · этаж ${a.floor}`;
+  const a=cityAddress(room,fallback);return `${cityRoomBuildingTitle(room,fallback)} · ${tr('этаж', 'floor')} ${a.floor}`;
 }
 function cityRoomBuildingTitle(room, fallback=1) {
-  return typeof room.building_title==='string' && room.building_title.trim() ? room.building_title : `Корпус ${cityAddress(room,fallback).building}`;
+  return room.building_title_custom !== false && typeof room.building_title==='string' && room.building_title.trim() ? room.building_title : `${tr('Корпус', 'Building')} ${cityAddress(room,fallback).building}`;
 }
 function cityLayout(rooms) {
   const groups=new Map();
@@ -42,13 +42,13 @@ function citySurroundings(buildings) {
     const k=cityIso(b.x,b.y)[0], left=k+234;
     result.push(lot('house',left,-180,92,75,80+(i%3)*15),
       lot('house',left,580,98,82,105+(i%2)*18),
-      lot('shop',left,b.near?448:174,112,70,40,{title:i%2?'КАФЕ':'МАГАЗИН'}));
-    if(i%4===0)result.push(lot('school',k-244,-400,190,92,63,{title:'ШКОЛА'}));
+      lot('shop',left,b.near?448:174,112,70,40,{title:i%2?tr("КАФЕ", "CAFE"):tr("МАГАЗИН", "SHOP")}));
+    if(i%4===0)result.push(lot('school',k-244,-400,190,92,63,{title:tr("ШКОЛА", "SCHOOL")}));
   });
   const first=buildings[0];
   if(first) {
     const k=cityIso(first.x,first.y)[0];
-    result.push(lot('house',k-222,-80,85,78,97),lot('shop',k-230,130,100,65,36,{title:'ПЕКАРНЯ'}));
+    result.push(lot('house',k-222,-80,85,78,97),lot('shop',k-230,130,100,65,36,{title:tr("ПЕКАРНЯ", "BAKERY")}));
   }
   return result;
 }
@@ -125,7 +125,7 @@ function cityLabels(camera,buildings,focus=null) {
     return {x:Math.min(...xs),y:Math.min(...ys),w:Math.max(...xs)-Math.min(...xs),h:Math.max(...ys)-Math.min(...ys)};
   });
   for(const b of visible) {
-    const text=b.title||`Корпус ${b.number}`;
+    const text=b.title||`${tr('Корпус', 'Building')} ${b.number}`;
     const maxWidth=Math.min(168,visible.length>1?(area.right-area.left-8)/2:area.right-area.left);
     const anchor=camera.project(b.x+110,b.y+145), w=Math.min(maxWidth,Math.max(96,Array.from(text).length*7+24)),h=36;
     const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));

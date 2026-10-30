@@ -1,6 +1,8 @@
 # Работа с замечаниями в Bitbucket
 
-[Главная](../README.md) · [Настройки](CONFIGURATION.md) · [Runbook](RUNBOOK.md)
+**Русский** · [English](BITBUCKET.en.md)
+
+[Главная](../README.ru.md) · [Настройки](CONFIGURATION.md) · [Runbook](RUNBOOK.md)
 
 ## Замечания в Bitbucket PR в простое
 
@@ -14,16 +16,24 @@ Jira REST-клиент, текст обсуждения и временную к
 Включение в конфиге демона:
 
 ```json
-"bitbucket": {
-  "enabled": true,
-  "url": "https://bitbucket.example.com",
-  "project": "HR",
-  "repo": "backend",
-  "bot_user": "artel-bot",
-  "batch_comments": true,
-  "poll_interval_seconds": 600,
-  "max_per_cycle": 1,
-  "test_commands": [["./mvnw", "-B", "test"]]
+{
+  "bitbucket": {
+    "enabled": true,
+    "url": "https://bitbucket.example.com",
+    "project": "HR",
+    "repo": "backend",
+    "bot_user": "artel-bot",
+    "batch_comments": true,
+    "poll_interval_seconds": 600,
+    "max_per_cycle": 1,
+    "test_commands": [
+      [
+        "./mvnw",
+        "-B",
+        "test"
+      ]
+    ]
+  }
 }
 ```
 

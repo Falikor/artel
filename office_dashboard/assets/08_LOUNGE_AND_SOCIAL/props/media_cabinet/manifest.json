@@ -1,0 +1,95 @@
+{
+  "id": "media_cabinet",
+  "frameSize": {
+    "w": 160,
+    "h": 160
+  },
+  "pivot": {
+    "x": 80,
+    "y": 136
+  },
+  "scenePosition": {
+    "x": 760,
+    "y": 665
+  },
+  "interactionPoint": {
+    "x": 845,
+    "y": 819
+  },
+  "consoleInstallPoint": {
+    "x": 871,
+    "y": 734
+  },
+  "states": {
+    "stored": 0,
+    "opening_stored": 1,
+    "open_stored": 2,
+    "open_empty": 3,
+    "closing_empty": 4,
+    "installed_off": 5,
+    "playing": 6,
+    "paused": 7
+  },
+  "drawerAnimations": {
+    "open_stored": {
+      "frames": [
+        0,
+        1,
+        2
+      ],
+      "durationsMs": [
+        120,
+        160,
+        220
+      ]
+    },
+    "close_stored": {
+      "frames": [
+        2,
+        1,
+        0
+      ],
+      "durationsMs": [
+        220,
+        160,
+        120
+      ]
+    },
+    "close_empty": {
+      "frames": [
+        3,
+        4,
+        0
+      ],
+      "durationsMs": [
+        220,
+        160,
+        120
+      ]
+    },
+    "open_empty": {
+      "frames": [
+        0,
+        4,
+        3
+      ],
+      "durationsMs": [
+        120,
+        160,
+        220
+      ]
+    }
+  },
+  "inventory": {
+    "consoleCount": 1,
+    "controllerCount": 2,
+    "initialConsole": "drawer",
+    "initialControllers": "drawer"
+  },
+  "collisionFootprint": {
+    "x": 790,
+    "y": 756,
+    "width": 96,
+    "height": 44
+  }
+}

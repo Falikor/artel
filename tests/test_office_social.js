@@ -7,7 +7,7 @@ const preferences=new Map(), classes=new Set();
 const reduced={matches:false,listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}};
 const motionButton={listeners:{},attributes:{},addEventListener(type,fn){this.listeners[type]=fn;},
  setAttribute(name,value){this.attributes[name]=value;}};
-const context={window:{matchMedia:()=>reduced},Date,Math,ACTIVITIES:{},ACTIVITY_WEIGHTS:{},
+const context={tr:(ru,en)=>ru, window:{matchMedia:()=>reduced},Date,Math,ACTIVITIES:{},ACTIVITY_WEIGHTS:{},
  storage:{get:(key,fallback)=>preferences.has(key)?preferences.get(key):fallback,
   set:(key,value)=>preferences.set(key,value)},
  $:id=>id==='motionToggle'?motionButton:null,

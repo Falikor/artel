@@ -30,19 +30,19 @@ function renderCityRooms(rooms) {
   const nav = $('cityFloors'), active = document.activeElement?.dataset?.cityFloor;
   const html = rooms.filter(r => city.eligible.has(r.id)).map(r => {
     const ds = lastSnapshot.daemons.filter(d => d.office_id === r.id), stats = roomStats(ds);
-    return `<button type="button" class="city-floor" data-city-floor="${esc(r.id)}" aria-controls="cityPreview" aria-expanded="${r.id === city.selected}" aria-pressed="${r.id === city.selected}"><span class="city-floor-address">${esc(cityAddressLabel(r,city.rooms.indexOf(r)+1))}</span><span>${esc(r.title)}</span>${stats.bad ? `<small aria-label="Требуют внимания: ${stats.bad}">! ${stats.bad}</small>` : ''}</button>`;
+    return `<button type="button" class="city-floor" data-city-floor="${esc(r.id)}" aria-controls="cityPreview" aria-expanded="${r.id === city.selected}" aria-pressed="${r.id === city.selected}"><span class="city-floor-address">${esc(cityAddressLabel(r,city.rooms.indexOf(r)+1))}</span><span>${esc(r.title)}</span>${stats.bad ? `<small aria-label="${tr('Требуют внимания:', 'Needs attention:')} ${stats.bad}">! ${stats.bad}</small>` : ''}</button>`;
   }).join('');
   if (nav.innerHTML !== html) {
     nav.innerHTML = html;
     if (active) [...nav.querySelectorAll('button')].find(b => b.dataset.cityFloor === active)?.focus({preventScroll:true});
   }
-  $('cityHint').textContent = !rooms.length ? 'Офисы появятся при подключении демонов' : !city.eligible.size ? 'По этому фильтру нет офисов' : 'Наведите на этаж, чтобы заглянуть внутрь';
+  $('cityHint').textContent = !rooms.length ? tr("Офисы появятся при подключении демонов", "Offices appear when daemons connect") : !city.eligible.size ? tr("По этому фильтру нет офисов", "No offices match this filter") : tr("Наведите на этаж, чтобы заглянуть внутрь", "Hover over a floor to look inside");
   renderCityBuildings(); cityPreview(); city.dirty = true;
 }
 function renderCityBuildings() {
   const nav=$('cityBuildings'), active=nav.contains(document.activeElement)?document.activeElement?.dataset?.cityBuilding:null;
-  const html=`<button type="button" class="btn" data-city-building="all" aria-pressed="${city.focus===null}">Весь квартал</button>`+
-    city.buildings.map(b=>`<button type="button" class="btn" data-city-building="${b.number}" aria-pressed="${city.focus===b.number}"><b>${esc(b.title)}</b><span>${b.title!==`Корпус ${b.number}`?`№${b.number} · `:''}${b.rooms.length}/16 офисов</span></button>`).join('');
+  const html=`<button type="button" class="btn" data-city-building="all" aria-pressed="${city.focus===null}">${tr('Весь квартал', 'Entire district')}</button>`+
+    city.buildings.map(b=>`<button type="button" class="btn" data-city-building="${b.number}" aria-pressed="${city.focus===b.number}"><b>${esc(b.title)}</b><span>${b.title!==`${tr('Корпус', 'Building')} ${b.number}`?`№${b.number} · `:''}${b.rooms.length}/16 ${tr('офисов', 'offices')}</span></button>`).join('');
   if(nav.innerHTML!==html) {
     nav.innerHTML=html;
     if(active)[...nav.querySelectorAll('button')].find(b=>b.dataset.cityBuilding===active)?.focus({preventScroll:true});
@@ -51,12 +51,12 @@ function renderCityBuildings() {
   $('cityRenameOpen').disabled=!city.buildings.length||city.savingName;
   const count=city.buildings.length, p=cityPopulation(count);
   const word=count%100>=11&&count%100<=14?'корпусов':count%10===1?'корпус':count%10>=2&&count%10<=4?'корпуса':'корпусов';
-  $('cityDistrictSummary').textContent=city.focus?`${city.buildings.find(b=>b.number===city.focus)?.title || `Корпус ${city.focus}`} · до 16 офисов`:count>1?`${count} ${word} · магазинов и кафе: ${p.shops} · школ: ${p.schools}`:'Каждый этаж — ваша команда';
+  $('cityDistrictSummary').textContent=city.focus?`${city.buildings.find(b=>b.number===city.focus)?.title || `${tr('Корпус', 'Building')} ${city.focus}`} · ${tr('до 16 офисов', 'up to 16 offices')}`:count>1?tr(`${count} ${word} · магазинов и кафе: ${p.shops} · школ: ${p.schools}`, `${count} buildings · shops and cafes: ${p.shops} · schools: ${p.schools}`):tr("Каждый этаж — ваша команда", "A home for each team");
 }
 function cityOpenNameEditor() {
   if(!city.buildings.length||city.savingName)return;
   city.naming=true;
-  $('cityNameBuilding').innerHTML=city.buildings.map(b=>`<option value="${b.number}">Корпус ${b.number}${b.title!==`Корпус ${b.number}`?` — ${esc(b.title)}`:''}</option>`).join('');
+  $('cityNameBuilding').innerHTML=city.buildings.map(b=>`<option value="${b.number}">${tr('Корпус', 'Building')} ${b.number}${b.title!==`${tr('Корпус', 'Building')} ${b.number}`?` — ${esc(b.title)}`:''}</option>`).join('');
   $('cityNameBuilding').value=String(city.focus || city.buildings[0].number);
   cityNameTargetChanged();
   $('cityNameStatus').textContent='';
@@ -66,9 +66,11 @@ function cityOpenNameEditor() {
 function cityNameTargetChanged() {
   const b=city.buildings.find(b=>b.number===Number($('cityNameBuilding').value));
   $('cityNameInput').value=b?.title || '';
+  markFormClean($('cityNameForm'));
 }
 function cityCloseNameEditor() {
   if(city.savingName)return;
+  markFormClean($('cityNameForm'));
   city.naming=false;$('cityNameForm').hidden=true;$('cityRenameOpen').setAttribute('aria-expanded','false');
   $('cityRenameOpen').focus({preventScroll:true});
 }
@@ -78,20 +80,20 @@ async function citySaveName(e) {
   const building=Number($('cityNameBuilding').value), name=$('cityNameInput').value.trim();
   const status=$('cityNameStatus');
   if(!name || Array.from(name).length>60 || /[\p{C}\p{Zl}\p{Zp}]/u.test(name)) {
-    status.textContent='Введите название от 1 до 60 символов, без переносов строк.';return;
+    status.textContent=tr("Введите название от 1 до 60 символов, без переносов строк.", "Enter a name of 1–60 characters, without line breaks.");return;
   }
-  city.savingName=true;status.textContent='Сохраняем название…';
+  city.savingName=true;status.textContent=tr("Сохраняем название…", "Saving name…");
   const controls=['cityNameBuilding','cityNameInput','cityNameSave','cityNameCancel','cityRenameOpen'];
   controls.forEach(id=>$(id).disabled=true);$('cityNameForm').setAttribute('aria-busy','true');
   let saved=false;
   try {
     const response=await fetch('/api/buildings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'rename',building,name})});
     const snap=await response.json();
-    if(!response.ok || snap.error)throw new Error(snap.error || 'Не удалось сохранить название. Попробуйте ещё раз.');
-    saved=true;
-    try { apply(snap);status.textContent='Название корпуса сохранено'; }
-    catch (_) { status.textContent='Название сохранено. Обновите страницу, чтобы увидеть изменения.'; }
-  } catch (error) { status.textContent=error.message || 'Нет связи с сервером. Попробуйте ещё раз.'; }
+    if(!response.ok || snap.error)throw new Error(translateServerMessage(snap.error) || tr("Не удалось сохранить название. Попробуйте ещё раз.", "Could not save the name. Try again."));
+    saved=true;markFormClean($('cityNameForm'));
+    try { apply(snap);status.textContent=tr("Название корпуса сохранено", "Building name saved"); }
+    catch (_) { status.textContent=tr("Название сохранено. Обновите страницу, чтобы увидеть изменения.", "Name saved. Reload the page to see the changes."); }
+  } catch (error) { status.textContent=translateServerMessage(error.message) || tr("Нет связи с сервером. Попробуйте ещё раз.", "Cannot reach the server. Try again."); }
   finally {
     city.savingName=false;controls.forEach(id=>$(id).disabled=false);$('cityNameForm').setAttribute('aria-busy','false');
     if(saved)cityCloseNameEditor();
@@ -119,7 +121,7 @@ function renderCityLabels(camera,buildings) {
   if(key===city.labelKey)return;
   city.labels=cityLabels(camera,buildings,city.focus);city.labelKey=key;
   const host=$('cityLabels'), active=host.contains(document.activeElement)?document.activeElement.dataset.cityBuilding:null;
-  host.innerHTML=city.labels.map(label=>`<button type="button" class="city-building-label" data-city-building="${label.number}" aria-label="Приблизить корпус ${label.number}: ${esc(label.text)}" title="${esc(label.text)} · корпус ${label.number}" aria-pressed="${city.focus===label.number}" style="left:${label.x}px;top:${label.y}px;width:${label.w}px;height:${label.h}px">${esc(label.text)}</button>`).join('');
+  host.innerHTML=city.labels.map(label=>`<button type="button" class="city-building-label" data-city-building="${label.number}" aria-label="${tr('Приблизить корпус', 'Zoom to building')} ${label.number}: ${esc(label.text)}" title="${esc(label.text)} · ${tr('корпус', 'building')} ${label.number}" aria-pressed="${city.focus===label.number}" style="left:${label.x}px;top:${label.y}px;width:${label.w}px;height:${label.h}px">${esc(label.text)}</button>`).join('');
   if(active)[...host.querySelectorAll('button')].find(b=>b.dataset.cityBuilding===active)?.focus({preventScroll:true});
 }
 function citySelect(id, focusBuilding=false) {
@@ -138,13 +140,13 @@ function cityPreview() {
   if (!room) { box.hidden = true; city.previewKey = ''; return; }
   const ds = lastSnapshot.daemons.filter(d => d.office_id === room.id), counts = roomStats(ds);
   const picture = office.plate?.src;
-  const html = `<div class="city-preview-head"><div><small>${esc(cityAddressLabel(room,city.rooms.indexOf(room)+1))}</small><h3>${esc(room.title)}</h3></div><button type="button" class="close" data-city-action="close" aria-label="Закрыть предпросмотр">×</button></div>
-    <p class="city-preview-meta">${ds.length} из ${room.capacity} мест · ${counts.busy} работают${counts.bad ? ` · ${counts.bad} требуют внимания` : ''}</p>
-    <div class="city-office-image" role="img" aria-label="Офис ${esc(room.title)}. Закреплённые места демонов.">${picture ? `<img src="${esc(picture)}" alt="" draggable="false">${ds.map(d => {
+  const html = `<div class="city-preview-head"><div><small>${esc(cityAddressLabel(room,city.rooms.indexOf(room)+1))}</small><h3>${esc(room.title)}</h3></div><button type="button" class="close" data-city-action="close" aria-label="${tr('Закрыть предпросмотр', 'Close preview')}">×</button></div>
+    <p class="city-preview-meta">${tr(`${ds.length} из ${room.capacity} мест · ${counts.busy} работают`, `${ds.length} of ${room.capacity} seats · ${counts.busy} working`)}${counts.bad ? tr(` · ${counts.bad} требуют внимания`, ` · ${counts.bad} need attention`) : ''}</p>
+    <div class="city-office-image" role="img" aria-label="${tr('Офис', 'Office')} ${esc(room.title)}. ${tr('Закреплённые места демонов.', 'Assigned daemon seats.')}">${picture ? `<img src="${esc(picture)}" alt="" draggable="false">${ds.map(d => {
       const seat = SEATS[d.office_slot], thumb = appearanceThumb(d);
       return seat && thumb ? `<img class="preview-demon" src="${thumb}" alt="" draggable="false" style="left:${seat.pos[0]/PLATE*100}%;top:${seat.pos[1]/PLATE*100}%">` : '';
-    }).join('')}` : '<span class="city-art-loading">Оформление офиса загружается…</span>'}</div>
-    <div class="city-preview-actions"><button type="button" class="btn primary" data-city-action="open">Войти в офис →</button><button type="button" class="btn" data-city-action="manage">Рассадка</button></div>`;
+    }).join('')}` : `<span class="city-art-loading">${tr('Оформление офиса загружается…', 'Loading office artwork…')}</span>`}</div>
+    <div class="city-preview-actions"><button type="button" class="btn primary" data-city-action="open">${tr('Войти в офис', 'Enter office')} →</button><button type="button" class="btn" data-city-action="manage">${tr('Рассадка', 'Seating')}</button></div>`;
   if (city.previewKey !== html) {
     const focused = box.contains(document.activeElement) ? document.activeElement.dataset.cityAction : null;
     const scroll = box.scrollTop;
@@ -291,7 +293,7 @@ function drawCity() {
         for(let dx=10;dx<s.w-12;dx+=25)for(const z of [12,36])poly([[s.x+dx,s.y+s.d+.1,z],[s.x+dx+14,s.y+s.d+.1,z],[s.x+dx+14,s.y+s.d+.1,z+17],[s.x+dx,s.y+s.d+.1,z+17]],color.glass);
         box(s.x+s.w/2-21,s.y+s.d,0,42,12,48,color.wall,color.side,color.top);
         poly([[s.x+s.w/2-30,s.y+s.d+13,48],[s.x+s.w/2,s.y+s.d+13,72],[s.x+s.w/2+30,s.y+s.d+13,48]],color.top);
-        frontText('ШКОЛА',s.x+s.w/2-18,s.y+s.d+13,37,9,color.ink);
+        frontText(tr("ШКОЛА", "SCHOOL"),s.x+s.w/2-18,s.y+s.d+13,37,9,color.ink);
         box(s.x+s.w/2-9,s.y+s.d+13,0,18,1,25,color.glass);
         // Flag and playground beside the school, with a basketball hoop.
         box(s.x-16,s.y+s.d,0,2,2,68,color.metal);
@@ -336,7 +338,7 @@ function drawCity() {
   city.faces=[];
   for(const building of buildings) {
   if(!visible(building.x,building.y,232,132,(92+building.floors*62)*CITY_HEIGHT))continue;
-  const levels=Array.from({length:building.floors},(_,i)=>building.rooms.find(e=>e.floor===i+1)?.room||{id:null,title:'Свободный этаж'});
+  const levels=Array.from({length:building.floors},(_,i)=>building.rooms.find(e=>e.floor===i+1)?.room||{id:null,title:tr("Свободный этаж", "Vacant floor")});
   add(building.x+building.y+220, () => {
     origin=[building.x,building.y];zScale=CITY_HEIGHT;
     // Foundation, glazed lobby and cantilever canopy.
@@ -392,7 +394,7 @@ function drawCity() {
     for(let i=0;i<4;i++) line([143+i*12,17,roof+21.1],[143+i*12,45,roof+21.1],color.edge,.8);
     // A restrained turquoise sign anchors the identity on the entrance fascia.
     poly([[69,121.8,48],[153,121.8,48],[153,121.8,59],[69,121.8,59]],color.metal);
-    frontText('А Р Т Е Л Ь',75,122,50,8,dark?'#91e1ce':'#cbf3e0');
+    frontText(tr("А Р Т Е Л Ь", "A R T E L"),75,122,50,8,dark?'#91e1ce':'#cbf3e0');
     origin=[0,0];zScale=1;
   });
   }
@@ -466,7 +468,7 @@ function cityFrame(now) {
   if(document.hidden || !city.visible || !city.width || $('building').hidden || typeof officeMotionPaused !== 'function') return;
   const paused=officeMotionPaused(), theme=document.documentElement.dataset.theme;
   if(theme!==city.theme) { city.theme=theme;city.dirty=true; }
-  const button=$('cityMotion'), label=social.reduced.matches?'Движение сокращено':paused?'Продолжить сцену':'Пауза сцены';
+  const button=$('cityMotion'), label=social.reduced.matches?tr("Движение сокращено", "Reduced motion"):paused?tr("Продолжить сцену", "Resume scene"):tr("Пауза сцены", "Pause scene");
   if(button.textContent!==label) {button.textContent=label;button.setAttribute('aria-pressed',String(paused));button.disabled=social.reduced.matches;city.dirty=true;}
   if(!paused) city.time+=elapsed;
   // No continuous paint when paused; cap the street at 30 fps to leave CPU for daemon logs.

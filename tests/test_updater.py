@@ -38,9 +38,13 @@ class UpdaterTest(unittest.TestCase):
             'office_dashboard/artel_dashboard/memory.py': b'enabled = True',
             'office_dashboard/assets/06_CHARACTER_ANIMATIONS/characters/new/atlas.png': b'new sprite',
             'office_dashboard/assets/06_CHARACTER_ANIMATIONS/characters/new/animations.json': b'{"idle": 1}',
-            'office_dashboard/assets/LICENSE_EN.txt': b'License',
+            'office_dashboard/assets/NOTICE.txt': b'Asset metadata',
             'README.md': b'new documentation',
             'README.ru.md': b'Russian documentation',
+            'UPDATE.en.md': b'English update guide',
+            'CHANGELOG.en.md': b'English release history',
+            'office_dashboard/README.en.md': b'English architecture guide',
+            'tests/README.en.md': b'English testing guide',
             'docs/images/city-overview.jpg': b'demo screenshot',
             'CHANGELOG.md': b'release changes',
             'docs/CONFIGURATION.md': b'configuration reference',
@@ -109,6 +113,7 @@ class UpdaterTest(unittest.TestCase):
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text('private')
         documentation = ('README.md', 'README.ru.md', 'CHANGELOG.md', 'office_dashboard/README.md',
+                         'UPDATE.en.md', 'CHANGELOG.en.md', 'office_dashboard/README.en.md', 'tests/README.en.md',
                          'docs/images/city-overview.jpg',
                          'docs/CONFIGURATION.md', 'docs/RUNBOOK.md', 'config/example.json.sample',
                          'config/example-services.json.sample', 'tests/README.md')

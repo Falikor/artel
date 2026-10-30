@@ -1,0 +1,1183 @@
+{
+  "id": "worker_orange_yellow",
+  "name": "Рыжая · жёлтый",
+  "color": "yellow",
+  "image": "characters/worker_orange_yellow/atlas.png",
+  "atlas": "characters/worker_orange_yellow/atlas.json",
+  "frameSize": {
+    "w": 128,
+    "h": 128
+  },
+  "pivot": {
+    "x": 64,
+    "y": 112
+  },
+  "bodyHeightPx": 86,
+  "directions": {
+    "down": "front / toward viewer",
+    "up": "back / away from viewer",
+    "right": "screen right",
+    "left": "screen left"
+  },
+  "animations": {
+    "idle_down": {
+      "label": "Ожидание · вперёд",
+      "row": 0,
+      "loop": true,
+      "frames": [
+        "idle_down_00",
+        "idle_down_01",
+        "idle_down_02",
+        "idle_down_03",
+        "idle_down_04",
+        "idle_down_05",
+        "idle_down_06",
+        "idle_down_07"
+      ],
+      "durationsMs": [
+        260,
+        260,
+        160,
+        120,
+        260,
+        260,
+        260,
+        260
+      ],
+      "totalDurationMs": 1840,
+      "events": [],
+      "category": "basic"
+    },
+    "idle_up": {
+      "label": "Ожидание · назад",
+      "row": 1,
+      "loop": true,
+      "frames": [
+        "idle_up_00",
+        "idle_up_01",
+        "idle_up_02",
+        "idle_up_03",
+        "idle_up_04",
+        "idle_up_05",
+        "idle_up_06",
+        "idle_up_07"
+      ],
+      "durationsMs": [
+        280,
+        280,
+        280,
+        280,
+        280,
+        280,
+        280,
+        280
+      ],
+      "totalDurationMs": 2240,
+      "events": [],
+      "category": "basic"
+    },
+    "idle_right": {
+      "label": "Ожидание · вправо",
+      "row": 2,
+      "loop": true,
+      "frames": [
+        "idle_right_00",
+        "idle_right_01",
+        "idle_right_02",
+        "idle_right_03",
+        "idle_right_04",
+        "idle_right_05",
+        "idle_right_06",
+        "idle_right_07"
+      ],
+      "durationsMs": [
+        260,
+        260,
+        160,
+        120,
+        260,
+        260,
+        260,
+        260
+      ],
+      "totalDurationMs": 1840,
+      "events": [],
+      "category": "basic"
+    },
+    "idle_left": {
+      "label": "Ожидание · влево",
+      "row": 3,
+      "loop": true,
+      "frames": [
+        "idle_left_00",
+        "idle_left_01",
+        "idle_left_02",
+        "idle_left_03",
+        "idle_left_04",
+        "idle_left_05",
+        "idle_left_06",
+        "idle_left_07"
+      ],
+      "durationsMs": [
+        260,
+        260,
+        160,
+        120,
+        260,
+        260,
+        260,
+        260
+      ],
+      "totalDurationMs": 1840,
+      "events": [],
+      "category": "basic"
+    },
+    "walk_down": {
+      "label": "Ходьба · вперёд",
+      "row": 4,
+      "loop": true,
+      "frames": [
+        "walk_down_00",
+        "walk_down_01",
+        "walk_down_02",
+        "walk_down_03",
+        "walk_down_04",
+        "walk_down_05",
+        "walk_down_06",
+        "walk_down_07"
+      ],
+      "durationsMs": [
+        110,
+        90,
+        90,
+        110,
+        110,
+        90,
+        90,
+        110
+      ],
+      "totalDurationMs": 800,
+      "events": [
+        {
+          "frame": 0,
+          "name": "footstep"
+        },
+        {
+          "frame": 4,
+          "name": "footstep"
+        }
+      ],
+      "category": "basic"
+    },
+    "walk_up": {
+      "label": "Ходьба · назад",
+      "row": 5,
+      "loop": true,
+      "frames": [
+        "walk_up_00",
+        "walk_up_01",
+        "walk_up_02",
+        "walk_up_03",
+        "walk_up_04",
+        "walk_up_05",
+        "walk_up_06",
+        "walk_up_07"
+      ],
+      "durationsMs": [
+        110,
+        90,
+        90,
+        110,
+        110,
+        90,
+        90,
+        110
+      ],
+      "totalDurationMs": 800,
+      "events": [
+        {
+          "frame": 0,
+          "name": "footstep"
+        },
+        {
+          "frame": 4,
+          "name": "footstep"
+        }
+      ],
+      "category": "basic"
+    },
+    "walk_right": {
+      "label": "Ходьба · вправо",
+      "row": 6,
+      "loop": true,
+      "frames": [
+        "walk_right_00",
+        "walk_right_01",
+        "walk_right_02",
+        "walk_right_03",
+        "walk_right_04",
+        "walk_right_05",
+        "walk_right_06",
+        "walk_right_07"
+      ],
+      "durationsMs": [
+        110,
+        90,
+        90,
+        110,
+        110,
+        90,
+        90,
+        110
+      ],
+      "totalDurationMs": 800,
+      "events": [
+        {
+          "frame": 0,
+          "name": "footstep"
+        },
+        {
+          "frame": 4,
+          "name": "footstep"
+        }
+      ],
+      "category": "basic"
+    },
+    "walk_left": {
+      "label": "Ходьба · влево",
+      "row": 7,
+      "loop": true,
+      "frames": [
+        "walk_left_00",
+        "walk_left_01",
+        "walk_left_02",
+        "walk_left_03",
+        "walk_left_04",
+        "walk_left_05",
+        "walk_left_06",
+        "walk_left_07"
+      ],
+      "durationsMs": [
+        110,
+        90,
+        90,
+        110,
+        110,
+        90,
+        90,
+        110
+      ],
+      "totalDurationMs": 800,
+      "events": [
+        {
+          "frame": 0,
+          "name": "footstep"
+        },
+        {
+          "frame": 4,
+          "name": "footstep"
+        }
+      ],
+      "category": "basic"
+    },
+    "work_right": {
+      "label": "Работа · вправо",
+      "row": 8,
+      "loop": true,
+      "frames": [
+        "work_right_00",
+        "work_right_01",
+        "work_right_02",
+        "work_right_03",
+        "work_right_04",
+        "work_right_05",
+        "work_right_06",
+        "work_right_07"
+      ],
+      "durationsMs": [
+        150,
+        100,
+        100,
+        140,
+        150,
+        100,
+        100,
+        220
+      ],
+      "totalDurationMs": 1060,
+      "events": [],
+      "category": "seating",
+      "posture": "seated",
+      "facing": "right",
+      "locksLocomotion": true,
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor; calibrate against furniture."
+      }
+    },
+    "work_left": {
+      "label": "Работа · влево",
+      "row": 9,
+      "loop": true,
+      "frames": [
+        "work_left_00",
+        "work_left_01",
+        "work_left_02",
+        "work_left_03",
+        "work_left_04",
+        "work_left_05",
+        "work_left_06",
+        "work_left_07"
+      ],
+      "durationsMs": [
+        150,
+        100,
+        100,
+        140,
+        150,
+        100,
+        100,
+        220
+      ],
+      "totalDurationMs": 1060,
+      "events": [],
+      "category": "seating",
+      "posture": "seated",
+      "facing": "left",
+      "locksLocomotion": true,
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor; calibrate against furniture."
+      }
+    },
+    "coffee": {
+      "label": "Кофе",
+      "row": 10,
+      "loop": false,
+      "frames": [
+        "coffee_00",
+        "coffee_01",
+        "coffee_02",
+        "coffee_03",
+        "coffee_04",
+        "coffee_05",
+        "coffee_06",
+        "coffee_07"
+      ],
+      "durationsMs": [
+        280,
+        160,
+        180,
+        420,
+        280,
+        180,
+        160,
+        320
+      ],
+      "totalDurationMs": 1980,
+      "events": [
+        {
+          "frame": 3,
+          "name": "sip"
+        }
+      ],
+      "category": "basic"
+    },
+    "talk": {
+      "label": "Разговор",
+      "row": 11,
+      "loop": true,
+      "frames": [
+        "talk_00",
+        "talk_01",
+        "talk_02",
+        "talk_03",
+        "talk_04",
+        "talk_05",
+        "talk_06",
+        "talk_07"
+      ],
+      "durationsMs": [
+        140,
+        140,
+        180,
+        140,
+        140,
+        180,
+        140,
+        180
+      ],
+      "totalDurationMs": 1240,
+      "events": [],
+      "category": "basic"
+    },
+    "laugh": {
+      "label": "Смех",
+      "row": 12,
+      "loop": false,
+      "frames": [
+        "laugh_00",
+        "laugh_01",
+        "laugh_02",
+        "laugh_03",
+        "laugh_04",
+        "laugh_05",
+        "laugh_06",
+        "laugh_07"
+      ],
+      "durationsMs": [
+        140,
+        100,
+        110,
+        100,
+        110,
+        120,
+        160,
+        280
+      ],
+      "totalDurationMs": 1120,
+      "events": [],
+      "category": "basic"
+    },
+    "celebrate": {
+      "label": "Празднование",
+      "row": 13,
+      "loop": false,
+      "frames": [
+        "celebrate_00",
+        "celebrate_01",
+        "celebrate_02",
+        "celebrate_03",
+        "celebrate_04",
+        "celebrate_05",
+        "celebrate_06",
+        "celebrate_07"
+      ],
+      "durationsMs": [
+        140,
+        100,
+        100,
+        180,
+        150,
+        120,
+        180,
+        300
+      ],
+      "totalDurationMs": 1270,
+      "events": [
+        {
+          "frame": 3,
+          "name": "cheer"
+        },
+        {
+          "frame": 6,
+          "name": "land"
+        }
+      ],
+      "category": "basic"
+    },
+    "wave": {
+      "label": "Приветствие",
+      "row": 14,
+      "loop": false,
+      "frames": [
+        "wave_00",
+        "wave_01",
+        "wave_02",
+        "wave_03",
+        "wave_04",
+        "wave_05",
+        "wave_06",
+        "wave_07"
+      ],
+      "durationsMs": [
+        180,
+        120,
+        140,
+        140,
+        140,
+        140,
+        140,
+        260
+      ],
+      "totalDurationMs": 1260,
+      "events": [],
+      "category": "basic"
+    },
+    "think": {
+      "label": "Размышление",
+      "row": 15,
+      "loop": true,
+      "frames": [
+        "think_00",
+        "think_01",
+        "think_02",
+        "think_03",
+        "think_04",
+        "think_05",
+        "think_06",
+        "think_07"
+      ],
+      "durationsMs": [
+        250,
+        200,
+        280,
+        380,
+        300,
+        240,
+        220,
+        300
+      ],
+      "totalDurationMs": 2170,
+      "events": [],
+      "category": "basic"
+    },
+    "seated_idle_down": {
+      "label": "Сидит · вперёд",
+      "row": 16,
+      "category": "seating",
+      "facing": "down",
+      "loop": true,
+      "frames": [
+        "seated_idle_down_00",
+        "seated_idle_down_01",
+        "seated_idle_down_02",
+        "seated_idle_down_03",
+        "seated_idle_down_04",
+        "seated_idle_down_05",
+        "seated_idle_down_06",
+        "seated_idle_down_07"
+      ],
+      "durationsMs": [
+        280,
+        280,
+        180,
+        160,
+        280,
+        280,
+        280,
+        280
+      ],
+      "totalDurationMs": 2020,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "seated_idle_up": {
+      "label": "Сидит · назад",
+      "row": 17,
+      "category": "seating",
+      "facing": "up",
+      "loop": true,
+      "frames": [
+        "seated_idle_up_00",
+        "seated_idle_up_01",
+        "seated_idle_up_02",
+        "seated_idle_up_03",
+        "seated_idle_up_04",
+        "seated_idle_up_05",
+        "seated_idle_up_06",
+        "seated_idle_up_07"
+      ],
+      "durationsMs": [
+        280,
+        280,
+        180,
+        160,
+        280,
+        280,
+        280,
+        280
+      ],
+      "totalDurationMs": 2020,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "seated_idle_right": {
+      "label": "Сидит · вправо",
+      "row": 18,
+      "category": "seating",
+      "facing": "right",
+      "loop": true,
+      "frames": [
+        "seated_idle_right_00",
+        "seated_idle_right_01",
+        "seated_idle_right_02",
+        "seated_idle_right_03",
+        "seated_idle_right_04",
+        "seated_idle_right_05",
+        "seated_idle_right_06",
+        "seated_idle_right_07"
+      ],
+      "durationsMs": [
+        280,
+        280,
+        180,
+        160,
+        280,
+        280,
+        280,
+        280
+      ],
+      "totalDurationMs": 2020,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "seated_idle_left": {
+      "label": "Сидит · влево",
+      "row": 19,
+      "category": "seating",
+      "facing": "left",
+      "loop": true,
+      "frames": [
+        "seated_idle_left_00",
+        "seated_idle_left_01",
+        "seated_idle_left_02",
+        "seated_idle_left_03",
+        "seated_idle_left_04",
+        "seated_idle_left_05",
+        "seated_idle_left_06",
+        "seated_idle_left_07"
+      ],
+      "durationsMs": [
+        280,
+        280,
+        180,
+        160,
+        280,
+        280,
+        280,
+        280
+      ],
+      "totalDurationMs": 2020,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "work_down": {
+      "label": "Работа · вперёд",
+      "row": 20,
+      "category": "seating",
+      "facing": "down",
+      "loop": true,
+      "frames": [
+        "work_down_00",
+        "work_down_01",
+        "work_down_02",
+        "work_down_03",
+        "work_down_04",
+        "work_down_05",
+        "work_down_06",
+        "work_down_07"
+      ],
+      "durationsMs": [
+        150,
+        100,
+        100,
+        140,
+        150,
+        100,
+        100,
+        220
+      ],
+      "totalDurationMs": 1060,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "work_up": {
+      "label": "Работа · назад",
+      "row": 21,
+      "category": "seating",
+      "facing": "up",
+      "loop": true,
+      "frames": [
+        "work_up_00",
+        "work_up_01",
+        "work_up_02",
+        "work_up_03",
+        "work_up_04",
+        "work_up_05",
+        "work_up_06",
+        "work_up_07"
+      ],
+      "durationsMs": [
+        150,
+        100,
+        100,
+        140,
+        150,
+        100,
+        100,
+        220
+      ],
+      "totalDurationMs": 1060,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "sit_down_right": {
+      "label": "Садится · вправо",
+      "row": 22,
+      "category": "seating",
+      "facing": "right",
+      "loop": false,
+      "frames": [
+        "sit_down_right_00",
+        "sit_down_right_01",
+        "sit_down_right_02",
+        "sit_down_right_03",
+        "sit_down_right_04",
+        "sit_down_right_05",
+        "sit_down_right_06",
+        "sit_down_right_07"
+      ],
+      "durationsMs": [
+        160,
+        120,
+        120,
+        120,
+        140,
+        160,
+        160,
+        220
+      ],
+      "totalDurationMs": 1200,
+      "posture": "transition",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": "seated_idle_right",
+      "events": [
+        {
+          "frame": 5,
+          "name": "seat_contact"
+        },
+        {
+          "frame": 7,
+          "name": "seated"
+        }
+      ]
+    },
+    "sit_down_left": {
+      "label": "Садится · влево",
+      "row": 23,
+      "category": "seating",
+      "facing": "left",
+      "loop": false,
+      "frames": [
+        "sit_down_left_00",
+        "sit_down_left_01",
+        "sit_down_left_02",
+        "sit_down_left_03",
+        "sit_down_left_04",
+        "sit_down_left_05",
+        "sit_down_left_06",
+        "sit_down_left_07"
+      ],
+      "durationsMs": [
+        160,
+        120,
+        120,
+        120,
+        140,
+        160,
+        160,
+        220
+      ],
+      "totalDurationMs": 1200,
+      "posture": "transition",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": "seated_idle_left",
+      "events": [
+        {
+          "frame": 5,
+          "name": "seat_contact"
+        },
+        {
+          "frame": 7,
+          "name": "seated"
+        }
+      ]
+    },
+    "stand_up_right": {
+      "label": "Встаёт · вправо",
+      "row": 24,
+      "category": "seating",
+      "facing": "right",
+      "loop": false,
+      "frames": [
+        "stand_up_right_00",
+        "stand_up_right_01",
+        "stand_up_right_02",
+        "stand_up_right_03",
+        "stand_up_right_04",
+        "stand_up_right_05",
+        "stand_up_right_06",
+        "stand_up_right_07"
+      ],
+      "durationsMs": [
+        160,
+        140,
+        120,
+        120,
+        120,
+        140,
+        160,
+        220
+      ],
+      "totalDurationMs": 1180,
+      "posture": "transition",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": "idle_right",
+      "events": [
+        {
+          "frame": 7,
+          "name": "seat_released"
+        }
+      ]
+    },
+    "stand_up_left": {
+      "label": "Встаёт · влево",
+      "row": 25,
+      "category": "seating",
+      "facing": "left",
+      "loop": false,
+      "frames": [
+        "stand_up_left_00",
+        "stand_up_left_01",
+        "stand_up_left_02",
+        "stand_up_left_03",
+        "stand_up_left_04",
+        "stand_up_left_05",
+        "stand_up_left_06",
+        "stand_up_left_07"
+      ],
+      "durationsMs": [
+        160,
+        140,
+        120,
+        120,
+        120,
+        140,
+        160,
+        220
+      ],
+      "totalDurationMs": 1180,
+      "posture": "transition",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": "idle_left",
+      "events": [
+        {
+          "frame": 7,
+          "name": "seat_released"
+        }
+      ]
+    },
+    "seated_coffee_right": {
+      "label": "Кофе сидя · вправо",
+      "row": 26,
+      "category": "seating",
+      "facing": "right",
+      "loop": false,
+      "frames": [
+        "seated_coffee_right_00",
+        "seated_coffee_right_01",
+        "seated_coffee_right_02",
+        "seated_coffee_right_03",
+        "seated_coffee_right_04",
+        "seated_coffee_right_05",
+        "seated_coffee_right_06",
+        "seated_coffee_right_07"
+      ],
+      "durationsMs": [
+        260,
+        180,
+        180,
+        420,
+        280,
+        200,
+        180,
+        300
+      ],
+      "totalDurationMs": 2000,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": "seated_idle_right",
+      "events": [
+        {
+          "frame": 3,
+          "name": "sip"
+        }
+      ]
+    },
+    "seated_coffee_left": {
+      "label": "Кофе сидя · влево",
+      "row": 27,
+      "category": "seating",
+      "facing": "left",
+      "loop": false,
+      "frames": [
+        "seated_coffee_left_00",
+        "seated_coffee_left_01",
+        "seated_coffee_left_02",
+        "seated_coffee_left_03",
+        "seated_coffee_left_04",
+        "seated_coffee_left_05",
+        "seated_coffee_left_06",
+        "seated_coffee_left_07"
+      ],
+      "durationsMs": [
+        260,
+        180,
+        180,
+        420,
+        280,
+        200,
+        180,
+        300
+      ],
+      "totalDurationMs": 2000,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": "seated_idle_left",
+      "events": [
+        {
+          "frame": 3,
+          "name": "sip"
+        }
+      ]
+    },
+    "seated_talk_right": {
+      "label": "Разговор сидя · вправо",
+      "row": 28,
+      "category": "seating",
+      "facing": "right",
+      "loop": true,
+      "frames": [
+        "seated_talk_right_00",
+        "seated_talk_right_01",
+        "seated_talk_right_02",
+        "seated_talk_right_03",
+        "seated_talk_right_04",
+        "seated_talk_right_05",
+        "seated_talk_right_06",
+        "seated_talk_right_07"
+      ],
+      "durationsMs": [
+        160,
+        140,
+        180,
+        140,
+        160,
+        180,
+        140,
+        180
+      ],
+      "totalDurationMs": 1280,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "seated_talk_left": {
+      "label": "Разговор сидя · влево",
+      "row": 29,
+      "category": "seating",
+      "facing": "left",
+      "loop": true,
+      "frames": [
+        "seated_talk_left_00",
+        "seated_talk_left_01",
+        "seated_talk_left_02",
+        "seated_talk_left_03",
+        "seated_talk_left_04",
+        "seated_talk_left_05",
+        "seated_talk_left_06",
+        "seated_talk_left_07"
+      ],
+      "durationsMs": [
+        160,
+        140,
+        180,
+        140,
+        160,
+        180,
+        140,
+        180
+      ],
+      "totalDurationMs": 1280,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "lounge_right": {
+      "label": "Отдых · вправо",
+      "row": 30,
+      "category": "seating",
+      "facing": "right",
+      "loop": true,
+      "frames": [
+        "lounge_right_00",
+        "lounge_right_01",
+        "lounge_right_02",
+        "lounge_right_03",
+        "lounge_right_04",
+        "lounge_right_05",
+        "lounge_right_06",
+        "lounge_right_07"
+      ],
+      "durationsMs": [
+        300,
+        280,
+        260,
+        320,
+        280,
+        260,
+        280,
+        340
+      ],
+      "totalDurationMs": 2320,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    },
+    "lounge_left": {
+      "label": "Отдых · влево",
+      "row": 31,
+      "category": "seating",
+      "facing": "left",
+      "loop": true,
+      "frames": [
+        "lounge_left_00",
+        "lounge_left_01",
+        "lounge_left_02",
+        "lounge_left_03",
+        "lounge_left_04",
+        "lounge_left_05",
+        "lounge_left_06",
+        "lounge_left_07"
+      ],
+      "durationsMs": [
+        300,
+        280,
+        260,
+        320,
+        280,
+        260,
+        280,
+        340
+      ],
+      "totalDurationMs": 2320,
+      "posture": "seated",
+      "seatAnchor": {
+        "x": 64,
+        "y": 94,
+        "calibration": "Suggested pelvis anchor. Calibrate once against the chosen furniture."
+      },
+      "locksLocomotion": true,
+      "completionAction": null,
+      "events": []
+    }
+  },
+  "atlasSize": {
+    "w": 1024,
+    "h": 4096
+  },
+  "seating": {
+    "suggestedSeatAnchor": {
+      "x": 64,
+      "y": 94
+    },
+    "worldFootPivot": {
+      "x": 64,
+      "y": 112
+    },
+    "calibrationRequired": true
+  }
+}

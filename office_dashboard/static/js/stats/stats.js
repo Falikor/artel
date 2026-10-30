@@ -6,14 +6,14 @@
  */
 
 const RESULT = {
-  ok:   { label: 'Готово',         icon: '✓', color: 'var(--st-good)' },
-  warn: { label: 'С замечаниями',  icon: '⚠', color: 'var(--st-warn)' },
-  fail: { label: 'Ошибка',         icon: '✗', color: 'var(--st-crit)' },
-  blocked: { label: 'Ждёт уточнения', icon: '?', color: 'var(--muted)' },
+  ok:   { label: tr('Готово', 'Done'),         icon: '✓', color: 'var(--st-good)' },
+  warn: { label: tr('С замечаниями', 'With notes'),  icon: '⚠', color: 'var(--st-warn)' },
+  fail: { label: tr('Ошибка', 'Failed'),         icon: '✗', color: 'var(--st-crit)' },
+  blocked: { label: tr('Ждёт уточнения', 'Needs clarification'), icon: '?', color: 'var(--muted)' },
 };
 const PERIODS = [
-  { key: 'today', label: 'Сегодня' }, { key: '7', label: '7 дней' },
-  { key: '30', label: '30 дней' }, { key: 'all', label: 'Всё время' },
+  { key: 'today', label: tr('Сегодня', 'Today') }, { key: '7', label: tr('7 дней', '7 days') },
+  { key: '30', label: tr('30 дней', '30 days') }, { key: 'all', label: tr('Всё время', 'All time') },
 ];
 const stats = { period: '7', room: '', demon: '', query: '', data: null, timer: null, sort: 'done',
   prices: { input: 0, output: 0, cached: 0, currency: '₽' }, pricesOpen: false, serial: 0, direction: 1, error: '' };
@@ -22,7 +22,7 @@ function statsEditorState() {
   const editing = statsEditing();
   $('stats').querySelectorAll('.filters input, .filters select, .filters button').forEach(el => { el.disabled = editing; });
   $('statsBody').querySelectorAll('[data-page-more]').forEach(el => { el.disabled = editing; });
-  if (editing && $('statsStatus')) $('statsStatus').textContent = 'Редактирование. Фильтры и автоматическое обновление приостановлены до сохранения или отмены.';
+  if (editing && $('statsStatus')) $('statsStatus').textContent = tr('Редактирование. Фильтры и автоматическое обновление приостановлены до сохранения или отмены.', 'Editing. Filters and automatic refresh are paused until you save or cancel.');
 }
 function statsStatus(message) { if ($('statsStatus')) $('statsStatus').textContent = message; }
 
@@ -40,15 +40,15 @@ function taskCost(tok) {
 function fmtMoney(v) {
   if (v == null || !isFinite(v)) return '—';
   const digits = v < 1 ? 2 : v < 100 ? 1 : 0;
-  return v.toLocaleString('ru-RU', { minimumFractionDigits: digits, maximumFractionDigits: digits }) + ' ' + stats.prices.currency;
+  return v.toLocaleString(uiLocale(), { minimumFractionDigits: digits, maximumFractionDigits: digits }) + ' ' + stats.prices.currency;
 }
 function costTitle(tok) {
   const c = taskCost(tok);
   if (!c) return '';
-  if (c.estimate) return `оценка: ${fmtTokens(tok.total)} токенов × цена входа (вход/выход GigaCode не сообщил)`;
+  if (c.estimate) return `${tr("оценка: ", "estimate: ")}${fmtTokens(tok.total)}${tr(" токенов × цена входа (вход/выход GigaCode не сообщил)", " tokens × input price (GigaCode did not report input/output separately)")}`;
   const p = stats.prices, cached = tok.cached || 0;
-  return [`вход ${fmtTokens(Math.max(0, (tok.input || 0) - cached))} × ${p.input}`, cached ? `кэш ${fmtTokens(cached)} × ${p.cached}` : '',
-    `выход ${fmtTokens(tok.output || 0)} × ${p.output}`].filter(Boolean).join(' + ') + ` (${p.currency} за 1 млн)`;
+  return [`${tr("вход ", "input ")}${fmtTokens(Math.max(0, (tok.input || 0) - cached))} × ${p.input}`, cached ? `${tr("кэш ", "cache ")}${fmtTokens(cached)} × ${p.cached}` : '',
+    `${tr("выход ", "output ")}${fmtTokens(tok.output || 0)} × ${p.output}`].filter(Boolean).join(' + ') + ` (${p.currency}${tr(" за 1 млн)", " per 1M)")}`;
 }
 // Стоимость задачи Jira — сумма по её попыткам (у каждой свои токены); у предложения — по его токенам
 function recCost(r) {
@@ -63,8 +63,8 @@ function recCost(r) {
 function recCostTitle(r) {
   const runs = r.runs || [];
   if (runs.length < 2) return costTitle(r.tokens);
-  const parts = runs.map((x, i) => { const c = taskCost(x.tokens); return `попытка ${i + 1}${x.result === 'fail' ? ' ✗' : ''}: ${c ? fmtMoney(c.value) : '—'}`; });
-  return `сумма ${runs.length} попыток — ${parts.join(' · ')}`;
+  const parts = runs.map((x, i) => { const c = taskCost(x.tokens); return `${tr("попытка ", "attempt ")}${i + 1}${x.result === 'fail' ? ' ✗' : ''}: ${c ? fmtMoney(c.value) : '—'}`; });
+  return `${tr("сумма ", "total across ")}${runs.length}${tr(" попыток — ", " attempts — ")}${parts.join(' · ')}`;
 }
 function sumCost(recs) {
   let total = 0, counted = 0, estimated = 0;
@@ -78,39 +78,39 @@ function sumCost(recs) {
 function renderPricesForm() {
   const p = stats.prices, f = (k, label) => `<label>${label}<input type="number" min="0" step="any" data-price="${k}" value="${p[k] || 0}"></label>`;
   return `<form class="prices" id="pricesForm">
-    <div class="prices-title">Цена за 1 млн токенов</div>
-    ${f('input', 'Входящие')}${f('output', 'Исходящие')}${f('cached', 'Кэш')}
-    <label>Валюта<input type="text" maxlength="6" data-price="currency" value="${esc(p.currency || '₽')}"></label>
-    <div class="form-actions"><button type="submit" class="btn primary">Сохранить</button><button type="button" class="btn" data-cancel-prices>Отмена</button></div>
-    <span role="status" class="muted prices-note">Кэш считается частью входящих. Стоимость — оценка по расходу, который сообщил GigaCode.</span>
+    <div class="prices-title">${tr("Цена за 1 млн токенов", "Price per 1M tokens")}</div>
+    ${f('input', tr('Входящие', 'Input'))}${f('output', tr('Исходящие', 'Output'))}${f('cached', tr('Кэш', 'Cache'))}
+    <label>${tr("Валюта", "Currency")}<input type="text" maxlength="6" data-price="currency" value="${esc(p.currency || '₽')}"></label>
+    <div class="form-actions"><button type="submit" class="btn primary">${tr("Сохранить", "Save")}</button><button type="button" class="btn" data-cancel-prices>${tr("Отмена", "Cancel")}</button></div>
+    <span role="status" class="muted prices-note">${tr("Кэш считается частью входящих. Стоимость — оценка по расходу, который сообщил GigaCode.", "Cached tokens are part of input. Cost is estimated from usage reported by GigaCode.")}</span>
   </form>`;
 }
 async function savePrices(form) {
   const body = {};
   form.querySelectorAll('[data-price]').forEach(i => { body[i.dataset.price] = i.value; });
   const buttons = [...form.querySelectorAll('button')]; buttons.forEach(b => b.disabled = true);
-  form.querySelector('.prices-note').textContent = 'Сохранение…';
+  form.querySelector('.prices-note').textContent = tr('Сохранение…', 'Saving…');
   try {
     stats.prices = await workspaceJson('/api/prices', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
-    stats.pricesOpen = false; renderStats(true); statsStatus('Цены сохранены. Стоимость пересчитана.');
-  } catch (e) { form.querySelector('.prices-note').textContent = 'Не сохранено: ' + e.message; buttons.forEach(b => b.disabled = false); }
+    markFormClean(form); stats.pricesOpen = false; renderStats(true); statsStatus(tr('Цены сохранены. Стоимость пересчитана.', 'Prices saved. Cost recalculated.'));
+  } catch (e) { form.querySelector('.prices-note').textContent = tr('Не сохранено: ', 'Not saved: ') + translateServerMessage(e.message); buttons.forEach(b => b.disabled = false); }
 }
 
 function fmtMin(sec) {
   if (sec == null || !isFinite(sec)) return '—';
   const m = Math.round(sec / 60);
-  if (m < 1) return '<1 мин';
-  if (m < 60) return `${m} мин`;
-  return `${Math.floor(m / 60)} ч ${String(m % 60).padStart(2, '0')} мин`;
+  if (m < 1) return tr('<1 мин', '<1 min');
+  if (m < 60) return `${m}${tr(" мин", " min")}`;
+  return `${Math.floor(m / 60)}${tr(" ч ", " h ")}${String(m % 60).padStart(2, '0')}${tr(" мин", " min")}`;
 }
 const pad2 = (n) => String(n).padStart(2, '0');
 function fmtWhen(ts) {
   const d = new Date(ts * 1000), now = new Date();
-  const time = `${pad2(d.getHours())}:${pad2(d.getMinutes())}`;
-  if (d.toDateString() === now.toDateString()) return `сегодня ${time}`;
+  const time = d.toLocaleTimeString(uiLocale(), {hour:'2-digit', minute:'2-digit'});
+  if (d.toDateString() === now.toDateString()) return `${tr("сегодня ", "today ")}${time}`;
   const y = new Date(now); y.setDate(now.getDate() - 1);
-  if (d.toDateString() === y.toDateString()) return `вчера ${time}`;
-  return `${pad2(d.getDate())}.${pad2(d.getMonth() + 1)} ${time}`;
+  if (d.toDateString() === y.toDateString()) return `${tr("вчера ", "yesterday ")}${time}`;
+  return `${d.toLocaleDateString(uiLocale(), {day:'numeric', month:'short'})} ${time}`;
 }
 const avg = (xs) => (xs.length ? xs.reduce((s, x) => s + x, 0) / xs.length : null);
 const dayStart = (ts) => { const d = new Date(ts * 1000); d.setHours(0, 0, 0, 0); return d.getTime() / 1000; };
@@ -131,15 +131,15 @@ function demonKey(id) {
   const live = lastSnapshot.daemons.find((d) => d.id === id);
   const meta = (stats.data && stats.data.daemons[id]) || {};
   const ci = (live && live.ci_id) || meta.ci_id;
-  return ci ? `КЭ ${ci}` : (live && live.project) || meta.project || id.toUpperCase();
+  return ci ? `${tr("КЭ ", "CI ")}${ci}` : (live && live.project) || meta.project || id.toUpperCase();
 }
 
 async function loadStats() {
   if (statsEditing()) { statsEditorState(); return; }
   const serial = ++stats.serial, since = periodSince();
   const days = since ? (Date.now() / 1000 - since) / 86400 + 0.01 : 0;
-  statsStatus('Обновление…');
-  if (!stats.data) $('statsBody').innerHTML = '<div class="workspace-loading" aria-label="Загрузка статистики"><span></span><span></span><span></span></div>';
+  statsStatus(tr('Обновление…', 'Refreshing…'));
+  if (!stats.data) $('statsBody').innerHTML = tr('<div class="workspace-loading" aria-label="Загрузка статистики"><span></span><span></span><span></span></div>', '<div class="workspace-loading" aria-label="Loading statistics"><span></span><span></span><span></span></div>');
   $('statsBody').setAttribute('aria-busy', 'true');
   try {
     const [data, prices] = await Promise.all([
@@ -150,12 +150,12 @@ async function loadStats() {
     quality.key = null;
     if (prices) stats.prices = prices;
     renderStats();
-    if (!statsEditing()) statsStatus('Обновлено ' + new Date().toLocaleTimeString('ru-RU', {hour:'2-digit', minute:'2-digit'}) + ' · Период по последнему завершению задачи');
+    if (!statsEditing()) statsStatus(tr('Обновлено ', 'Updated ') + new Date().toLocaleTimeString(uiLocale(), {hour:'2-digit', minute:'2-digit'}) + tr(' · Период по последнему завершению задачи', ' · Period follows the latest task completion'));
   } catch (e) {
     if (serial !== stats.serial) return;
     stats.error = e.message;
-    statsStatus('История не обновлена: ' + e.message);
-    if (!stats.data) $('statsBody').innerHTML = workspaceEmpty('История временно недоступна', 'Проверьте соединение с сервером и повторите загрузку.') + '<button class="btn" data-retry-stats>Повторить загрузку</button>';
+    statsStatus(tr('История не обновлена: ', 'History was not refreshed: ') + translateServerMessage(e.message));
+    if (!stats.data) $('statsBody').innerHTML = workspaceEmpty(tr('История временно недоступна', 'History is temporarily unavailable'), tr('Проверьте соединение с сервером и повторите загрузку.', 'Check the server connection and try loading again.')) + tr('<button class="btn" data-retry-stats>Повторить загрузку</button>', '<button class="btn" data-retry-stats>Retry loading</button>');
   } finally { if (serial === stats.serial) $('statsBody').setAttribute('aria-busy', 'false'); }
 }
 
@@ -182,31 +182,31 @@ function renderStats(force=false) {
   const expanded = new Set([...$('statsBody').querySelectorAll('details[open][data-detail]')].map(d=>d.dataset.detail));
   if (lastSnapshot.offices && stats.room && !lastSnapshot.offices.some(r => r.id === stats.room)) { stats.room = ''; stats.demon = ''; }
   sectionPaginationContext('stats', statsPaginationKey());
-  $('statsOffice').innerHTML = '<option value="">Все офисы</option>' + (lastSnapshot.offices || []).map(r => `<option value="${esc(r.id)}"${stats.room === r.id ? ' selected' : ''}>${esc(r.title)}</option>`).join('');
+  $('statsOffice').innerHTML = tr('<option value="">Все офисы</option>', '<option value="">All offices</option>') + (lastSnapshot.offices || []).map(r => `<option value="${esc(r.id)}"${stats.room === r.id ? ' selected' : ''}>${esc(r.title)}</option>`).join('');
   const recs = filtered(), props = filteredProposals();
   const ids = [...new Set([...lastSnapshot.daemons.map((d) => d.id), ...(stats.data ? stats.data.records.map((r) => r.id) : []),
     ...(stats.data && stats.data.proposals ? stats.data.proposals.map((r) => r.id) : [])])].filter(inStatsOffice).sort();
-  $('statsDemon').innerHTML = '<option value="">Все демоны</option>' +
+  $('statsDemon').innerHTML = tr('<option value="">Все демоны</option>', '<option value="">All daemons</option>') +
     ids.map((id) => `<option value="${esc(id)}"${stats.demon === id ? ' selected' : ''}>${esc(daemonOptionName(lastSnapshot.daemons.find(d=>d.id===id) || {id, name:demonName(id), project:stats.data?.daemons?.[id]?.project}))}</option>`).join('');
   if (!stats.data || (!stats.data.records.length && !(stats.data.proposals || []).length)) {
-    $('statsBody').innerHTML = workspaceEmpty('История работы пока пуста', 'Здесь появятся результаты задач, повторные попытки и расход токенов после первой завершённой работы.') + (stats.pricesOpen ? renderPricesForm() : '<button class="btn" data-prices>Настроить стоимость токенов</button>');
+    $('statsBody').innerHTML = workspaceEmpty(tr('История работы пока пуста', 'No work history yet'), tr('Здесь появятся результаты задач, повторные попытки и расход токенов после первой завершённой работы.', 'Task results, retries, and token usage will appear here after the first completed job.')) + (stats.pricesOpen ? renderPricesForm() : tr('<button class="btn" data-prices>Настроить стоимость токенов</button>', '<button class="btn" data-prices>Set token prices</button>'));
     statsEditorState();
     return;
   }
   $('statsBody').innerHTML = `
     ${stats.pricesOpen ? renderPricesForm() : ''}
     <div class="kpis">${renderKpis(recs, props)}</div>
-    ${!recs.length && !props.length ? workspaceEmpty("Ничего не найдено", "Измените офис, демона или поисковый запрос.") : ""}
+    ${!recs.length && !props.length ? workspaceEmpty(tr("Ничего не найдено", "Nothing found"), tr("Измените офис, демона или поисковый запрос.", "Change the office, daemon, or search.")) : ""}
     <div class="chart-row">
-      <figure class="chart-card"><figcaption>Задачи по ${stats.period === 'today' ? 'часам' : 'дням'}</figcaption>
+      <figure class="chart-card"><figcaption>${tr("Задачи по ", "Tasks by ")}${stats.period === 'today' ? tr('часам', 'hour') : tr('дням', 'day')}</figcaption>
         <div class="legend-row">${Object.values(RESULT).map((r) => `<span><i class="sw" style="background:${r.color}"></i>${r.icon} ${r.label}</span>`).join('')}</div>
         <div class="chart" id="chTime"></div></figure>
-      <figure class="chart-card"><figcaption>Закрыто задач по демонам</figcaption>
+      <figure class="chart-card"><figcaption>${tr("Закрыто задач по демонам", "Completed tasks by daemon")}</figcaption>
         <div class="chart" id="chDemons"></div></figure>
     </div>
     <section class="table-card quality-card" id="qualityCard"></section>
-    <section class="table-card"><h3>Демоны</h3>${renderDemonTable(recs, props)}</section>
-    <section class="table-card"><h3>Журнал задач <span class="muted">${recs.length} · одна строка — одна задача Jira, все её попытки</span></h3>
+    <section class="table-card"><h3>${tr("Демоны", "Daemons")}</h3>${renderDemonTable(recs, props)}</section>
+    <section class="table-card"><h3>${tr("Журнал задач ", "Task journal ")}<span class="muted">${recs.length}${tr(" · одна строка — одна задача Jira, все её попытки", " · one row per Jira task, including all attempts")}</span></h3>
       ${renderJournal(recs)}</section>
     ${renderProposals(props)}`;
   drawTimeChart($('chTime'), recs);
@@ -233,38 +233,38 @@ function renderKpis(recs, props) {
   const propTokens = props.reduce((x, p) => x + ((p.tokens && p.tokens.total) || 0), 0);
   const tile = (label, value, sub) => `<div class="kpi"><div class="kpi-label">${label}</div><div class="kpi-value">${value}</div>${sub ? `<div class="kpi-sub">${sub}</div>` : ''}</div>`;
   return [
-    tile('Закрыто задач', done.length, `из ${recs.length} задач Jira, взятых в работу`),
-    tile('Успешность', recs.length ? `${rate}%` : '—', done.length
-      ? `с первой попытки — ${Math.round(firstTry / done.length * 100)}% · ${recs.filter((r) => r.result === 'warn').length} с замечаниями` : ''),
-    tile('Не сделано', fails, [!fails ? 'все задачи сделаны' : '', failed ? `${failed} — последняя попытка с ошибкой` : '',
-      blocked ? `${blocked} ждут уточнения в Jira` : '', fails > failed + blocked ? `${fails - failed - blocked} без итогового результата` : '',
-      retried ? `${retried} сделаны не с первой попытки` : '', failedRuns ? `неудачных попыток: ${failedRuns}` : ''].filter(Boolean).join(' · ')),
-    tile('Среднее время генерации', fmtMin(gen), 'на задачу, все попытки'),
-    tile('Деплоев в Jenkins', deploys, deploys ? topStand(recs) : 'нет лейблов jenkins_*'),
-    tile('Токенов потрачено', withTokens.length || propTokens ? fmtTokens(taskTokens + propTokens) : '—', withTokens.length
-      ? `≈ ${fmtTokens(taskTokens / withTokens.length)} на задачу${withTokens.length < recs.length ? ` · учтено ${withTokens.length} из ${recs.length}` : ''}${propTokens ? ` · ${fmtTokens(propTokens)} — предложения` : ''}`
-      : (propTokens ? 'только предложения в простое' : 'GigaCode не сообщил расход')),
+    tile(tr('Закрыто задач', 'Completed tasks'), done.length, `${tr("из ", "of ")}${recs.length}${tr(" задач Jira, взятых в работу", " Jira tasks taken on")}`),
+    tile(tr('Успешность', 'Success rate'), recs.length ? `${rate}%` : '—', done.length
+      ? `${tr("с первой попытки — ", "first attempt — ")}${Math.round(firstTry / done.length * 100)}% · ${recs.filter((r) => r.result === 'warn').length}${tr(" с замечаниями", " with notes")}` : ''),
+    tile(tr('Не сделано', 'Not completed'), fails, [!fails ? tr('все задачи сделаны', 'all tasks completed') : '', failed ? `${failed}${tr(" — последняя попытка с ошибкой", " — latest attempt failed")}` : '',
+      blocked ? `${blocked}${tr(" ждут уточнения в Jira", " awaiting clarification in Jira")}` : '', fails > failed + blocked ? `${fails - failed - blocked}${tr(" без итогового результата", " without a final result")}` : '',
+      retried ? `${retried}${tr(" сделаны не с первой попытки", " completed after retrying")}` : '', failedRuns ? `${tr("неудачных попыток: ", "failed attempts: ")}${failedRuns}` : ''].filter(Boolean).join(' · ')),
+    tile(tr('Среднее время генерации', 'Average generation time'), fmtMin(gen), tr('на задачу, все попытки', 'per task, all attempts')),
+    tile(tr('Деплоев в Jenkins', 'Jenkins deployments'), deploys, deploys ? topStand(recs) : tr('нет лейблов jenkins_*', 'no jenkins_* labels')),
+    tile(tr('Токенов потрачено', 'Tokens used'), withTokens.length || propTokens ? fmtTokens(taskTokens + propTokens) : '—', withTokens.length
+      ? `≈ ${fmtTokens(taskTokens / withTokens.length)}${tr(" на задачу", " per task")}${withTokens.length < recs.length ? `${tr(" · учтено ", " · counted ")}${withTokens.length}${tr(" из ", " of ")}${recs.length}` : ''}${propTokens ? ` · ${fmtTokens(propTokens)}${tr(" — предложения", " — suggestions")}` : ''}`
+      : (propTokens ? tr('только предложения в простое', 'idle suggestions only') : tr('GigaCode не сообщил расход', 'GigaCode did not report usage'))),
     proposalsTile(props, tile),
     costTile(recs, tile, props),
   ].join('');
 }
 // Стоимость за период: задачи (все попытки) + исследование бэклога в простое
 function costTile(recs, tile, props = []) {
-  const priceBtn = `<button class="link" data-prices>${hasPrices() ? 'цены токенов' : 'задать цены токенов'}</button>`;
-  if (!hasPrices()) return tile('Стоимость', '—', priceBtn);
+  const priceBtn = `<button class="link" data-prices>${hasPrices() ? tr('цены токенов', 'token prices') : tr('задать цены токенов', 'set token prices')}</button>`;
+  if (!hasPrices()) return tile(tr('Стоимость', 'Cost'), '—', priceBtn);
   const c = sumCost(recs), pc = sumCost(props);
-  if (!c.counted && !pc.counted) return tile('Стоимость', '—', `нет данных о токенах · ${priceBtn}`);
-  const sub = [c.counted ? `≈ ${fmtMoney(c.total / c.counted)} на задачу` : '',
-    c.counted < recs.length ? `учтено ${c.counted} из ${recs.length}` : '',
-    pc.counted ? `${fmtMoney(pc.total)} — предложения` : '',
-    c.estimated + pc.estimated ? `${c.estimated + pc.estimated} — оценка по общему числу` : '', priceBtn].filter(Boolean).join(' · ');
-  return tile('Стоимость', (c.estimated || pc.estimated ? '≈ ' : '') + fmtMoney(c.total + pc.total), sub);
+  if (!c.counted && !pc.counted) return tile(tr('Стоимость', 'Cost'), '—', `${tr("нет данных о токенах · ", "no token data · ")}${priceBtn}`);
+  const sub = [c.counted ? `≈ ${fmtMoney(c.total / c.counted)}${tr(" на задачу", " per task")}` : '',
+    c.counted < recs.length ? `${tr("учтено ", "counted ")}${c.counted}${tr(" из ", " of ")}${recs.length}` : '',
+    pc.counted ? `${fmtMoney(pc.total)}${tr(" — предложения", " — suggestions")}` : '',
+    c.estimated + pc.estimated ? `${c.estimated + pc.estimated}${tr(" — оценка по общему числу", " — estimated from total tokens")}` : '', priceBtn].filter(Boolean).join(' · ');
+  return tile(tr('Стоимость', 'Cost'), (c.estimated || pc.estimated ? '≈ ' : '') + fmtMoney(c.total + pc.total), sub);
 }
 function topStand(recs) {
   const c = {};
   for (const r of recs) if (r.stand) c[r.stand] = (c[r.stand] || 0) + 1;
   const best = Object.entries(c).sort((a, b) => b[1] - a[1])[0];
-  return best ? `чаще всего — ${best[0]}` : '';
+  return best ? `${tr("чаще всего — ", "most frequent — ")}${best[0]}` : '';
 }
 
 function demonRows(recs, props = []) {
@@ -290,24 +290,24 @@ function demonRows(recs, props = []) {
 
 function renderDemonTable(recs, props) {
   const rows = demonRows(recs, props);
-  const sorters = { done: (a, b) => b.done - a.done, name: (a, b) => a.name.localeCompare(b.name, 'ru'),
+  const sorters = { done: (a, b) => b.done - a.done, name: (a, b) => a.name.localeCompare(b.name, uiLocale()),
     rate: (a, b) => (b.rate ?? -1) - (a.rate ?? -1), gen: (a, b) => (a.gen ?? 1e12) - (b.gen ?? 1e12),
     tokens: (a, b) => b.tokens - a.tokens, cost: (a, b) => (b.cost ?? -1) - (a.cost ?? -1),
     proposals: (a, b) => b.proposals - a.proposals,
     last: (a, b) => ((b.last && b.last.finished_at) || 0) - ((a.last && a.last.finished_at) || 0) };
   rows.sort((a,b)=>(sorters[stats.sort] || sorters.done)(a,b)*stats.direction);
-  const page = sectionPage('stats:demons', rows, JSON.stringify([statsPaginationKey(), stats.sort, stats.direction]), 'Демоны');
+  const page = sectionPage('stats:demons', rows, JSON.stringify([statsPaginationKey(), stats.sort, stats.direction]), tr('Демоны', 'Daemons'));
   const th = (key, label, cls = '') => `<th scope="col" class="${cls}" aria-sort="${stats.sort === key ? ((['name','gen'].includes(key) ? stats.direction === 1 : stats.direction !== 1) ? 'ascending' : 'descending') : 'none'}"><button class="table-sort" data-sort="${key}">${label}<span aria-hidden="true">${stats.sort === key ? ((['name','gen'].includes(key) ? stats.direction === 1 : stats.direction !== 1) ? ' ↑' : ' ↓') : ' ↕'}</span></button></th>`;
-  return `<div class="table-wrap"><table class="tbl"><thead><tr>${th('name', 'Демон')}<th>КЭ / проект</th>${th('done', 'Закрыто', 'num')}
-    <th class="num">Замечания</th><th class="num">Ошибки</th><th class="num" title="Сколько раз задачи брались заново после неудачи">Повторы</th>${th('rate', 'Успешность', 'num')}${th('gen', 'Ср. генерация', 'num')}${th('tokens', 'Токены', 'num')}${th('proposals', 'Предложения', 'num')}${th('cost', 'Стоимость', 'num')}
-    ${th('last', 'Последняя задача')}</tr></thead><tbody>${page.rows.map((r) => `<tr>
+  return `<div class="table-wrap"><table class="tbl"><thead><tr>${th('name', tr('Демон', 'Daemon'))}<th>${tr("КЭ / проект", "CI / project")}</th>${th('done', tr('Закрыто', 'Completed'), 'num')}
+    <th class="num">${tr("Замечания", "Notes")}</th><th class="num">${tr("Ошибки", "Failures")}</th><th class="num" title="${tr("Сколько раз задачи брались заново после неудачи", "How often tasks were retried after a failure")}">${tr("Повторы", "Retries")}</th>${th('rate', tr('Успешность', 'Success rate'), 'num')}${th('gen', tr('Ср. генерация', 'Avg. generation'), 'num')}${th('tokens', tr('Токены', 'Tokens'), 'num')}${th('proposals', tr('Предложения', 'Suggestions'), 'num')}${th('cost', tr('Стоимость', 'Cost'), 'num')}
+    ${th('last', tr('Последняя задача', 'Latest task'))}</tr></thead><tbody>${page.rows.map((r) => `<tr>
       <td><span class="name-cell" data-id="${esc(r.id)}">${esc(r.name)}</span>
-        <button class="rename" data-rename="${esc(r.id)}" title="Изменить имя" aria-label="Изменить имя ${esc(r.name)}">✎</button></td>
+        <button class="rename" data-rename="${esc(r.id)}" title="${tr("Изменить имя", "Rename")}" aria-label="${tr("Изменить имя ", "Rename ")}${esc(r.name)}">✎</button></td>
       <td class="muted">${esc(r.key)}</td><td class="num strong">${r.done}</td><td class="num">${r.warn || ''}</td>
       <td class="num">${r.fail || ''}</td><td class="num">${r.retries || ''}</td><td class="num">${r.rate == null ? '—' : Math.round(r.rate * 100) + '%'}</td>
       <td class="num">${fmtMin(r.gen)}</td><td class="num">${r.tokens ? fmtTokens(r.tokens) : '—'}</td>
       <td class="num">${r.proposals || ''}</td>
-      <td class="num" title="${r.propCost ? `задачи ${fmtMoney(r.taskCost || 0)} + предложения ${fmtMoney(r.propCost)}` : ''}">${r.cost == null ? '—' : fmtMoney(r.cost)}</td>
+      <td class="num" title="${r.propCost ? `${tr("задачи ", "tasks ")}${fmtMoney(r.taskCost || 0)}${tr(" + предложения ", " + suggestions ")}${fmtMoney(r.propCost)}` : ''}">${r.cost == null ? '—' : fmtMoney(r.cost)}</td>
       <td>${r.last ? `${issueLink(r.last)} <span class="muted">${fmtWhen(r.last.finished_at)}</span>` : '<span class="muted">—</span>'}</td>
     </tr>`).join('')}</tbody></table></div>${page.footer}`;
 }
@@ -330,19 +330,19 @@ function issueLink(r) {
 }
 
 function renderJournal(recs) {
-  const page = sectionPage('stats:journal', recs, statsPaginationKey(), 'Журнал задач'), rows = page.rows;
-  if (!rows.length) return '<p class="muted pad">Задач с выбранными фильтрами нет.</p>';
-  return `<div class="table-wrap"><table class="tbl"><thead><tr><th>Когда</th><th>Демон</th><th>Задача</th><th>Итог</th>
-    <th class="num" title="Сколько раз демон брался за задачу">Попыток</th><th class="num">Генерация</th><th class="num">Всего</th><th class="num">Токены</th><th class="num">Стоимость</th><th>Стенд</th><th>Сообщение</th></tr></thead><tbody>
+  const page = sectionPage('stats:journal', recs, statsPaginationKey(), tr('Журнал задач', 'Task journal')), rows = page.rows;
+  if (!rows.length) return tr('<p class="muted pad">Задач с выбранными фильтрами нет.</p>', '<p class="muted pad">No tasks match the selected filters.</p>');
+  return `<div class="table-wrap"><table class="tbl"><thead><tr><th>${tr("Когда", "When")}</th><th>${tr("Демон", "Daemon")}</th><th>${tr("Задача", "Task")}</th><th>${tr("Итог", "Outcome")}</th>
+    <th class="num" title="${tr("Сколько раз демон брался за задачу", "How often the daemon attempted the task")}">${tr("Попыток", "Attempts")}</th><th class="num">${tr("Генерация", "Generation")}</th><th class="num">${tr("Всего", "Total")}</th><th class="num">${tr("Токены", "Tokens")}</th><th class="num">${tr("Стоимость", "Cost")}</th><th>${tr("Стенд", "Environment")}</th><th>${tr("Сообщение", "Message")}</th></tr></thead><tbody>
     ${rows.map((r) => { const res = RESULT[r.result] || RESULT.warn; return `<tr>
       <td class="nowrap">${fmtWhen(r.finished_at)}</td><td>${esc(demonName(r.id))}</td>
       <td class="nowrap">${issueLink(r)}${r.service ? ` <span class="svc">${esc(r.service)}</span>` : ''}</td>
       <td class="nowrap"><i class="sw" style="background:${res.color}"></i>${res.icon} ${res.label}</td>
       <td class="num">${(r.runs || []).length > 1 ? `<details class="attempt-details" data-detail="${esc(r.id+':'+r.issue+':runs')}"><summary>${attemptsCell(r)}</summary><div>${esc(attemptsTitle(r))}</div></details>` : attemptsCell(r)}</td>
       <td class="num">${fmtMin(r.gen_seconds)}</td><td class="num">${fmtMin(r.total_seconds)}</td>
-      <td class="num" title="${r.tokens && r.tokens.input ? `вход ${r.tokens.input} · выход ${r.tokens.output}${r.tokens.cached ? ` · кэш ${r.tokens.cached}` : ''}` : ''}">${r.tokens && r.tokens.total ? fmtTokens(r.tokens.total) : '—'}</td>
+      <td class="num" title="${r.tokens && r.tokens.input ? `${tr("вход ", "input ")}${r.tokens.input}${tr(" · выход ", " · output ")}${r.tokens.output}${r.tokens.cached ? `${tr(" · кэш ", " · cache ")}${r.tokens.cached}` : ''}` : ''}">${r.tokens && r.tokens.total ? fmtTokens(r.tokens.total) : '—'}</td>
       <td class="num" title="${esc(recCostTitle(r))}">${(() => { const c = recCost(r); return c ? (c.estimate ? '≈ ' : '') + fmtMoney(c.value) : '—'; })()}</td>
-      <td>${r.stand ? esc(r.stand) + (r.migration ? ' <span class="muted">+ миграция</span>' : '') : '<span class="muted">—</span>'}</td>
+      <td>${r.stand ? esc(r.stand) + (r.migration ? tr(' <span class="muted">+ миграция</span>', ' <span class="muted">+ migration</span>') : '') : '<span class="muted">—</span>'}</td>
       <td class="msg" title="${esc(r.message || '')}">${esc(r.message || '')}</td></tr>`; }).join('')}
     </tbody></table></div>${page.footer}`;
 }
@@ -386,7 +386,7 @@ function drawTimeChart(el, recs) {
   const band = (W - L - R) / n, bw = Math.min(24, Math.max(3, band * 0.66));
   const y = (v) => T + (H - T - B) * (1 - v / max);
   const ticks = [0, max / 2, max].filter((v, i, a) => a.indexOf(v) === i && Number.isInteger(v));
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Задачи по ${hourly ? 'часам' : 'дням'}">`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="${tr("Задачи по ", "Tasks by ")}${hourly ? tr('часам', 'hour') : tr('дням', 'day')}">`;
   for (const v of ticks) svg += `<line x1="${L}" x2="${W - R}" y1="${y(v)}" y2="${y(v)}" class="grid"/><text x="${L - 6}" y="${y(v) + 4}" class="axis" text-anchor="end">${v}</text>`;
   const labelEvery = Math.ceil(n / Math.max(1, Math.floor((W - L - R) / 46)));
   buckets.forEach((b, i) => {
@@ -403,7 +403,7 @@ function drawTimeChart(el, recs) {
     });
     if (i % labelEvery === 0) {
       const d = new Date(b.t * 1000);
-      const lab = hourly ? `${pad2(d.getHours())}:00` : `${pad2(d.getDate())}.${pad2(d.getMonth() + 1)}`;
+      const lab = hourly ? `${pad2(d.getHours())}:00` : d.toLocaleDateString(uiLocale(), {day:'2-digit', month:'2-digit'});
       svg += `<text x="${x + bw / 2}" y="${H - 8}" class="axis" text-anchor="middle">${lab}</text>`;
     }
     svg += `<rect x="${L + i * band}" y="${T}" width="${band}" height="${H - T - B}" class="hit" data-i="${i}"/>`;
@@ -413,7 +413,7 @@ function drawTimeChart(el, recs) {
   el.querySelectorAll('.hit').forEach((h) => {
     h.addEventListener('mousemove', (e) => {
       const b = buckets[+h.dataset.i], d = new Date(b.t * 1000);
-      const title = hourly ? `${pad2(d.getHours())}:00–${pad2(d.getHours() + 1)}:00` : d.toLocaleDateString('ru-RU', { weekday: 'short', day: 'numeric', month: 'long' });
+      const title = hourly ? `${pad2(d.getHours())}:00–${pad2(d.getHours() + 1)}:00` : d.toLocaleDateString(uiLocale(), { weekday: 'short', day: 'numeric', month: 'long' });
       showTip(e, `<b>${title}</b>${['ok', 'warn', 'fail', 'blocked'].map((k) => `<div><i class="sw" style="background:${RESULT[k].color}"></i>${RESULT[k].icon} ${RESULT[k].label}: <b>${b[k]}</b></div>`).join('')}`);
     });
     h.addEventListener('mouseleave', hideTip);
@@ -427,15 +427,15 @@ function roundTop(x, y, w, h, r) {
 // Горизонтальные столбики: закрыто задач на демона (один ряд — один цвет)
 function drawDemonChart(el, recs) {
   const rows = demonRows(recs).filter((r) => r.total > 0).sort((a, b) => b.done - a.done);
-  if (!rows.length) { el.innerHTML = '<div class="muted pad">Нет задач за период</div>'; return; }
+  if (!rows.length) { el.innerHTML = tr('<div class="muted pad">Нет задач за период</div>', '<div class="muted pad">No tasks in this period</div>'); return; }
   if (rows.length > 10) {
-    el.insertAdjacentHTML('beforebegin', '<p class="chart-scroll-hint muted">Все демоны · список прокручивается</p>');
+    el.insertAdjacentHTML('beforebegin', tr('<p class="chart-scroll-hint muted">Все демоны · список прокручивается</p>', '<p class="chart-scroll-hint muted">All daemons · scrollable list</p>'));
     el.tabIndex = 0; el.setAttribute('role', 'region');
-    el.setAttribute('aria-label', 'Закрытые задачи по всем демонам. Прокрутите список для просмотра остальных.');
+    el.setAttribute('aria-label', tr('Закрытые задачи по всем демонам. Прокрутите список для просмотра остальных.', 'Completed tasks across all daemons. Scroll to see the rest.'));
   }
   const W = el.clientWidth || 420, rowH = 28, L = 110, R = 44, H = rows.length * rowH + 8;
   const max = Math.max(1, ...rows.map((r) => r.done));
-  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="Закрыто задач по демонам">`;
+  let svg = `<svg viewBox="0 0 ${W} ${H}" width="100%" height="${H}" role="img" aria-label="${tr("Закрыто задач по демонам", "Completed tasks by daemon")}">`;
   rows.forEach((r, i) => {
     const y = 4 + i * rowH, bw = Math.max(r.done ? 2 : 0, (W - L - R) * r.done / max);
     svg += `<text x="${L - 8}" y="${y + rowH / 2 + 4}" class="label" text-anchor="end"><title>${esc(r.name)} · ${esc(r.id)} · ${esc(r.key)}</title>${esc(r.name.length > 14 ? r.name.slice(0, 13) + '…' : r.name)}</text>`;
@@ -448,8 +448,8 @@ function drawDemonChart(el, recs) {
     h.addEventListener('mousemove', (e) => {
       const r = rows[+h.dataset.i];
       showTip(e, `<b>${esc(r.name)}</b> <span class="muted">${esc(r.key)}</span>
-        <div>Закрыто: <b>${r.done}</b> (⚠ ${r.warn}) · ✗ ${r.fail}</div><div>Ср. генерация: <b>${fmtMin(r.gen)}</b></div>
-        <div>Токены: <b>${r.tokens ? fmtTokens(r.tokens) : '—'}</b></div>${r.cost != null ? `<div>Стоимость: <b>${fmtMoney(r.cost)}</b></div>` : ''}`);
+        <div>${tr("Закрыто: ", "Completed: ")}<b>${r.done}</b> (⚠ ${r.warn}) · ✗ ${r.fail}</div><div>${tr("Ср. генерация: ", "Avg. generation: ")}<b>${fmtMin(r.gen)}</b></div>
+        <div>${tr("Токены: ", "Tokens: ")}<b>${r.tokens ? fmtTokens(r.tokens) : '—'}</b></div>${r.cost != null ? `<div>${tr("Стоимость: ", "Cost: ")}<b>${fmtMoney(r.cost)}</b></div>` : ''}`);
     });
     h.addEventListener('mouseleave', hideTip);
   });
@@ -487,7 +487,7 @@ function setView(view) {
 }
 
 function setupStats() {
-  $('statsCsv').title = 'Выгрузить все задачи выбранного периода, офиса и демона. Текстовый поиск не применяется.';
+  $('statsCsv').title = tr('Выгрузить все задачи выбранного периода, офиса и демона. Текстовый поиск не применяется.', 'Export all tasks for the selected period, office, and daemon. Text search does not apply.');
   $('statsPeriods').innerHTML = PERIODS.map((p) => `<button data-period="${p.key}" aria-pressed="${stats.period === p.key}" class="${stats.period === p.key ? 'on' : ''}">${p.label}</button>`).join('');
   $('statsPeriods').addEventListener('click', (e) => {
     const b = e.target.closest('[data-period]'); if (!b) return;
@@ -501,7 +501,7 @@ function setupStats() {
   $('statsSearch').addEventListener('input', (e) => { stats.query = e.target.value; renderStats(); });
   $('statsCsv').addEventListener('click', () => {
     const since = periodSince(), days = since ? (Date.now() / 1000 - since) / 86400 + 0.01 : 0;
-    location.href = `/api/history.csv?${new URLSearchParams({days:days.toFixed(3),office:stats.room,id:stats.demon})}`;
+    location.href = `/api/history.csv?${new URLSearchParams({days:days.toFixed(3),office:stats.room,id:stats.demon,lang:uiLocale().split('-')[0]})}`;
   });
   $('statsBody').addEventListener('submit', (e) => {
     if (e.target.id === 'pricesForm') { e.preventDefault(); savePrices(e.target); }
@@ -509,7 +509,7 @@ function setupStats() {
   $('statsBody').addEventListener('click', (e) => {
     if (sectionPaginationClick(e, key => key === 'stats:quality' ? drawQuality() : renderStats(), () => !statsEditing())) return;
     if (e.target.closest('[data-retry-stats]')) { loadStats(); return; }
-    if (e.target.closest('[data-cancel-prices]')) { stats.pricesOpen = false; renderStats(true); statsStatus('Изменения цен отменены.'); return; }
+    if (e.target.closest('[data-cancel-prices]')) { markFormClean($('pricesForm')); stats.pricesOpen = false; renderStats(true); statsStatus(tr('Изменения цен отменены.', 'Price changes cancelled.')); return; }
     if (e.target.closest('[data-prices]')) {
       if (statsEditing()) return;
       stats.pricesOpen = true; renderStats(); $('pricesForm')?.querySelector('input')?.focus(); return;

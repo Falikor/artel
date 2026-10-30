@@ -29,7 +29,7 @@ function harness({dataA=descriptor(),dataB=descriptor()}={}) {
     if(url==='/api/prompts')return response({daemons:[{id:'a',name:'Альфа'},{id:'b',name:'Бета'}]});
     return response(url.endsWith('=a')?dataA:dataB);
   };
-  const context=vm.createContext({Map,JSON,Date,URLSearchParams,$:element,lastSnapshot:{daemons:[]},
+  const context=vm.createContext({tr:(ru,en)=>ru, uiLocale:()=>'ru-RU', translateServerMessage:message=>message, markFormClean(){}, Map,JSON,Date,URLSearchParams,$:element,lastSnapshot:{daemons:[]},
     esc:value=>String(value).replaceAll('&','&amp;').replaceAll('"','&quot;').replaceAll('<','&lt;'),daemonOptionName:d=>d.id,
     fetch:(url,options)=>{requests.push({url,...(options?{body:JSON.parse(options.body)}:{})});return handler(url,options);},
     window:{addEventListener:(name,listener)=>windows.set(name,listener)}});

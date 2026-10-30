@@ -154,14 +154,21 @@ def runs_cost(item, prices):
     return (total if counted else None), estimate
 
 
-def history_csv(tasks, names, ci_ids, prices):
+def history_csv(tasks, names, ci_ids, prices, language='ru'):
     """CSV задач для Excel (разделитель «;», BOM — чтобы Excel понял кириллицу): строка на задачу Jira,
     время, токены и стоимость — сумма всех попыток. names — {id: имя}, ci_ids — {id: КЭ}."""
     buf = io.StringIO()
     w = csv.writer(buf, delimiter=';')
-    w.writerow(['Демон', 'КЭ / проект', 'Сервис', 'Задача', 'Итог', 'Попыток', 'Неудачных', 'Начало', 'Окончание',
+    english = language in ('en', 'en-US')
+    headers = (['Daemon', 'CI / project', 'Service', 'Issue', 'Outcome', 'Attempts', 'Failed attempts',
+                'Started', 'Finished', 'Generation, min', 'Total, min', 'Tokens', 'Input', 'Output', 'Cache',
+                f"Cost, {prices['currency']}", 'Environment', 'Migration', 'Message'] if english else
+               ['Демон', 'КЭ / проект', 'Сервис', 'Задача', 'Итог', 'Попыток', 'Неудачных', 'Начало', 'Окончание',
                 'Генерация, мин', 'Всего, мин', 'Токены', 'Вход', 'Выход', 'Кэш', f"Стоимость, {prices['currency']}",
                 'Стенд', 'Миграция', 'Сообщение'])
+    labels = ({'ok': 'done', 'warn': 'with findings', 'fail': 'failed', 'blocked': 'awaiting clarification'}
+              if english else RESULT_LABELS)
+    w.writerow(headers)
 
     def fmt(ts):
         return time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(ts)) if ts else ''
@@ -169,14 +176,14 @@ def history_csv(tasks, names, ci_ids, prices):
     for r in tasks:
         tokens = r.get('tokens') or {}
         cost, estimate = runs_cost(r, prices)
-        key = f"КЭ {ci_ids[r['id']]}" if ci_ids.get(r['id']) else (r.get('project') or r['id'].upper())
+        key = (("CI " if english else "КЭ ") + str(ci_ids[r['id']])) if ci_ids.get(r['id']) else (r.get('project') or r['id'].upper())
         w.writerow([names.get(r['id'], ''), key, r.get('service') or '', r.get('issue'),
-                    RESULT_LABELS.get(r.get('result'), r.get('result')), r.get('attempts') or 1, r.get('failed_attempts') or 0,
+                    labels.get(r.get('result'), r.get('result')), r.get('attempts') or 1, r.get('failed_attempts') or 0,
                     fmt(r.get('started_at')), fmt(r.get('finished_at')),
                     round((r.get('gen_seconds') or 0) / 60, 1), round((r.get('total_seconds') or 0) / 60, 1),
                     tokens.get('total') or '', tokens.get('input') or '', tokens.get('output') or '',
-                    tokens.get('cached') or '', ('≈' if estimate else '') + (f'{cost:.2f}'.replace('.', ',') if cost is not None else ''),
-                    r.get('stand') or '', 'да' if r.get('migration') else '', r.get('message') or ''])
+                    tokens.get('cached') or '', ('≈' if estimate else '') + (f'{cost:.2f}'.replace('.', '.' if english else ',') if cost is not None else ''),
+                    r.get('stand') or '', ('yes' if english else 'да') if r.get('migration') else '', r.get('message') or ''])
     return ('\ufeff' + buf.getvalue()).encode('utf-8')
 
 

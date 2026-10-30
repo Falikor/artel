@@ -15,7 +15,7 @@ function harness(options = {}) {
   };
   element('stats').hidden = true;
   const calls = {input:0,frames:0,legend:0,roster:0,cards:0,sync:0,sources:[]};
-  const context = vm.createContext({
+  const context = vm.createContext({tr:(ru,en)=>ru, uiLocale:()=>'ru-RU', translateServerMessage:message=>message, markFormClean(){},
     console:{warn(){},error(){}},setTimeout,clearTimeout,AbortController,Promise,Map,Set,Number,Date,
     $:element,document:{createElement:()=>element('created')},window:{addEventListener(){}},
     office:{plate:null,props:null,doors:[],decor:{},chars:{},thumbs:{}},cabinet:{},drawer:{id:null},clockSkew:0,

@@ -94,7 +94,7 @@ class Handler(BaseHTTPRequestHandler):
                 since = time.time() - days * 86400 if days > 0 else 0
                 tasks = self.filter_office(read_tasks(self.server.logs, since), query)
                 if path.endswith('.csv'):
-                    return self.send_csv(tasks)
+                    return self.send_csv(tasks, language=(query.get('lang') or ['ru'])[0])
                 proposals = self.filter_office(read_proposals(self.server.logs, since), query)
                 state = self.state()
                 names = self.server.names.load()
@@ -389,12 +389,12 @@ class Handler(BaseHTTPRequestHandler):
         open(os.path.join(self.server.logs, f'artel-restart-{name}'), 'w').close()
         return {'ok': True}
 
-    def send_csv(self, records):
+    def send_csv(self, records, language='ru'):
         state = self.state()
         names = {d['id']: d['name'] for d in state['daemons'] if d.get('name')}
         names.update(self.server.names.load())
         ci_ids = {d['id']: d.get('ci_id') for d in state['daemons']}
-        body = history_csv(records, names, ci_ids, self.server.prices.load())
+        body = history_csv(records, names, ci_ids, self.server.prices.load(), language=language)
         self.send_response(200)
         self.send_header('Content-Type', 'text/csv; charset=utf-8')
         self.send_header('Content-Disposition', 'attachment; filename="daemon-history.csv"')

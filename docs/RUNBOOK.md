@@ -1,5 +1,7 @@
 # Runbook: когда нужна помощь
 
+[English](RUNBOOK.en.md) · [Русский](RUNBOOK.md)
+
 [Главная](../README.md) · [Конфигурация](CONFIGURATION.md) · [Процессы и логи](OPERATIONS.md)
 
 Команды выполняются из папки Артели. На Windows заменяйте `python3` на `py -3 -X utf8`.

@@ -29,7 +29,7 @@ function harness(width=1200,height=600) {
   const document={activeElement:null,documentElement:{dataset:{theme:'light'}},hidden:false};
   for(const id of ['cityCanvas','cityViewport','cityZoomIn','cityZoomOut','cityZoomValue','cityReset','cityFloors','cityPreview','cityStage','cityHint','cityBuildings','cityLabels','cityDistrictSummary','cityMotion','building','officeDirectory','buildingRooms','cityRenameOpen','cityNameBuilding','cityNameInput','cityNameStatus','cityNameForm','cityNameSave','cityNameCancel'])elements[id]=element(id);
   elements.cityNameForm.hidden=true;
-  const env={document,window:{devicePixelRatio:2,listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}},performance:{now:()=>clock},console,
+  const env={tr:(ru,en)=>ru, uiLocale:()=>'ru-RU', translateServerMessage:message=>message, markFormClean(){}, document,window:{devicePixelRatio:2,listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}},performance:{now:()=>clock},console,
     $:id=>elements[id],ResizeObserver:class {constructor(fn){this.fn=fn;}observe(){this.fn();}},IntersectionObserver:class {constructor(fn){this.fn=fn;}observe(){this.fn([{isIntersecting:true}]);}},requestAnimationFrame(){},
     esc:s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])),
     rosterFilter:{query:'',status:'all'},lastSnapshot:{daemons:[]},matchesDemon:d=>d.match!==false,

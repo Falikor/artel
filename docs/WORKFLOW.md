@@ -1,6 +1,8 @@
 # Жизненный цикл задачи
 
-[Главная](../README.md) · [Настройки](CONFIGURATION.md) · [Runbook](RUNBOOK.md)
+**Русский** · [English](WORKFLOW.en.md)
+
+[Главная](../README.ru.md) · [Настройки](CONFIGURATION.md) · [Runbook](RUNBOOK.md)
 
 ## Обычная задача
 
@@ -109,15 +111,50 @@ remote всегда `origin`. Ревизии вроде `main~1`, SHA и тег�
 Если под КЭ живут разные репозитории, перечислите их в `services` вместо `general.repo_path`:
 
 ```json
-"services": [
-  {"name": "back", "role": "backend", "repo_path": "/work/hr-back",
-   "keywords": ["бек", "бэк", "beck", "back", "backend", "бэкенд"], "labels": ["back", "backend"],
-   "jenkins": {"job_name": "hr/deploy-back"}},
-  {"name": "web", "role": "frontend", "repo_path": "/work/hr-web",
-   "keywords": ["web", "веб", "фронт", "front", "frontend"], "labels": ["web", "front"],
-   "jenkins": {"job_name": "hr/deploy-web"},
-   "compare_url": "https://bitbucket.example.com/projects/HR/repos/hr-web/compare/diff?sourceBranch={branch}&targetBranch={base}"}
-]
+{
+  "services": [
+    {
+      "name": "back",
+      "role": "backend",
+      "repo_path": "/work/hr-back",
+      "keywords": [
+        "бек",
+        "бэк",
+        "beck",
+        "back",
+        "backend",
+        "бэкенд"
+      ],
+      "labels": [
+        "back",
+        "backend"
+      ],
+      "jenkins": {
+        "job_name": "hr/deploy-back"
+      }
+    },
+    {
+      "name": "web",
+      "role": "frontend",
+      "repo_path": "/work/hr-web",
+      "keywords": [
+        "web",
+        "веб",
+        "фронт",
+        "front",
+        "frontend"
+      ],
+      "labels": [
+        "web",
+        "front"
+      ],
+      "jenkins": {
+        "job_name": "hr/deploy-web"
+      },
+      "compare_url": "https://bitbucket.example.com/projects/HR/repos/hr-web/compare/diff?sourceBranch={branch}&targetBranch={base}"
+    }
+  ]
+}
 ```
 
 **Как настройки сервиса сочетаются с общими:**
@@ -207,12 +244,14 @@ fetch ветки и базы в отдельные временные Git refs �
 задачи и не ставит себе разрешающий лейбл.
 
 ```json
-"dependencies": {
-  "enabled": true,
-  "external_ready_label": "backend-ready",
-  "allow_code_branch": true,
-  "dev_application_type": "stash",
-  "dev_data_type": "pullrequest"
+{
+  "dependencies": {
+    "enabled": true,
+    "external_ready_label": "backend-ready",
+    "allow_code_branch": true,
+    "dev_application_type": "stash",
+    "dev_data_type": "pullrequest"
+  }
 }
 ```
 

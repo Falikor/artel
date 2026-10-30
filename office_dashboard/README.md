@@ -1,5 +1,7 @@
 # Артель демонов — как устроен дашборд
 
+**Русский** · [English](README.en.md)
+
 Запуск и описание возможностей — в [руководстве дашборда](../docs/DASHBOARD.md); быстрый старт — в [README](../README.md). Здесь — устройство для тех, кто будет
 его дорабатывать.
 
@@ -111,11 +113,10 @@
 07_DOOR_ANIMATIONS/                                      фон с проёмами, 3 двери, manifest.json
 08_LOUNGE_AND_SOCIAL/characters/<id>/, props/media_cabinet/, manifest.json   мягкая мебель, жесты, приставка
 cat/                                                     Кокошка
-LICENSE_EN.txt                                           лицензия пака
 ```
 
 Источники: LennoxStudio Animated Corporate Office Asset Pack v1.1 и дополнения AI Artel
-(`ai-artel-main-2`, `ai-artel-main-3`). Использовать в своём продукте можно, распространять отдельно — нет.
+(`ai-artel-main-2`, `ai-artel-main-3`). Пак включён в репозиторий с разрешения правообладателя.
 
 
 ## Здание и постоянные места (2.8.0)

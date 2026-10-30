@@ -71,7 +71,7 @@ const ACTIVITIES = {
     if (office.spots.has('kitchen') || !office.decor.coffee) return false;
     office.spots.add('kitchen');
     a.startPlan('kitchen', [{ place: standPlace('kitchen', KITCHEN, 'up', 'coffee', 'mgr_door'), dur: rnd(9, 16),
-      onArrive: (tt) => { a.shot('coffee', tt); if (Math.random() < 0.5) a.sayLine(pick(['Сначала кофе, потом код', 'Где мой кофе?', 'Кто доел печеньки?', 'Кофемашина опять пустая']), tt + 0.5, 2.6); } }],
+      onArrive: (tt) => { a.shot('coffee', tt); if (Math.random() < 0.5) a.sayLine(pick([tr("Сначала кофе, потом код", "Coffee first, code later"), tr("Где мой кофе?", "Where is my coffee?"), tr("Кто доел печеньки?", "Who ate all the cookies?"), tr("Кофемашина опять пустая", "The coffee machine is empty again")]), tt + 0.5, 2.6); } }],
     t, { spot: 'kitchen' });
     return true;
   },

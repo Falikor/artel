@@ -200,6 +200,8 @@ class Building:
                 r['building_level'] = meta['building_level']
                 number = (meta['building_level'] - 1) // BUILDING_FLOORS + 1
                 r['building_title'] = building_names.get(str(number), f'Корпус {number}')
+                # Explicit provenance lets the UI translate defaults without altering user names.
+                r['building_title_custom'] = str(number) in building_names
                 r['occupied'] = sum(1 for v in data.values() if 'group' in v and 'seat' in v
                                     and self.room_id(v['group'], v['seat']) == rid)
             if json.dumps(catalog, sort_keys=True) != catalog_before:

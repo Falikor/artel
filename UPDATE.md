@@ -1,5 +1,7 @@
 # Обновление Артели на минике
 
+[English](UPDATE.en.md) · [Русский](UPDATE.md)
+
 Используйте `update_artel.py` из **новой** версии. Нужен Python 3.9+; дополнительные пакеты не нужны. Скрипт работает локально на минике с двумя отдельными папками: распакованной новой версией и существующей установкой. Он не скачивает код и не меняет настройки автозапуска. В обычном режиме процессы запускаются вручную; режим `--managed` автоматически дожидается работы и возвращает прежние процессы (см. ниже).
 
 ## Полный пакет обновления и проверка переноса (2.19.1)
@@ -9,7 +11,7 @@
 Сборка на компьютере с новой полной версией проекта:
 
 ```bash
-python3 build_artel_release.py --output output/artel-2.29.0-update.tar.gz
+python3 build_artel_release.py --output output/artel-2.30.0-update.tar.gz
 ```
 
 В архив не входят рабочие конфиги, память, логи, секреты, настройки офисов или презентации.
@@ -25,7 +27,7 @@ python3 build_artel_release.py --output output/artel-2.29.0-update.tar.gz
 
 ```bash
 ARTEL_RELEASE_DIR="$(mktemp -d "$HOME/artel-release.XXXXXX")"
-tar -xzf "$HOME/Downloads/artel-2.29.0-update.tar.gz" -C "$ARTEL_RELEASE_DIR"
+tar -xzf "$HOME/Downloads/artel-2.30.0-update.tar.gz" -C "$ARTEL_RELEASE_DIR"
 
 python3 "$ARTEL_RELEASE_DIR/artel-new/update_artel.py" \
   --source "$ARTEL_RELEASE_DIR/artel-new" \

@@ -1,0 +1,123 @@
+{
+  "version": 1,
+  "engine": "generic",
+  "image": "atlas.png",
+  "columns": 8,
+  "rows": 4,
+  "cell": {
+    "width": 256,
+    "height": 256
+  },
+  "seamlessLoop": false,
+  "frameDurationMs": 250,
+  "animations": [
+    {
+      "id": "office-doors",
+      "label": "office doors",
+      "row": 0,
+      "frames": 8,
+      "playback": "once",
+      "durationsMs": [
+        400,
+        100,
+        67,
+        100,
+        66,
+        900,
+        334,
+        33
+      ],
+      "phaseLabels": [
+        "start opening",
+        "opening",
+        "opening",
+        "opening",
+        "opening",
+        "opening",
+        "fully open",
+        "fully open"
+      ]
+    },
+    {
+      "id": "tv-diagram",
+      "label": "tv diagram",
+      "row": 1,
+      "frames": 8,
+      "playback": "once",
+      "durationsMs": [
+        100,
+        800,
+        33,
+        100,
+        67,
+        833,
+        34,
+        33
+      ],
+      "phaseLabels": [
+        "start updating",
+        "updating",
+        "updating",
+        "updating",
+        "updating",
+        "updating",
+        "updated",
+        "updated"
+      ]
+    },
+    {
+      "id": "office-plants",
+      "label": "office plants",
+      "row": 2,
+      "frames": 8,
+      "playback": "loop",
+      "durationsMs": [
+        250,
+        250,
+        250,
+        250,
+        250,
+        250,
+        250,
+        250
+      ],
+      "phaseLabels": [
+        "start swaying",
+        "swaying",
+        "swaying",
+        "swaying",
+        "swaying",
+        "swaying",
+        "swaying",
+        "fully swayed"
+      ]
+    },
+    {
+      "id": "office-printer",
+      "label": "office printer",
+      "row": 3,
+      "frames": 8,
+      "playback": "once",
+      "durationsMs": [
+        133,
+        200,
+        934,
+        100,
+        33,
+        533,
+        34,
+        33
+      ],
+      "phaseLabels": [
+        "start printing",
+        "start printing",
+        "printing",
+        "printing",
+        "printed",
+        "printed",
+        "printed",
+        "printed"
+      ]
+    }
+  ]
+}

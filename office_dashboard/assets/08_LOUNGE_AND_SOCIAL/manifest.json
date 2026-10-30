@@ -1,0 +1,69 @@
+{
+ "version": "1.0.0",
+ "frameSize": {
+  "w": 160,
+  "h": 160
+ },
+ "pivot": {
+  "x": 80,
+  "y": 136
+ },
+ "scene": {
+  "width": 1254,
+  "height": 1254,
+  "background": "scene/office_entrance_lounge_clean.png",
+  "doorsManifest": "../07_DOOR_ANIMATIONS/manifest.json",
+  "mediaCabinet": {
+   "x": 760,
+   "y": 665
+  },
+  "sofaSlots": [
+   {
+    "id": "sofa_upper",
+    "feet": {
+     "x": 1031,
+     "y": 808
+    },
+    "entry": {
+     "x": 989,
+     "y": 808
+    },
+    "facing": "left"
+   },
+   {
+    "id": "sofa_lower",
+    "feet": {
+     "x": 1031,
+     "y": 876
+    },
+    "entry": {
+     "x": 989,
+     "y": 876
+    },
+    "facing": "left"
+   }
+  ],
+  "armchairSlot": {
+   "id": "armchair",
+   "feet": {
+    "x": 827,
+    "y": 893
+   },
+   "entry": {
+    "x": 870,
+    "y": 893
+   },
+   "facing": "right"
+  }
+ },
+ "leftDirections": "Left clips reuse authored right-facing frames with flipX=true; frameOverrides preserve original left standing endpoint. Honor overrides per frame.",
+ "characters": [
+  "manager_navy",
+  "worker_orange_yellow",
+  "worker_dark_purple",
+  "worker_brown_green",
+  "worker_black_charcoal",
+  "worker_blond_blue",
+  "worker_brown_red"
+ ]
+}

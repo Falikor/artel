@@ -1,7 +1,7 @@
 'use strict';
 /* The building is a live overview; only the selected office creates animated workers. */
 const buildingView = { room: storage.get('artel-room', null), rendered: null, dragging: null, editing: null, busy: false };
-const LOOKS = ['Исходный', 'Бирюза', 'Роза', 'Янтарь', 'Индиго', 'Шалфей'];
+const LOOKS = [tr("Исходный", "Original"), tr("Бирюза", "Teal"), tr("Роза", "Rose"), tr("Янтарь", "Amber"), tr("Индиго", "Indigo"), tr("Шалфей", "Sage")];
 const LOOK_COLORS = ['#b9b4cd', '#42b9af', '#d86b99', '#dfa950', '#8689e2', '#8dab68'];
 function visibleDaemons() {
   return buildingView.room ? lastSnapshot.daemons.filter(d => socialRoom(d) === buildingView.room).map((d,i) => socialRoom(d) !== d.office_id ? {...d, office_slot:SEATS.length+i, guest:true} : d) : [];
@@ -50,8 +50,8 @@ function renderBuilding() {
   const filtering = !!rosterFilter.query || rosterFilter.status !== 'all';
   const base = buildingView.room ? visibleDaemons() : lastSnapshot.daemons;
   const matched = filteredDaemons(base);
-  if ($('buildingResultCount')) $('buildingResultCount').textContent = filtering ? `Найдено ${matched.length} из ${base.length}` : `${base.length} демонов`;
-  $('buildingTotals').textContent = `${rooms.length} офисов · ${lastSnapshot.daemons.length} демонов · ${all.busy} работают`;
+  if ($('buildingResultCount')) $('buildingResultCount').textContent = filtering ? tr(`Найдено ${matched.length} из ${base.length}`, `Showing ${matched.length} of ${base.length}`) : tr(`${base.length} демонов`, `${base.length} daemons`);
+  $('buildingTotals').textContent = tr(`${rooms.length} офисов · ${lastSnapshot.daemons.length} демонов · ${all.busy} работают`, `${rooms.length} offices · ${lastSnapshot.daemons.length} daemons · ${all.busy} working`);
   const html = rooms.map(r => {
     const ds = lastSnapshot.daemons.filter(d => d.office_id === r.id), counts = roomStats(ds);
     const shown = ds.filter(d => matchesDemon(d, r)).sort((a,b) => (a.office_slot ?? 0) - (b.office_slot ?? 0));
@@ -59,19 +59,19 @@ function renderBuilding() {
     if (filtering && !shown.length && !matchesEmpty) return '';
     const guests = lastSnapshot.daemons.filter(d => d.office_id !== r.id && socialRoom(d) === r.id).length;
     return `<article data-drop-room="${esc(r.id)}" class="room ${counts.bad ? 'room-alert' : ''}">
-      <button type="button" class="room-open" data-room="${esc(r.id)}" aria-label="Открыть офис ${esc(r.title)}, ${esc(cityAddressLabel(r,rooms.length-rooms.indexOf(r)))}"><span class="floor-level">${r.building_level || rooms.length - rooms.indexOf(r)}<small>этаж</small></span><span class="room-label">${esc(cityAddressLabel(r,rooms.length-rooms.indexOf(r)))} · ${esc(r.project || 'Офис')}</span><h3>${esc(r.title)}</h3>
-      <span class="room-counts">${ds.length} из ${r.capacity} мест · ${counts.busy} работают${guests ? ` · ${guests} в гостях` : ''}</span><b aria-hidden="true">Открыть офис →</b></button>
-      ${counts.bad ? `<p class="room-attention"><span aria-hidden="true">!</span> Требуют внимания: ${counts.bad}</p>` : ''}
+      <button type="button" class="room-open" data-room="${esc(r.id)}" aria-label="${tr('Открыть офис', 'Open office')} ${esc(r.title)}, ${esc(cityAddressLabel(r,rooms.length-rooms.indexOf(r)))}"><span class="floor-level">${r.building_level || rooms.length - rooms.indexOf(r)}<small>${tr('этаж', 'floor')}</small></span><span class="room-label">${esc(cityAddressLabel(r,rooms.length-rooms.indexOf(r)))} · ${esc(r.project || tr("Офис", "Office"))}</span><h3>${esc(r.title)}</h3>
+      <span class="room-counts">${tr(`${ds.length} из ${r.capacity} мест · ${counts.busy} работают`, `${ds.length} of ${r.capacity} seats · ${counts.busy} working`)}${guests ? tr(` · ${guests} в гостях`, ` · ${guests} visiting`) : ''}</span><b aria-hidden="true">${tr('Открыть офис', 'Open office')} →</b></button>
+      ${counts.bad ? `<p class="room-attention"><span aria-hidden="true">!</span> ${tr('Требуют внимания:', 'Needs attention:')} ${counts.bad}</p>` : ''}
       <div class="room-seats">${shown.map(d => {
         const stage = d.alive === false && d.stage !== 'stopped' ? 'lost' : d.stage;
-        return `<button type="button" draggable="false" class="resident ${needsAttention(d) ? 'resident-alert' : ''}" data-resident="${esc(d.id)}" aria-label="${esc(displayName(d))}: ${esc((STAGE[stage] || STAGE.idle).label)}. Место ${Number.isInteger(d.office_slot) ? d.office_slot+1 : '—'}" title="${esc(displayName(d))} · ${esc((STAGE[stage] || STAGE.idle).label)}. Перетащите мышью для переселения.">
-          <img draggable="false" src="${appearanceThumb(d)}" alt=""><span class="resident-info"><span>${esc(displayName(d))}</span><small>${social.visits.has(d.id) ? 'В гостях · ' : ''}${esc((STAGE[stage] || STAGE.idle).label)}</small></span><span class="resident-seat">${Number.isInteger(d.office_slot) ? d.office_slot+1 : '—'}</span></button>`;
-      }).join('') || `<p class="room-empty">Офис свободен<span>Переселите сюда демона из другого офиса.</span></p>`}</div>
-      <div class="room-actions"><button type="button" class="btn" data-rename-room="${esc(r.id)}">Переименовать</button>
-        <button type="button" class="btn" data-move-room="${esc(r.id)}" ${!ds.length || rooms.length < 2 ? 'disabled' : ''}>Переселить…</button>
-        <button type="button" class="btn room-delete" data-delete-room="${esc(r.id)}" ${(r.occupied || ds.length) ? 'disabled title="Переселите всех закреплённых демонов, включая отсутствующих"' : ''}>Удалить</button>
-        ${r.occupied > ds.length ? `<small>Ещё ${r.occupied-ds.length} мест закреплено за отсутствующими демонами</small>` : ''}</div></article>`;
-  }).join('') || `<div class="empty">${filtering ? 'Ничего не найдено. Измените запрос или статус.' : 'Пока нет офисов. Они появятся автоматически при подключении демонов.'}</div>`;
+        return `<button type="button" draggable="false" class="resident ${needsAttention(d) ? 'resident-alert' : ''}" data-resident="${esc(d.id)}" aria-label="${esc(displayName(d))}: ${esc((STAGE[stage] || STAGE.idle).label)}. ${tr('Место', 'Seat')} ${Number.isInteger(d.office_slot) ? d.office_slot+1 : '—'}" title="${esc(displayName(d))} · ${esc((STAGE[stage] || STAGE.idle).label)}. ${tr('Перетащите мышью для переселения.', 'Drag to move to another office.')}">
+          <img draggable="false" src="${appearanceThumb(d)}" alt=""><span class="resident-info"><span>${esc(displayName(d))}</span><small>${social.visits.has(d.id) ? tr("В гостях · ", "Visiting · ") : ''}${esc((STAGE[stage] || STAGE.idle).label)}</small></span><span class="resident-seat">${Number.isInteger(d.office_slot) ? d.office_slot+1 : '—'}</span></button>`;
+      }).join('') || `<p class="room-empty">${tr('Офис свободен', 'Office available')}<span>${tr('Переселите сюда демона из другого офиса.', 'Move a daemon here from another office.')}</span></p>`}</div>
+      <div class="room-actions"><button type="button" class="btn" data-rename-room="${esc(r.id)}">${tr('Переименовать', 'Rename')}</button>
+        <button type="button" class="btn" data-move-room="${esc(r.id)}" ${!ds.length || rooms.length < 2 ? 'disabled' : ''}>${tr('Переселить…', 'Move…')}</button>
+        <button type="button" class="btn room-delete" data-delete-room="${esc(r.id)}" ${(r.occupied || ds.length) ? `disabled title="${tr('Переселите всех закреплённых демонов, включая отсутствующих', 'Move all assigned daemons first, including offline daemons')}"` : ''}>${tr('Удалить', 'Delete')}</button>
+        ${r.occupied > ds.length ? `<small>${tr(`Ещё ${r.occupied-ds.length} мест закреплено за отсутствующими демонами`, `${r.occupied-ds.length} more seats reserved for offline daemons`)}</small>` : ''}</div></article>`;
+  }).join('') || `<div class="empty">${filtering ? tr("Ничего не найдено. Измените запрос или статус.", "No matches. Change the search or status filter.") : tr("Пока нет офисов. Они появятся автоматически при подключении демонов.", "No offices yet. They appear automatically when daemons connect.")}</div>`;
   replaceRosterContent($('buildingRooms'), html);
   if (typeof renderCityRooms === 'function') renderCityRooms(rooms);
   const options = rooms.map(r => `<option value="${esc(r.id)}">${esc(cityAddressLabel(r))} · ${esc(r.title)}</option>`).join('');
@@ -80,11 +80,11 @@ function renderBuilding() {
   const room = rooms.find(r => r.id === buildingView.room);
   $('officeTitle').textContent = room ? room.title : '';
   const elsewhere = lastSnapshot.daemons.filter(d => d.office_id !== buildingView.room && needsAttention(d));
-  $('otherOffices').textContent = elsewhere.length ? `В других офисах требуют внимания: ${elsewhere.length}` : '';
+  $('otherOffices').textContent = elsewhere.length ? tr(`В других офисах требуют внимания: ${elsewhere.length}`, `Needs attention in other offices: ${elsewhere.length}`) : '';
   $('building').hidden = !!room;
   $('officeNav').hidden = !room;
   $('officeLayout').hidden = !room;
-  if (!room) $('summary').textContent = `${all.busy} работают · ${all.bad} требуют внимания`;
+  if (!room) $('summary').textContent = tr(`${all.busy} работают · ${all.bad} требуют внимания`, `${all.busy} working · ${all.bad} need attention`);
 }
 function refreshRosterFilter() {
   rosterFilter.query = ($('buildingSearch')?.value || '').trim().toLocaleLowerCase();
@@ -115,7 +115,7 @@ function syncOffice() {
     const character = office.plate && charFor(d, d.office_slot);
     if (!character) { if (w) { w.destroy(); office.workers.delete(d.id); } continue; }
     if (w && w.slot !== d.office_slot) { w.destroy(); office.workers.delete(d.id); w = null; }
-    if (!w) { w = new Worker(d, d.office_slot); office.workers.set(d.id, w); w.ingest(d, true); if (d.guest) { w.endPlan(office.t,true); w.mode='stand'; w.visible=true; w.pos=[...N.door_out]; w.node='door_out'; w.place=null; w.goTo(w.seatPlace(),office.t); w.sayLine('Привет! Зашёл в гости',office.t,4); } }
+    if (!w) { w = new Worker(d, d.office_slot); office.workers.set(d.id, w); w.ingest(d, true); if (d.guest) { w.endPlan(office.t,true); w.mode='stand'; w.visible=true; w.pos=[...N.door_out]; w.node='door_out'; w.place=null; w.goTo(w.seatPlace(),office.t); w.sayLine(tr("Привет! Зашёл в гости", "Hi! Just visiting"),office.t,4); } }
     else { w.char = character; w.ingest(d, false); }
   }
   for (const [id,w] of office.workers) if (!ids.has(id)) { w.destroy(); office.workers.delete(id); }
@@ -129,7 +129,7 @@ $('buildingRooms').onclick = e => {
   const move = e.target.closest('[data-move-room]');
   if (move) { editRoomMove(move); return; }
   const remove = e.target.closest('[data-delete-room]');
-  if (remove) { roomAction({action:'delete',room:remove.dataset.deleteRoom}, 'Пустой офис удалён'); return; }
+  if (remove) { roomAction({action:'delete',room:remove.dataset.deleteRoom}, tr("Пустой офис удалён", "Empty office deleted")); return; }
 
   const resident = e.target.closest('[data-resident]');
   if (resident) {
@@ -145,15 +145,15 @@ async function roomAction(body, message) {
   if (buildingView.busy) return false;
   buildingView.busy = true;
   $('buildingRooms').setAttribute('aria-busy','true');
-  $('buildingStatus').textContent = 'Сохраняем…';
+  $('buildingStatus').textContent = tr("Сохраняем…", "Saving…");
   try {
     const response = await fetch('/api/offices', {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
     const snap = await response.json();
-    if (!response.ok || snap.error) throw new Error(snap.error || 'Не удалось сохранить. Попробуйте ещё раз.');
+    if (!response.ok || snap.error) throw new Error(translateServerMessage(snap.error) || tr("Не удалось сохранить. Попробуйте ещё раз.", "Could not save. Try again."));
     apply(snap);
     $('buildingStatus').textContent = message;
     return true;
-  } catch (error) { $('buildingStatus').textContent = error.message; return false; }
+  } catch (error) { $('buildingStatus').textContent = translateServerMessage(error.message); return false; }
   finally { buildingView.busy = false; $('buildingRooms').removeAttribute('aria-busy'); }
 }
 function roomInlineForm(button, html, action) {
@@ -161,7 +161,7 @@ function roomInlineForm(button, html, action) {
   const focusKey = Object.entries(button.dataset)[0];
   buildingView.editing = id;
   const form = document.createElement('form'); form.className = 'room-name-form';
-  form.innerHTML = html + '<div class="room-form-actions"><button type="submit" class="btn primary">Сохранить</button><button type="button" class="btn">Отмена</button></div><p class="room-form-status" role="status"></p>';
+  form.innerHTML = html + `<div class="room-form-actions"><button type="submit" class="btn primary">${tr('Сохранить', 'Save')}</button><button type="button" class="btn">${tr('Отмена', 'Cancel')}</button></div><p class="room-form-status" role="status"></p>`;
   button.parentElement.replaceWith(form);
   const cancel = () => {
     if (buildingView.busy) return;
@@ -177,7 +177,7 @@ function roomInlineForm(button, html, action) {
     controls.forEach(el => el.disabled = true);
     const ok = await roomAction(request.body, request.message);
     controls.forEach(el => el.disabled = false);
-    if (ok) cancel();
+    if (ok) { markFormClean(form); cancel(); }
     else form.querySelector('.room-form-status').textContent = $('buildingStatus').textContent;
   };
   form.querySelector('input,select')?.focus();
@@ -186,14 +186,14 @@ function roomInlineForm(button, html, action) {
 function editRoomName(button) {
   const id = button.dataset.renameRoom, room = lastSnapshot.offices.find(r => r.id === id);
   if (!room) return;
-  roomInlineForm(button, `<label>Название офиса<input name="name" aria-label="Новое название офиса" maxlength="60" required value="${esc(room.title)}"></label>`, data => ({body:{action:'rename',room:id,name:data.get('name').trim()},message:'Название офиса сохранено'}));
+  roomInlineForm(button, `<label>${tr('Название офиса', 'Office name')}<input name="name" aria-label="${tr('Новое название офиса', 'New office name')}" maxlength="60" required value="${esc(room.title)}"></label>`, data => ({body:{action:'rename',room:id,name:data.get('name').trim()},message:tr("Название офиса сохранено", "Office name saved")}));
 }
 function editRoomMove(button) {
   const id = button.dataset.moveRoom;
   const ds = lastSnapshot.daemons.filter(d => d.office_id === id);
   const targets = (lastSnapshot.offices || []).filter(r => r.id !== id);
   if (!ds.length || !targets.length) return;
-  roomInlineForm(button, `<label>Демон<select name="id" aria-label="Демон для переселения">${ds.map(d => `<option value="${esc(d.id)}">${esc(displayName(d))}</option>`).join('')}</select></label><label>Новый офис<select name="room" aria-label="Новый офис">${targets.map(r => `<option value="${esc(r.id)}">${esc(r.title)}</option>`).join('')}</select></label>`, data => ({body:{id:data.get('id'),room:data.get('room')},message:'Демон переселён. Его новое место сохранено.'}));
+  roomInlineForm(button, `<label>${tr('Демон', 'Daemon')}<select name="id" aria-label="${tr('Демон для переселения', 'Daemon to move')}">${ds.map(d => `<option value="${esc(d.id)}">${esc(displayName(d))}</option>`).join('')}</select></label><label>${tr('Новый офис', 'New office')}<select name="room" aria-label="${tr('Новый офис', 'New office')}">${targets.map(r => `<option value="${esc(r.id)}">${esc(r.title)}</option>`).join('')}</select></label>`, data => ({body:{id:data.get('id'),room:data.get('room')},message:tr("Демон переселён. Его новое место сохранено.", "Daemon moved. Its new seat is saved.")}));
 }
 const roomGrid = $('buildingRooms');
 function endRoomDrag() {
@@ -231,7 +231,7 @@ function finishRoomPointer(e, cancelled=false) {
   if (node.hasPointerCapture(e.pointerId)) node.releasePointerCapture(e.pointerId);
   if (id) { buildingView.suppressClickUntil = Date.now()+350; endRoomDrag(); }
   const demon = lastSnapshot.daemons.find(d => d.id === id);
-  if (!cancelled && id && room && demon && demon.office_id !== room) roomAction({id,room}, 'Демон переселён');
+  if (!cancelled && id && room && demon && demon.office_id !== room) roomAction({id,room}, tr("Демон переселён", "Daemon moved"));
 }
 roomGrid.addEventListener('pointerup', e => finishRoomPointer(e));
 roomGrid.addEventListener('pointercancel', e => finishRoomPointer(e,true));

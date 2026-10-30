@@ -1,5 +1,7 @@
 # Исполнитель задач Артели для GigaCode CLI
 
+**Русский** · [English](README.en.md)
+
 Готовое определение: [jira-to-deploy-orchestrator.md](jira-to-deploy-orchestrator.md).
 Формат — Markdown с YAML frontmatter, имя соответствует вызовам из Артели.
 

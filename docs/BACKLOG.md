@@ -1,6 +1,8 @@
 # Исследование бэклога
 
-[Главная](../README.md) · [Настройки](CONFIGURATION.md) · [Runbook](RUNBOOK.md)
+**Русский** · [English](BACKLOG.en.md)
+
+[Главная](../README.ru.md) · [Настройки](CONFIGURATION.md) · [Runbook](RUNBOOK.md)
 
 ## Исследование бэклога в простое
 

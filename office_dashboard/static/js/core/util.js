@@ -17,7 +17,7 @@ function loadImage(src) {
   return new Promise((resolve, reject) => {
     const img = new Image();
     img.onload = () => resolve(img);
-    img.onerror = () => reject(new Error('Не загрузилось: ' + src));
+    img.onerror = () => reject(new Error(tr("Не загрузилось: ", "Could not load: ") + src));
     img.src = src;
   });
 }

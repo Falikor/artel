@@ -8,10 +8,10 @@ function updateMotionControl() {
   social.freezeAt = office.t;
   document.body.classList.toggle('motion-paused', paused);
   if (button) {
-    button.textContent = social.reduced.matches ? 'Движение сокращено' : paused ? 'Включить анимацию' : 'Приостановить анимацию';
+    button.textContent = social.reduced.matches ? tr("Движение сокращено", "Reduced motion") : paused ? tr("Включить анимацию", "Resume animation") : tr("Приостановить анимацию", "Pause animation");
     button.setAttribute('aria-pressed', String(paused));
     button.disabled = social.reduced.matches;
-    button.title = social.reduced.matches ? 'По настройке уменьшения движения в системе. Статусы и логи обновляются.' : 'Останавливает только движение персонажей. Статусы и логи продолжат обновляться.';
+    button.title = social.reduced.matches ? tr("По настройке уменьшения движения в системе. Статусы и логи обновляются.", "Following your system reduced motion preference. Status and logs keep updating.") : tr("Останавливает только движение персонажей. Статусы и логи продолжат обновляться.", "Pauses character motion. Status and logs keep updating.");
   }
   if (paused) social.visits.clear();
   for (const w of office.workers.values()) w.stillKey = null;
@@ -37,7 +37,7 @@ function startOfficeVisit(id, target, requested=false) {
   const w=office.workers.get(id);
   if(w && !w.free && !requested) return false;
   social.visits.set(id,{home:d.office_id,target,phase:'leaving',at:Date.now()});
-  if(w) leaveForVisit(w,'Зайду к коллегам в другой офис');
+  if(w) leaveForVisit(w,tr("Зайду к коллегам в другой офис", "Visiting colleagues in another office"));
   renderBuilding(); return true;
 }
 function leaveForVisit(w, text) {
@@ -53,11 +53,11 @@ function socialTick(now) {
     if(!d || d.alive===false || d.stage!=='idle' || d.office_id!==v.home || !(lastSnapshot.offices||[]).some(r=>r.id===v.target)) {
       social.visits.delete(id); changed=true;continue;
     }
-    if (w && ['leaving','returning'].includes(v.phase) && w.visible && w.plan?.kind !== 'office-visit') leaveForVisit(w,'До встречи!');
+    if (w && ['leaving','returning'].includes(v.phase) && w.visible && w.plan?.kind !== 'office-visit') leaveForVisit(w,tr("До встречи!", "See you!"));
     if(v.phase==='leaving' && (!w || !w.visible)) {v.phase='visiting';v.at=now;changed=true;}
     else if(v.phase==='visiting' && now-v.at>45000) {
       v.phase='returning';v.at=now;
-      if(w) leaveForVisit(w,'Спасибо за беседу! Возвращаюсь к себе');
+      if(w) leaveForVisit(w,tr("Спасибо за беседу! Возвращаюсь к себе", "Thanks for the chat! Heading back"));
       changed=true;
     } else if(v.phase==='returning' && (!w || !w.visible)) {social.visits.delete(id);changed=true;}
   }
@@ -76,7 +76,7 @@ function ownerReaction(id, kind) {
   if(!w || !w.visible || w.lost) return;
   w.feedback={kind,at:office.t};
   if (!officeMotionPaused()) w.shot(w.mode==='seated' ? w.seatedClip(kind==='praise'?'win':'talk') : kind==='praise'?'celebrate':'think',office.t);
-  w.sayLine(kind==='praise'?'Спасибо! Звезда за работу ★':'Замечание принято. Давай разберём результат.',office.t,5);
+  w.sayLine(kind==='praise'?tr("Спасибо! Звезда за работу ★", "Thanks! A star for my work ★"):tr("Замечание принято. Давай разберём результат.", "Feedback received. Let us review the result."),office.t,5);
   if(kind==='praise' && !officeMotionPaused()) office.react(w,office.t,'success');
 }
 function reactionOffset(w,t) {
@@ -106,7 +106,7 @@ ACTIVITIES.brainstorm=(a,t,all)=>{
   office.spots.add('brainstorm');
   const duration=18;
   a.startPlan('brainstorm',[{place:standPlace('brainstorm',[N.board[0]-35,N.board[1]],'up','think','board'),dur:duration,
-    onArrive:tt=>dialog(a,b,tt,[['Проверим крайний случай?','Добавим его в тесты.'],['Как сделать проще?','Начнём с самого короткого сценария.']])}],t,{spot:'brainstorm'});
+    onArrive:tt=>dialog(a,b,tt,[[tr("Проверим крайний случай?", "Shall we check the edge case?"),tr("Добавим его в тесты.", "Let us add a test for it.")],[tr("Как сделать проще?", "How can we simplify it?"),tr("Начнём с самого короткого сценария.", "Start with the shortest scenario.")]])}],t,{spot:'brainstorm'});
   b.startPlan('brainstorm',[{place:standPlace('brainstorm-b',[N.board[0]+10,N.board[1]+15],'up','think','board'),dur:duration}],t);
   return true;
 };
@@ -114,7 +114,7 @@ ACTIVITY_WEIGHTS.brainstorm=2;
 ACTIVITIES.coffeeExchange=(a,t,all)=>{
   const b=all.find(w=>w!==a&&w.free);if(!b)return false;
   const ok=ACTIVITIES.chat(a,t,all);
-  if(ok) {a.sayLine('Кому кофе после хорошего теста?',t,3);b.replies.push({at:t+5,text:'Мне! А потом посмотрим на результат.',pose:'coffee',dur:3});}
+  if(ok) {a.sayLine(tr("Кому кофе после хорошего теста?", "Coffee after a good test?"),t,3);b.replies.push({at:t+5,text:tr("Мне! А потом посмотрим на результат.", "Yes! Then let us check the result."),pose:'coffee',dur:3});}
   return ok;
 };
 ACTIVITY_WEIGHTS.coffeeExchange=1.5;

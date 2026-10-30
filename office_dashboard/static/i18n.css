@@ -1,0 +1,16 @@
+/* Browser preferences stay together and wrap instead of narrowing page content. */
+.ui-preferences { display:flex; align-items:center; gap:8px; flex:none; }
+.language-select { width:106px; font-size:12px; min-height:34px; padding:6px 22px 6px 9px; background:var(--card); border-color:var(--line); }
+@media(max-width:1050px) { .top-status { gap:12px; }.summary { gap:8px; } }
+@media(max-width:760px) {
+  .top-bar { flex-wrap:wrap; gap:8px 12px; padding-block:12px; }
+  .top-status { flex-wrap:wrap; justify-content:flex-end; gap:8px; }
+  .language-select { width:100px; min-height:38px; }
+}
+@media(max-width:480px) {
+  .top-bar { align-items:flex-start; }
+  .top-status { max-width:100%; margin-left:auto; }
+  .ui-preferences { gap:6px; }
+  .language-select { width:91px; }
+  .theme-select { width:97px; }
+}

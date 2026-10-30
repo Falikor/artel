@@ -29,10 +29,11 @@
 *.tar.gz
 *.zip
 
-# Source asset files have a separate distribution license. Keep local copies.
-/office_dashboard/assets/*
-!/office_dashboard/assets/LICENSE_EN.txt
-!/office_dashboard/assets/README.md
+# Office scene assets are included; temporary editor/export files are not.
+/office_dashboard/assets/**/*.tmp
+/office_dashboard/assets/**/*.part
+/office_dashboard/assets/**/*.bak
+/office_dashboard/assets/**/*~
 
 # Python, editor and operating-system caches
 __pycache__/

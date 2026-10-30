@@ -85,7 +85,7 @@ ACTIVITIES.game = (a, t, all) => {
 // Убрать приставку, если её оставили у ТВ
 ACTIVITIES.tidy = (a, t) => {
   if (!cabinet.img || cabinet.console !== 'installed' || office.game || office.spots.has('cabinet')) return false;
-  a.startPlan('tidy', [{ place: cabPlace(), dur: 4.4, say: 'Уберу приставку на место',
+  a.startPlan('tidy', [{ place: cabPlace(), dur: 4.4, say: tr("Уберу приставку на место", "Putting the console away"),
     onArrive: (tt) => { if (cabinet.console === 'installed' && !office.game) consoleStore(a, tt); } }], t);
   return true;
 };
@@ -105,15 +105,15 @@ function updateGame(t) {
   if (!game.playing && seated && cabinet.console === 'installed' && !office.spots.has('cabinet')) {
     game.playing = true; cabinet.state = 6; game.endAt = t + rnd(25, 45);
     game.players.forEach((w) => { w.gaming = true; w.nextAct = t + rnd(3, 8); });
-    game.players[0].sayLine('Погнали!', t, 1.8);
+    game.players[0].sayLine(tr("Погнали!", "Let us go!"), t, 1.8);
   }
   if (game.playing && t > game.endAt) {
     game.playing = false; cabinet.state = 7;
     after(t + 1.2, () => { if (cabinet.state === 7) cabinet.state = 5; });
     game.players.forEach((w) => { w.gaming = false; });
     const [w1, w2] = game.players;
-    w1.sayLine(pick(['Хорошая игра!', 'Ладно, твоя взяла', 'Реванш потом']), t, 2.4);
-    w2.replies.push({ at: t + 2.4, text: pick(['GG', 'Обращайся :)', 'Договорились']) });
+    w1.sayLine(pick([tr("Хорошая игра!", "Good game!"), tr("Ладно, твоя взяла", "All right, you win"), tr("Реванш потом", "Rematch later")]), t, 2.4);
+    w2.replies.push({ at: t + 2.4, text: pick(['GG', tr("Обращайся :)", "Any time :)"), tr("Договорились", "Deal")]) });
     after(t + 3.5, () => { game.done = true; });
   }
 }

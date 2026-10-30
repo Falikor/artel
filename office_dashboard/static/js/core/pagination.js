@@ -10,7 +10,7 @@ function sectionPaginationContext(group, signature) {
     sectionPagination.contexts.set(group, value);
   }
 }
-function sectionPage(key, records, signature = '', label = 'Записи') {
+function sectionPage(key, records, signature = '', label = tr("Записи", "Records")) {
   let page = sectionPagination.pages.get(key);
   if (!page || page.signature !== signature) {
     page = {signature, visible: sectionPagination.size, total: 0};
@@ -20,8 +20,8 @@ function sectionPage(key, records, signature = '', label = 'Записи') {
   const shown = Math.min(page.visible, page.total), next = Math.min(sectionPagination.size, page.total - shown);
   const id = 'section-page-' + encodeURIComponent(key);
   const footer = page.total ? `<div class="section-pagination" id="${esc(id)}" tabindex="-1" aria-label="${esc(label)}">
-    <span class="section-pagination-count muted" role="status">Показано ${shown} из ${page.total}</span>
-    ${next ? `<button type="button" class="btn" data-page-more="${esc(key)}" aria-label="${esc(label)}: показать ещё ${next}">Показать ещё <span class="muted" aria-hidden="true">${next}</span></button>` : ''}
+    <span class="section-pagination-count muted" role="status">${tr(`Показано ${shown} из ${page.total}`, `Showing ${shown} of ${page.total}`)}</span>
+    ${next ? `<button type="button" class="btn" data-page-more="${esc(key)}" aria-label="${esc(label)}: ${tr('показать ещё', 'show more')} ${next}">${tr('Показать ещё', 'Show more')} <span class="muted" aria-hidden="true">${next}</span></button>` : ''}
   </div>` : '';
   return {rows: records.slice(0, shown), footer};
 }

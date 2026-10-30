@@ -1,0 +1,1851 @@
+{
+  "sofa_sit_right": {
+    "label": "Сесть на диван · вправо",
+    "frames": [
+      "sofa_sit_right_00",
+      "sofa_sit_right_01",
+      "sofa_sit_right_02",
+      "sofa_sit_right_03",
+      "sofa_sit_right_04",
+      "sofa_sit_right_05",
+      "sofa_sit_right_06",
+      "sofa_sit_right_07"
+    ],
+    "durationsMs": [
+      160,
+      140,
+      140,
+      160,
+      160,
+      160,
+      180,
+      260
+    ],
+    "totalDurationMs": 1360,
+    "loop": false,
+    "flipX": false,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 5,
+        "name": "seat_contact"
+      },
+      {
+        "frame": 7,
+        "name": "seated",
+        "phase": "completion"
+      }
+    ],
+    "completionAction": "sofa_idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_idle_right": {
+    "label": "Сидеть на диване · вправо",
+    "frames": [
+      "sofa_idle_right_00",
+      "sofa_idle_right_01",
+      "sofa_idle_right_02",
+      "sofa_idle_right_03",
+      "sofa_idle_right_04",
+      "sofa_idle_right_05",
+      "sofa_idle_right_06",
+      "sofa_idle_right_07"
+    ],
+    "durationsMs": [
+      280,
+      220,
+      260,
+      220,
+      280,
+      260,
+      220,
+      260
+    ],
+    "totalDurationMs": 2000,
+    "loop": true,
+    "flipX": false,
+    "furniture": "sofa",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "sofa_idle_right",
+    "frameOverrides": {}
+  },
+  "sofa_drink_right": {
+    "label": "Пить на диване · вправо",
+    "frames": [
+      "sofa_drink_right_00",
+      "sofa_drink_right_01",
+      "sofa_drink_right_02",
+      "sofa_drink_right_03",
+      "sofa_drink_right_04",
+      "sofa_drink_right_05",
+      "sofa_drink_right_06",
+      "sofa_drink_right_07"
+    ],
+    "durationsMs": [
+      200,
+      180,
+      200,
+      420,
+      200,
+      180,
+      220,
+      300
+    ],
+    "totalDurationMs": 1900,
+    "loop": false,
+    "flipX": false,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 1,
+        "name": "mug_grasp"
+      },
+      {
+        "frame": 3,
+        "name": "sip"
+      },
+      {
+        "frame": 6,
+        "name": "mug_place"
+      }
+    ],
+    "completionAction": "sofa_idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "armchair_sit_right": {
+    "label": "Сесть в мягкое кресло · вправо",
+    "frames": [
+      "armchair_sit_right_00",
+      "armchair_sit_right_01",
+      "armchair_sit_right_02",
+      "armchair_sit_right_03",
+      "armchair_sit_right_04",
+      "armchair_sit_right_05",
+      "armchair_sit_right_06",
+      "armchair_sit_right_07"
+    ],
+    "durationsMs": [
+      160,
+      140,
+      140,
+      160,
+      160,
+      160,
+      180,
+      260
+    ],
+    "totalDurationMs": 1360,
+    "loop": false,
+    "flipX": false,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 5,
+        "name": "seat_contact"
+      },
+      {
+        "frame": 7,
+        "name": "seated",
+        "phase": "completion"
+      }
+    ],
+    "completionAction": "armchair_idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "armchair_idle_right": {
+    "label": "Сидеть в мягком кресле · вправо",
+    "frames": [
+      "armchair_idle_right_00",
+      "armchair_idle_right_01",
+      "armchair_idle_right_02",
+      "armchair_idle_right_03",
+      "armchair_idle_right_04",
+      "armchair_idle_right_05",
+      "armchair_idle_right_06",
+      "armchair_idle_right_07"
+    ],
+    "durationsMs": [
+      280,
+      220,
+      260,
+      220,
+      280,
+      260,
+      220,
+      260
+    ],
+    "totalDurationMs": 2000,
+    "loop": true,
+    "flipX": false,
+    "furniture": "lounge_armchair",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "armchair_idle_right",
+    "frameOverrides": {}
+  },
+  "armchair_drink_right": {
+    "label": "Пить в мягком кресле · вправо",
+    "frames": [
+      "armchair_drink_right_00",
+      "armchair_drink_right_01",
+      "armchair_drink_right_02",
+      "armchair_drink_right_03",
+      "armchair_drink_right_04",
+      "armchair_drink_right_05",
+      "armchair_drink_right_06",
+      "armchair_drink_right_07"
+    ],
+    "durationsMs": [
+      200,
+      180,
+      200,
+      420,
+      200,
+      180,
+      220,
+      300
+    ],
+    "totalDurationMs": 1900,
+    "loop": false,
+    "flipX": false,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 1,
+        "name": "mug_grasp"
+      },
+      {
+        "frame": 3,
+        "name": "sip"
+      },
+      {
+        "frame": 6,
+        "name": "mug_place"
+      }
+    ],
+    "completionAction": "armchair_idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "pat_shoulder_right": {
+    "label": "Хлопнуть по плечу · вправо",
+    "frames": [
+      "pat_shoulder_right_00",
+      "pat_shoulder_right_01",
+      "pat_shoulder_right_02",
+      "pat_shoulder_right_03",
+      "pat_shoulder_right_04",
+      "pat_shoulder_right_05",
+      "pat_shoulder_right_06",
+      "pat_shoulder_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": false,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 3,
+        "name": "shoulder_contact"
+      }
+    ],
+    "completionAction": "base:idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "pat_received_right": {
+    "label": "Принять дружеский хлопок · вправо",
+    "frames": [
+      "pat_received_right_00",
+      "pat_received_right_01",
+      "pat_received_right_02",
+      "pat_received_right_03",
+      "pat_received_right_04",
+      "pat_received_right_05",
+      "pat_received_right_06",
+      "pat_received_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": false,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 3,
+        "name": "shoulder_reaction"
+      }
+    ],
+    "completionAction": "base:idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "give_item_right": {
+    "label": "Передать предмет · вправо",
+    "frames": [
+      "give_item_right_00",
+      "give_item_right_01",
+      "give_item_right_02",
+      "give_item_right_03",
+      "give_item_right_04",
+      "give_item_right_05",
+      "give_item_right_06",
+      "give_item_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": false,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "item_transfer"
+      }
+    ],
+    "completionAction": "base:idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "receive_item_right": {
+    "label": "Принять предмет · вправо",
+    "frames": [
+      "receive_item_right_00",
+      "receive_item_right_01",
+      "receive_item_right_02",
+      "receive_item_right_03",
+      "receive_item_right_04",
+      "receive_item_right_05",
+      "receive_item_right_06",
+      "receive_item_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": false,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "item_transfer"
+      }
+    ],
+    "completionAction": "base:idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_game_right": {
+    "label": "Играть на диване · вправо",
+    "frames": [
+      "sofa_game_right_00",
+      "sofa_game_right_01",
+      "sofa_game_right_02",
+      "sofa_game_right_03",
+      "sofa_game_right_04",
+      "sofa_game_right_05",
+      "sofa_game_right_06",
+      "sofa_game_right_07"
+    ],
+    "durationsMs": [
+      160,
+      140,
+      140,
+      160,
+      180,
+      160,
+      180,
+      180
+    ],
+    "totalDurationMs": 1300,
+    "loop": true,
+    "flipX": false,
+    "furniture": "sofa",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "sofa_idle_right",
+    "frameOverrides": {}
+  },
+  "armchair_game_right": {
+    "label": "Играть в кресле · вправо",
+    "frames": [
+      "armchair_game_right_00",
+      "armchair_game_right_01",
+      "armchair_game_right_02",
+      "armchair_game_right_03",
+      "armchair_game_right_04",
+      "armchair_game_right_05",
+      "armchair_game_right_06",
+      "armchair_game_right_07"
+    ],
+    "durationsMs": [
+      160,
+      140,
+      140,
+      160,
+      180,
+      160,
+      180,
+      180
+    ],
+    "totalDurationMs": 1300,
+    "loop": true,
+    "flipX": false,
+    "furniture": "lounge_armchair",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "armchair_idle_right",
+    "frameOverrides": {}
+  },
+  "retrieve_console_right": {
+    "label": "Достать приставку · вправо",
+    "frames": [
+      "retrieve_console_right_00",
+      "retrieve_console_right_01",
+      "retrieve_console_right_02",
+      "retrieve_console_right_03",
+      "retrieve_console_right_04",
+      "retrieve_console_right_05",
+      "retrieve_console_right_06",
+      "retrieve_console_right_07"
+    ],
+    "durationsMs": [
+      180,
+      180,
+      200,
+      280,
+      180,
+      180,
+      160,
+      240
+    ],
+    "totalDurationMs": 1600,
+    "loop": false,
+    "flipX": false,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 3,
+        "name": "console_pickup"
+      }
+    ],
+    "completionAction": "carry_console_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "carry_console_right": {
+    "label": "Нести приставку · вправо",
+    "frames": [
+      "carry_console_right_00",
+      "carry_console_right_01",
+      "carry_console_right_02",
+      "carry_console_right_03",
+      "carry_console_right_04",
+      "carry_console_right_05",
+      "carry_console_right_06",
+      "carry_console_right_07"
+    ],
+    "durationsMs": [
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110
+    ],
+    "totalDurationMs": 880,
+    "loop": true,
+    "flipX": false,
+    "furniture": null,
+    "events": [],
+    "completionAction": null,
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "set_console_right": {
+    "label": "Установить приставку · вправо",
+    "frames": [
+      "set_console_right_00",
+      "set_console_right_01",
+      "set_console_right_02",
+      "set_console_right_03",
+      "set_console_right_04",
+      "set_console_right_05",
+      "set_console_right_06",
+      "set_console_right_07"
+    ],
+    "durationsMs": [
+      180,
+      180,
+      200,
+      280,
+      180,
+      180,
+      160,
+      240
+    ],
+    "totalDurationMs": 1600,
+    "loop": false,
+    "flipX": false,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "console_install"
+      }
+    ],
+    "completionAction": "base:idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "return_console_right": {
+    "label": "Убрать приставку · вправо",
+    "frames": [
+      "return_console_right_00",
+      "return_console_right_01",
+      "return_console_right_02",
+      "return_console_right_03",
+      "return_console_right_04",
+      "return_console_right_05",
+      "return_console_right_06",
+      "return_console_right_07"
+    ],
+    "durationsMs": [
+      180,
+      180,
+      200,
+      280,
+      180,
+      180,
+      160,
+      240
+    ],
+    "totalDurationMs": 1600,
+    "loop": false,
+    "flipX": false,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "console_store"
+      }
+    ],
+    "completionAction": "base:idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_talk_right": {
+    "label": "Говорить на диване · вправо",
+    "frames": [
+      "sofa_talk_right_00",
+      "sofa_talk_right_01",
+      "sofa_talk_right_02",
+      "sofa_talk_right_03",
+      "sofa_talk_right_04",
+      "sofa_talk_right_05",
+      "sofa_talk_right_06",
+      "sofa_talk_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": true,
+    "flipX": false,
+    "furniture": "sofa",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "sofa_idle_right",
+    "frameOverrides": {}
+  },
+  "armchair_talk_right": {
+    "label": "Говорить в кресле · вправо",
+    "frames": [
+      "armchair_talk_right_00",
+      "armchair_talk_right_01",
+      "armchair_talk_right_02",
+      "armchair_talk_right_03",
+      "armchair_talk_right_04",
+      "armchair_talk_right_05",
+      "armchair_talk_right_06",
+      "armchair_talk_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": true,
+    "flipX": false,
+    "furniture": "lounge_armchair",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "armchair_idle_right",
+    "frameOverrides": {}
+  },
+  "sofa_laugh_right": {
+    "label": "Смеяться на диване · вправо",
+    "frames": [
+      "sofa_laugh_right_00",
+      "sofa_laugh_right_01",
+      "sofa_laugh_right_02",
+      "sofa_laugh_right_03",
+      "sofa_laugh_right_04",
+      "sofa_laugh_right_05",
+      "sofa_laugh_right_06",
+      "sofa_laugh_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": false,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 3,
+        "name": "seated_chuckle"
+      }
+    ],
+    "completionAction": "sofa_idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "armchair_laugh_right": {
+    "label": "Смеяться в кресле · вправо",
+    "frames": [
+      "armchair_laugh_right_00",
+      "armchair_laugh_right_01",
+      "armchair_laugh_right_02",
+      "armchair_laugh_right_03",
+      "armchair_laugh_right_04",
+      "armchair_laugh_right_05",
+      "armchair_laugh_right_06",
+      "armchair_laugh_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": false,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 3,
+        "name": "seated_chuckle"
+      }
+    ],
+    "completionAction": "armchair_idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_game_win_right": {
+    "label": "Победа на диване · вправо",
+    "frames": [
+      "sofa_game_win_right_00",
+      "sofa_game_win_right_01",
+      "sofa_game_win_right_02",
+      "sofa_game_win_right_03",
+      "sofa_game_win_right_04",
+      "sofa_game_win_right_05",
+      "sofa_game_win_right_06",
+      "sofa_game_win_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": false,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 3,
+        "name": "seated_game_cheer"
+      }
+    ],
+    "completionAction": "sofa_game_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "armchair_game_win_right": {
+    "label": "Победа в кресле · вправо",
+    "frames": [
+      "armchair_game_win_right_00",
+      "armchair_game_win_right_01",
+      "armchair_game_win_right_02",
+      "armchair_game_win_right_03",
+      "armchair_game_win_right_04",
+      "armchair_game_win_right_05",
+      "armchair_game_win_right_06",
+      "armchair_game_win_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": false,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 3,
+        "name": "seated_game_cheer"
+      }
+    ],
+    "completionAction": "armchair_game_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_stand_right": {
+    "label": "Встать с дивана · вправо",
+    "frames": [
+      "sofa_sit_right_07",
+      "sofa_sit_right_06",
+      "sofa_sit_right_05",
+      "sofa_sit_right_04",
+      "sofa_sit_right_03",
+      "sofa_sit_right_02",
+      "sofa_sit_right_01",
+      "sofa_sit_right_00"
+    ],
+    "durationsMs": [
+      260,
+      180,
+      160,
+      160,
+      160,
+      140,
+      140,
+      160
+    ],
+    "totalDurationMs": 1360,
+    "loop": false,
+    "flipX": false,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 7,
+        "name": "seat_released",
+        "phase": "completion"
+      }
+    ],
+    "completionAction": "base:idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "armchair_stand_right": {
+    "label": "Встать из мягкого кресла · вправо",
+    "frames": [
+      "armchair_sit_right_07",
+      "armchair_sit_right_06",
+      "armchair_sit_right_05",
+      "armchair_sit_right_04",
+      "armchair_sit_right_03",
+      "armchair_sit_right_02",
+      "armchair_sit_right_01",
+      "armchair_sit_right_00"
+    ],
+    "durationsMs": [
+      260,
+      180,
+      160,
+      160,
+      160,
+      140,
+      140,
+      160
+    ],
+    "totalDurationMs": 1360,
+    "loop": false,
+    "flipX": false,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 7,
+        "name": "seat_released",
+        "phase": "completion"
+      }
+    ],
+    "completionAction": "base:idle_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "take_installed_console_right": {
+    "label": "Забрать установленную приставку · вправо",
+    "frames": [
+      "set_console_right_07",
+      "set_console_right_06",
+      "set_console_right_05",
+      "set_console_right_04",
+      "set_console_right_03",
+      "set_console_right_02",
+      "set_console_right_01",
+      "set_console_right_00"
+    ],
+    "durationsMs": [
+      240,
+      160,
+      180,
+      180,
+      280,
+      200,
+      180,
+      180
+    ],
+    "totalDurationMs": 1600,
+    "loop": false,
+    "flipX": false,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "console_pickup_installed"
+      }
+    ],
+    "completionAction": "carry_console_right",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_sit_left": {
+    "label": "Сесть на диван · влево",
+    "frames": [
+      "sofa_sit_right_00",
+      "sofa_sit_right_01",
+      "sofa_sit_right_02",
+      "sofa_sit_right_03",
+      "sofa_sit_right_04",
+      "sofa_sit_right_05",
+      "sofa_sit_right_06",
+      "sofa_sit_right_07"
+    ],
+    "durationsMs": [
+      160,
+      140,
+      140,
+      160,
+      160,
+      160,
+      180,
+      260
+    ],
+    "totalDurationMs": 1360,
+    "loop": false,
+    "flipX": true,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 5,
+        "name": "seat_contact"
+      },
+      {
+        "frame": 7,
+        "name": "seated",
+        "phase": "completion"
+      }
+    ],
+    "completionAction": "sofa_idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "0": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "sofa_idle_left": {
+    "label": "Сидеть на диване · влево",
+    "frames": [
+      "sofa_idle_right_00",
+      "sofa_idle_right_01",
+      "sofa_idle_right_02",
+      "sofa_idle_right_03",
+      "sofa_idle_right_04",
+      "sofa_idle_right_05",
+      "sofa_idle_right_06",
+      "sofa_idle_right_07"
+    ],
+    "durationsMs": [
+      280,
+      220,
+      260,
+      220,
+      280,
+      260,
+      220,
+      260
+    ],
+    "totalDurationMs": 2000,
+    "loop": true,
+    "flipX": true,
+    "furniture": "sofa",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "sofa_idle_left",
+    "frameOverrides": {}
+  },
+  "sofa_drink_left": {
+    "label": "Пить на диване · влево",
+    "frames": [
+      "sofa_drink_right_00",
+      "sofa_drink_right_01",
+      "sofa_drink_right_02",
+      "sofa_drink_right_03",
+      "sofa_drink_right_04",
+      "sofa_drink_right_05",
+      "sofa_drink_right_06",
+      "sofa_drink_right_07"
+    ],
+    "durationsMs": [
+      200,
+      180,
+      200,
+      420,
+      200,
+      180,
+      220,
+      300
+    ],
+    "totalDurationMs": 1900,
+    "loop": false,
+    "flipX": true,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 1,
+        "name": "mug_grasp"
+      },
+      {
+        "frame": 3,
+        "name": "sip"
+      },
+      {
+        "frame": 6,
+        "name": "mug_place"
+      }
+    ],
+    "completionAction": "sofa_idle_left",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "armchair_sit_left": {
+    "label": "Сесть в мягкое кресло · влево",
+    "frames": [
+      "armchair_sit_right_00",
+      "armchair_sit_right_01",
+      "armchair_sit_right_02",
+      "armchair_sit_right_03",
+      "armchair_sit_right_04",
+      "armchair_sit_right_05",
+      "armchair_sit_right_06",
+      "armchair_sit_right_07"
+    ],
+    "durationsMs": [
+      160,
+      140,
+      140,
+      160,
+      160,
+      160,
+      180,
+      260
+    ],
+    "totalDurationMs": 1360,
+    "loop": false,
+    "flipX": true,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 5,
+        "name": "seat_contact"
+      },
+      {
+        "frame": 7,
+        "name": "seated",
+        "phase": "completion"
+      }
+    ],
+    "completionAction": "armchair_idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "0": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "armchair_idle_left": {
+    "label": "Сидеть в мягком кресле · влево",
+    "frames": [
+      "armchair_idle_right_00",
+      "armchair_idle_right_01",
+      "armchair_idle_right_02",
+      "armchair_idle_right_03",
+      "armchair_idle_right_04",
+      "armchair_idle_right_05",
+      "armchair_idle_right_06",
+      "armchair_idle_right_07"
+    ],
+    "durationsMs": [
+      280,
+      220,
+      260,
+      220,
+      280,
+      260,
+      220,
+      260
+    ],
+    "totalDurationMs": 2000,
+    "loop": true,
+    "flipX": true,
+    "furniture": "lounge_armchair",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "armchair_idle_left",
+    "frameOverrides": {}
+  },
+  "armchair_drink_left": {
+    "label": "Пить в мягком кресле · влево",
+    "frames": [
+      "armchair_drink_right_00",
+      "armchair_drink_right_01",
+      "armchair_drink_right_02",
+      "armchair_drink_right_03",
+      "armchair_drink_right_04",
+      "armchair_drink_right_05",
+      "armchair_drink_right_06",
+      "armchair_drink_right_07"
+    ],
+    "durationsMs": [
+      200,
+      180,
+      200,
+      420,
+      200,
+      180,
+      220,
+      300
+    ],
+    "totalDurationMs": 1900,
+    "loop": false,
+    "flipX": true,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 1,
+        "name": "mug_grasp"
+      },
+      {
+        "frame": 3,
+        "name": "sip"
+      },
+      {
+        "frame": 6,
+        "name": "mug_place"
+      }
+    ],
+    "completionAction": "armchair_idle_left",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "pat_shoulder_left": {
+    "label": "Хлопнуть по плечу · влево",
+    "frames": [
+      "pat_shoulder_right_00",
+      "pat_shoulder_right_01",
+      "pat_shoulder_right_02",
+      "pat_shoulder_right_03",
+      "pat_shoulder_right_04",
+      "pat_shoulder_right_05",
+      "pat_shoulder_right_06",
+      "pat_shoulder_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": true,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 3,
+        "name": "shoulder_contact"
+      }
+    ],
+    "completionAction": "base:idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "0": {
+        "frame": "standing_left",
+        "flipX": false
+      },
+      "7": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "pat_received_left": {
+    "label": "Принять дружеский хлопок · влево",
+    "frames": [
+      "pat_received_right_00",
+      "pat_received_right_01",
+      "pat_received_right_02",
+      "pat_received_right_03",
+      "pat_received_right_04",
+      "pat_received_right_05",
+      "pat_received_right_06",
+      "pat_received_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": true,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 3,
+        "name": "shoulder_reaction"
+      }
+    ],
+    "completionAction": "base:idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "0": {
+        "frame": "standing_left",
+        "flipX": false
+      },
+      "7": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "give_item_left": {
+    "label": "Передать предмет · влево",
+    "frames": [
+      "give_item_right_00",
+      "give_item_right_01",
+      "give_item_right_02",
+      "give_item_right_03",
+      "give_item_right_04",
+      "give_item_right_05",
+      "give_item_right_06",
+      "give_item_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": true,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "item_transfer"
+      }
+    ],
+    "completionAction": "base:idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "7": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "receive_item_left": {
+    "label": "Принять предмет · влево",
+    "frames": [
+      "receive_item_right_00",
+      "receive_item_right_01",
+      "receive_item_right_02",
+      "receive_item_right_03",
+      "receive_item_right_04",
+      "receive_item_right_05",
+      "receive_item_right_06",
+      "receive_item_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": true,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "item_transfer"
+      }
+    ],
+    "completionAction": "base:idle_left",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_game_left": {
+    "label": "Играть на диване · влево",
+    "frames": [
+      "sofa_game_right_00",
+      "sofa_game_right_01",
+      "sofa_game_right_02",
+      "sofa_game_right_03",
+      "sofa_game_right_04",
+      "sofa_game_right_05",
+      "sofa_game_right_06",
+      "sofa_game_right_07"
+    ],
+    "durationsMs": [
+      160,
+      140,
+      140,
+      160,
+      180,
+      160,
+      180,
+      180
+    ],
+    "totalDurationMs": 1300,
+    "loop": true,
+    "flipX": true,
+    "furniture": "sofa",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "sofa_idle_left",
+    "frameOverrides": {}
+  },
+  "armchair_game_left": {
+    "label": "Играть в кресле · влево",
+    "frames": [
+      "armchair_game_right_00",
+      "armchair_game_right_01",
+      "armchair_game_right_02",
+      "armchair_game_right_03",
+      "armchair_game_right_04",
+      "armchair_game_right_05",
+      "armchair_game_right_06",
+      "armchair_game_right_07"
+    ],
+    "durationsMs": [
+      160,
+      140,
+      140,
+      160,
+      180,
+      160,
+      180,
+      180
+    ],
+    "totalDurationMs": 1300,
+    "loop": true,
+    "flipX": true,
+    "furniture": "lounge_armchair",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "armchair_idle_left",
+    "frameOverrides": {}
+  },
+  "retrieve_console_left": {
+    "label": "Достать приставку · влево",
+    "frames": [
+      "retrieve_console_right_00",
+      "retrieve_console_right_01",
+      "retrieve_console_right_02",
+      "retrieve_console_right_03",
+      "retrieve_console_right_04",
+      "retrieve_console_right_05",
+      "retrieve_console_right_06",
+      "retrieve_console_right_07"
+    ],
+    "durationsMs": [
+      180,
+      180,
+      200,
+      280,
+      180,
+      180,
+      160,
+      240
+    ],
+    "totalDurationMs": 1600,
+    "loop": false,
+    "flipX": true,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 3,
+        "name": "console_pickup"
+      }
+    ],
+    "completionAction": "carry_console_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "0": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "carry_console_left": {
+    "label": "Нести приставку · влево",
+    "frames": [
+      "carry_console_right_00",
+      "carry_console_right_01",
+      "carry_console_right_02",
+      "carry_console_right_03",
+      "carry_console_right_04",
+      "carry_console_right_05",
+      "carry_console_right_06",
+      "carry_console_right_07"
+    ],
+    "durationsMs": [
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110,
+      110
+    ],
+    "totalDurationMs": 880,
+    "loop": true,
+    "flipX": true,
+    "furniture": null,
+    "events": [],
+    "completionAction": null,
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "set_console_left": {
+    "label": "Установить приставку · влево",
+    "frames": [
+      "set_console_right_00",
+      "set_console_right_01",
+      "set_console_right_02",
+      "set_console_right_03",
+      "set_console_right_04",
+      "set_console_right_05",
+      "set_console_right_06",
+      "set_console_right_07"
+    ],
+    "durationsMs": [
+      180,
+      180,
+      200,
+      280,
+      180,
+      180,
+      160,
+      240
+    ],
+    "totalDurationMs": 1600,
+    "loop": false,
+    "flipX": true,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "console_install"
+      }
+    ],
+    "completionAction": "base:idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "7": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "return_console_left": {
+    "label": "Убрать приставку · влево",
+    "frames": [
+      "return_console_right_00",
+      "return_console_right_01",
+      "return_console_right_02",
+      "return_console_right_03",
+      "return_console_right_04",
+      "return_console_right_05",
+      "return_console_right_06",
+      "return_console_right_07"
+    ],
+    "durationsMs": [
+      180,
+      180,
+      200,
+      280,
+      180,
+      180,
+      160,
+      240
+    ],
+    "totalDurationMs": 1600,
+    "loop": false,
+    "flipX": true,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "console_store"
+      }
+    ],
+    "completionAction": "base:idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "7": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "sofa_talk_left": {
+    "label": "Говорить на диване · влево",
+    "frames": [
+      "sofa_talk_right_00",
+      "sofa_talk_right_01",
+      "sofa_talk_right_02",
+      "sofa_talk_right_03",
+      "sofa_talk_right_04",
+      "sofa_talk_right_05",
+      "sofa_talk_right_06",
+      "sofa_talk_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": true,
+    "flipX": true,
+    "furniture": "sofa",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "sofa_idle_left",
+    "frameOverrides": {}
+  },
+  "armchair_talk_left": {
+    "label": "Говорить в кресле · влево",
+    "frames": [
+      "armchair_talk_right_00",
+      "armchair_talk_right_01",
+      "armchair_talk_right_02",
+      "armchair_talk_right_03",
+      "armchair_talk_right_04",
+      "armchair_talk_right_05",
+      "armchair_talk_right_06",
+      "armchair_talk_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": true,
+    "flipX": true,
+    "furniture": "lounge_armchair",
+    "events": [],
+    "completionAction": null,
+    "exitAction": "armchair_idle_left",
+    "frameOverrides": {}
+  },
+  "sofa_laugh_left": {
+    "label": "Смеяться на диване · влево",
+    "frames": [
+      "sofa_laugh_right_00",
+      "sofa_laugh_right_01",
+      "sofa_laugh_right_02",
+      "sofa_laugh_right_03",
+      "sofa_laugh_right_04",
+      "sofa_laugh_right_05",
+      "sofa_laugh_right_06",
+      "sofa_laugh_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": true,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 3,
+        "name": "seated_chuckle"
+      }
+    ],
+    "completionAction": "sofa_idle_left",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "armchair_laugh_left": {
+    "label": "Смеяться в кресле · влево",
+    "frames": [
+      "armchair_laugh_right_00",
+      "armchair_laugh_right_01",
+      "armchair_laugh_right_02",
+      "armchair_laugh_right_03",
+      "armchair_laugh_right_04",
+      "armchair_laugh_right_05",
+      "armchair_laugh_right_06",
+      "armchair_laugh_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": true,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 3,
+        "name": "seated_chuckle"
+      }
+    ],
+    "completionAction": "armchair_idle_left",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_game_win_left": {
+    "label": "Победа на диване · влево",
+    "frames": [
+      "sofa_game_win_right_00",
+      "sofa_game_win_right_01",
+      "sofa_game_win_right_02",
+      "sofa_game_win_right_03",
+      "sofa_game_win_right_04",
+      "sofa_game_win_right_05",
+      "sofa_game_win_right_06",
+      "sofa_game_win_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": true,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 3,
+        "name": "seated_game_cheer"
+      }
+    ],
+    "completionAction": "sofa_game_left",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "armchair_game_win_left": {
+    "label": "Победа в кресле · влево",
+    "frames": [
+      "armchair_game_win_right_00",
+      "armchair_game_win_right_01",
+      "armchair_game_win_right_02",
+      "armchair_game_win_right_03",
+      "armchair_game_win_right_04",
+      "armchair_game_win_right_05",
+      "armchair_game_win_right_06",
+      "armchair_game_win_right_07"
+    ],
+    "durationsMs": [
+      160,
+      120,
+      120,
+      180,
+      180,
+      120,
+      120,
+      260
+    ],
+    "totalDurationMs": 1260,
+    "loop": false,
+    "flipX": true,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 3,
+        "name": "seated_game_cheer"
+      }
+    ],
+    "completionAction": "armchair_game_left",
+    "exitAction": null,
+    "frameOverrides": {}
+  },
+  "sofa_stand_left": {
+    "label": "Встать с дивана · влево",
+    "frames": [
+      "sofa_sit_right_07",
+      "sofa_sit_right_06",
+      "sofa_sit_right_05",
+      "sofa_sit_right_04",
+      "sofa_sit_right_03",
+      "sofa_sit_right_02",
+      "sofa_sit_right_01",
+      "sofa_sit_right_00"
+    ],
+    "durationsMs": [
+      260,
+      180,
+      160,
+      160,
+      160,
+      140,
+      140,
+      160
+    ],
+    "totalDurationMs": 1360,
+    "loop": false,
+    "flipX": true,
+    "furniture": "sofa",
+    "events": [
+      {
+        "frame": 7,
+        "name": "seat_released",
+        "phase": "completion"
+      }
+    ],
+    "completionAction": "base:idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "7": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "armchair_stand_left": {
+    "label": "Встать из мягкого кресла · влево",
+    "frames": [
+      "armchair_sit_right_07",
+      "armchair_sit_right_06",
+      "armchair_sit_right_05",
+      "armchair_sit_right_04",
+      "armchair_sit_right_03",
+      "armchair_sit_right_02",
+      "armchair_sit_right_01",
+      "armchair_sit_right_00"
+    ],
+    "durationsMs": [
+      260,
+      180,
+      160,
+      160,
+      160,
+      140,
+      140,
+      160
+    ],
+    "totalDurationMs": 1360,
+    "loop": false,
+    "flipX": true,
+    "furniture": "lounge_armchair",
+    "events": [
+      {
+        "frame": 7,
+        "name": "seat_released",
+        "phase": "completion"
+      }
+    ],
+    "completionAction": "base:idle_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "7": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  },
+  "take_installed_console_left": {
+    "label": "Забрать установленную приставку · влево",
+    "frames": [
+      "set_console_right_07",
+      "set_console_right_06",
+      "set_console_right_05",
+      "set_console_right_04",
+      "set_console_right_03",
+      "set_console_right_02",
+      "set_console_right_01",
+      "set_console_right_00"
+    ],
+    "durationsMs": [
+      240,
+      160,
+      180,
+      180,
+      280,
+      200,
+      180,
+      180
+    ],
+    "totalDurationMs": 1600,
+    "loop": false,
+    "flipX": true,
+    "furniture": null,
+    "events": [
+      {
+        "frame": 4,
+        "name": "console_pickup_installed"
+      }
+    ],
+    "completionAction": "carry_console_left",
+    "exitAction": null,
+    "frameOverrides": {
+      "0": {
+        "frame": "standing_left",
+        "flipX": false
+      }
+    }
+  }
+}

@@ -1,5 +1,7 @@
 # Память и ретроспективы
 
+[English](MEMORY.en.md) · [Русский](MEMORY.md)
+
 [Главная](../README.md) · [Настройки](CONFIGURATION.md) · [Runbook](RUNBOOK.md)
 
 ## Опыт по репозиторию (`memory/`)

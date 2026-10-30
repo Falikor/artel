@@ -384,30 +384,30 @@ class Worker {
     const stage = this.stage, info = STAGE[stage] || STAGE.idle, d = this.data, step = this.step || {};
     tag.style.setProperty('--c', info.color);
     tag.className = 'tag ' + stage + (this.id === office.selected ? ' sel' : '');
-    const label = displayName(d) + (d.guest ? ' · в гостях' : '');
+    const label = displayName(d) + (d.guest ? tr(" · в гостях", " · visiting") : '');
     const nameEl = tag.querySelector('.name span');
     if (nameEl.textContent !== label) nameEl.textContent = label;
     const since = (step.t || d.stage_since || nowSec());
     let text = '';
     switch (step.stage === '_greet' || step.stage === '_bye' ? step.stage : stage) {
-      case '_greet': text = 'привет!'; break;
-      case '_bye': text = 'до встречи!'; break;
-      case 'generating': text = `${step.issue || d.issue || ''} · пишет код ${fmtDur(nowSec() - since)}`; break;
-      case 'reviewing': text = `${step.issue || d.issue || ''} · ревью ${fmtDur(nowSec() - since)}`; break;
-      case 'rework': text = `${step.issue || d.issue || ''} · доработка ${fmtDur(nowSec() - since)}`; break;
-      case 'exploring': text = `${step.issue || d.issue || ''} · изучает бэклог`; break;
-      case 'retro': text = 'вспоминает свои задачи…'; break;
+      case '_greet': text = tr("привет!", "hello!"); break;
+      case '_bye': text = tr("до встречи!", "see you!"); break;
+      case 'generating': text = `${step.issue || d.issue || ''} · ${tr('пишет код', 'coding')} ${fmtDur(nowSec() - since)}`; break;
+      case 'reviewing': text = `${step.issue || d.issue || ''} · ${tr('ревью', 'review')} ${fmtDur(nowSec() - since)}`; break;
+      case 'rework': text = `${step.issue || d.issue || ''} · ${tr('доработка', 'rework')} ${fmtDur(nowSec() - since)}`; break;
+      case 'exploring': text = `${step.issue || d.issue || ''} · ${tr('изучает бэклог', 'exploring backlog')}`; break;
+      case 'retro': text = tr("вспоминает свои задачи…", "looking back at completed tasks…"); break;
       case 'git': text = `git push ${(step.branch || '').split('/').pop() || step.issue || ''}`; break;
-      case 'jenkins': text = `деплой → ${step.stand || '?'}${step.migration ? ' + миграция' : ''}`; break;
-      case 'jira': text = `${step.issue || ''} → ${(step.targets || []).join(' / ') || 'статус'}`; break;
-      case 'success': text = (step.result === 'warn' ? '⚠ ' : '✓ ') + (step.issue || 'готово'); break;
-      case 'error': text = `✗ ${step.issue || 'ошибка'}`; break;
-      case 'lost': text = `нет сигнала ${fmtDur(d.heartbeat_age || 0)}`; break;
-      case 'polling': text = 'смотрит Jira…'; break;
-      case 'starting': text = 'запуск'; break;
+      case 'jenkins': text = `${tr('деплой', 'deploy')} → ${step.stand || '?'}${step.migration ? tr(" + миграция", " + migration") : ''}`; break;
+      case 'jira': text = `${step.issue || ''} → ${(step.targets || []).join(' / ') || tr("статус", "status")}`; break;
+      case 'success': text = (step.result === 'warn' ? '⚠ ' : '✓ ') + (step.issue || tr("готово", "done")); break;
+      case 'error': text = `✗ ${step.issue || tr("ошибка", "error")}`; break;
+      case 'lost': text = `${tr('нет сигнала', 'no heartbeat')} ${fmtDur(d.heartbeat_age || 0)}`; break;
+      case 'polling': text = tr("смотрит Jira…", "checking Jira…"); break;
+      case 'starting': text = tr("запуск", "starting"); break;
       case 'idle': {
         const idle = idleSeconds(d);
-        text = this.place && this.place.lounge && idle != null ? `☕ простой ${fmtIdle(idle)}` : '';
+        text = this.place && this.place.lounge && idle != null ? `☕ ${tr('простой', 'idle')} ${fmtIdle(idle)}` : '';
         break;
       }
     }
