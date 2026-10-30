@@ -40,6 +40,8 @@ class UpdaterTest(unittest.TestCase):
             'office_dashboard/assets/06_CHARACTER_ANIMATIONS/characters/new/animations.json': b'{"idle": 1}',
             'office_dashboard/assets/LICENSE_EN.txt': b'License',
             'README.md': b'new documentation',
+            'README.ru.md': b'Russian documentation',
+            'docs/images/city-overview.jpg': b'demo screenshot',
             'CHANGELOG.md': b'release changes',
             'docs/CONFIGURATION.md': b'configuration reference',
             'docs/RUNBOOK.md': b'runbook',
@@ -106,7 +108,8 @@ class UpdaterTest(unittest.TestCase):
             p = self.source / rel
             p.parent.mkdir(parents=True, exist_ok=True)
             p.write_text('private')
-        documentation = ('README.md', 'CHANGELOG.md', 'office_dashboard/README.md',
+        documentation = ('README.md', 'README.ru.md', 'CHANGELOG.md', 'office_dashboard/README.md',
+                         'docs/images/city-overview.jpg',
                          'docs/CONFIGURATION.md', 'docs/RUNBOOK.md', 'config/example.json.sample',
                          'config/example-services.json.sample', 'tests/README.md')
         for rel in documentation:

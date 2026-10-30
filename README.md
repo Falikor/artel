@@ -1,88 +1,125 @@
-# Артель демонов
+# Artel
 
-Артель — локальный сервис, который берёт задачи из Jira, реализует их через GigaCode CLI,
-проверяет изменения и возвращает результат в Jira. Веб-дашборд показывает работу демонов,
-живые логи, офисы, память, переделки и статистику.
+**English** · [Русский](README.ru.md)
 
-Один демон обслуживает проект или КЭ; несколько репозиториев можно объединить в его конфиге
-как сервисы. В простое он исследует бэклог, разбирает замечания к своим PR в Bitbucket
-Server / Data Center и проверяет кандидатов памяти. Jira и Bitbucket вызываются через
-Python REST-клиенты: доступность MCP у модели для этих операций не требуется.
+Local AI workers for your Jira workflow, with a dashboard to see and direct their work.
 
-## Быстрый старт
+Artel runs on your own machine. Its workers—called **daemons**—pick up scoped Jira tasks,
+implement them through GigaCode CLI, review the changes, and report back to Jira.
+Each daemon serves a project or configuration item and can route work to several repositories.
 
-Нужны **Python 3.9+**, **Git** и отдельно установленный **GigaCode CLI**. Python-зависимостей,
-Node.js и CDN для запуска нет. Каждый демон должен иметь отдельный рабочий клон с `origin`
-и доступом к нужной базовой ветке.
+![Artel dashboard: a city with two office buildings](docs/images/city-overview.jpg)
+*Demo installation with simulated workers and tasks. The office scene uses separately installed assets.*
 
-1. Скопируйте [шаблон одного репозитория](config/example.json.sample) в `config/team.json`.
-   Для нескольких репозиториев используйте [шаблон сервисов](config/example-services.json.sample).
-   Файлы `.sample` не запускаются.
-2. Укажите `jira.url`, `jira.project`, `jira.status_analysis`, `jira.status_ready`,
-   `general.repo_path` и базовые ветки. Для `main` задайте
-   `general.base_branch: "main"` и `general.base_branch_create_from: "main"`.
-   Замените или уберите необязательные настройки эпика, КЭ и Jenkins из шаблона.
-3. Создайте `tmp/.env` и задайте `JIRA_TOKEN=…` (или `TEAM_JIRA_TOKEN=…`, где `TEAM` —
-   значение `jira.project`). Токены Bitbucket/Jenkins добавляются при включении этих интеграций.
-4. Установите [субагента-исполнителя](subagents/README.md) для пользователя, запускающего демонов.
-   Проверьте OpenSpec в рабочих репозиториях. Рекомендуется `general.require_success_marker: true`.
-5. Из папки Артели проверьте конфиги и запустите сервис:
+## What you can do
+
+| Capability | How it works |
+|---|---|
+| Run a team | Start the dashboard and configured daemons together; organize workers into named offices and buildings. |
+| Give workers different roles | Choose developer, tester, or custom profiles; set a subagent and instructions for seven workflow stages. |
+| Follow execution | Watch GigaCode events and tool activity as they arrive, inspect results, and toggle daemon features. |
+| Control the next attempt | Exclude tasks, pause retries, approve a repeat, or request rework after requirements change. |
+| Improve between tasks | Revisit changed backlog stories, process Bitbucket PR feedback, run retrospectives, and verify memory candidates against code and tests. |
+| Understand the workload | Filter task histories and analytics, browse records 20 at a time, and export task statistics as CSV. |
+
+Jira and **Bitbucket Server / Data Center** use Python REST clients; these operations do not
+depend on the model's MCP connections. Linked frontend tasks wait for configured backend
+readiness. A `BLOCKED` result asks for clarification in Jira instead of repeatedly retrying.
+
+<details>
+<summary>More screenshots</summary>
+
+![Task outcomes, generation time, and token usage](docs/images/statistics.jpg)
+*Statistics from simulated demo tasks; no production project data is shown.*
+
+![Per-daemon prompt editor](docs/images/prompts.jpg)
+*Selecting the tester profile for a demo worker. The dashboard and reference documentation are currently in Russian.*
+
+</details>
+
+## Quickstart
+
+You need **Python 3.9+**, **Git**, and a separately installed **GigaCode CLI**. Artel itself
+has no third-party Python runtime dependencies, Node.js requirement, or CDN dependency.
+Give every daemon a separate working clone with an `origin` remote and access to its base branch.
+
+1. Clone this repository and enter its directory:
+
+   ```bash
+   git clone https://github.com/Falikor/artel.git
+   cd artel
+   ```
+
+2. Copy [the single-repository template](config/example.json.sample) to `config/team.json`.
+   For multiple repositories, use [the services template](config/example-services.json.sample).
+   Files ending in `.sample` are not launched.
+3. Set `jira.url`, `jira.project`, `jira.status_analysis`, `jira.status_ready`, and
+   `general.repo_path`. For a `main` base, set both `general.base_branch` and
+   `general.base_branch_create_from` to `"main"`. Replace or remove the template's optional
+   epic, configuration-item, and Jenkins settings.
+4. Create `tmp/.env` with `JIRA_TOKEN=…`, or a project-prefixed token such as
+   `TEAM_JIRA_TOKEN=…` when `jira.project` is `TEAM`. Add Bitbucket/Jenkins credentials only
+   when enabling those integrations.
+5. Install [the executor subagent](subagents/README.md) for the OS user running the daemons
+   and set up OpenSpec in the working repositories. Set `general.require_success_marker: true`
+   to require an explicit successful completion signal.
+6. Validate the configuration, then start Artel if validation succeeds:
+
+   ```bash
+   python3 artel.py check
+   python3 artel.py up
+   ```
+
+The [dashboard](http://127.0.0.1:8765/) opens automatically. Use `up --no-browser` to skip opening it.
+
+**Windows:** in PowerShell, use `py -3 -X utf8 artel.py check`, followed by
+`py -3 -X utf8 artel.py up`, or run `start-artel.cmd` after setup. Use JSON paths such as
+`C:/work/service` and test commands appropriate for your OS. See [operations](docs/OPERATIONS.md).
+
+**Office artwork:** the licensed PNG/JSON scene assets shown above are **not included in this
+repository**. Install a compatible asset pack you have permission to use in
+`office_dashboard/assets/`, or set `OFFICE_ASSETS` to its directory before starting Artel.
+See [asset setup](office_dashboard/assets/README.md) for the required structure.
+The full animated office scene requires these assets.
+
+## Everyday operation
 
 ```bash
-python3 artel.py check
-python3 artel.py up
+python3 artel.py status          # Show running processes
+python3 artel.py restart team    # Reload config/team.json
+python3 artel.py down            # Stop Artel; interrupts current work
 ```
 
-Продолжайте запуск, если проверка прошла. Откроется [дашборд](http://127.0.0.1:8765/).
-Для работы без открытия браузера: `python3 artel.py up --no-browser`.
+Closing the browser does not stop the service. For updates that wait for current tasks,
+use the [managed updater](UPDATE.md) with `--managed`: it backs up local data, waits for work,
+updates code, and restarts the previous processes with their settings.
 
-**Windows:** в PowerShell используйте `py -3 -X utf8 artel.py check`, затем
-`py -3 -X utf8 artel.py up`; либо `start-artel.cmd` после настройки.
-Пути в JSON удобно писать как `C:/work/service`. Команды тестов должны соответствовать ОС.
-[Подробности запуска и ограничения Windows](docs/OPERATIONS.md).
+The dashboard binds to `127.0.0.1` and has no login. Anyone who can reach it can access logs
+and controls; keep that in mind before exposing it beyond the local machine.
 
-## Ежедневная работа
+## Documentation
 
-| Действие | Где или как |
+The guides below are currently in Russian.
+
+| Topic | Guide |
 |---|---|
-| Состояние всех демонов | `python3 artel.py status` |
-| Текущие действия GigaCode | Дашборд → демон → **Логи GigaCode** |
-| Включить Jira, PR, память, ревью | Демон → **Настройки → Функции демона** |
-| Настроить роль тестировщика или свои инструкции | **Промпты** → выбрать демона |
-| Исключить задачу или разрешить повтор | Демон → **Повторы** |
-| Выполнить задачу по новой постановке | **Переделки → Направить демона на переделку** |
-| Разобрать спорные уроки | **Память** |
-| Перезапустить после правки конфига | `python3 artel.py restart team` (имя JSON без расширения) |
-| Остановить Артель | `python3 artel.py down` или `stop-artel.cmd` |
+| Stuck tasks, missed tasks, and paused workers | [Runbook](docs/RUNBOOK.md) |
+| Configuration keys, defaults, environment variables, and services | [Configuration reference](docs/CONFIGURATION.md) |
+| Roles, subagents, and per-stage instructions | [Prompts](docs/PROMPTS.md) |
+| Processes, Windows, logs, and backups | [Operations](docs/OPERATIONS.md) |
+| Branches, dependencies, reviews, retries, and changed requirements | [Task lifecycle](docs/WORKFLOW.md) |
+| Backlog research and pull request feedback | [Backlog](docs/BACKLOG.md) · [Bitbucket](docs/BITBUCKET.md) |
+| Memory verification and retrospectives | [Memory](docs/MEMORY.md) |
+| Screens, themes, offices, seating, and statistics | [Dashboard](docs/DASHBOARD.md) |
+| Safe updates and release history | [Update and recovery](UPDATE.md) · [Changelog](CHANGELOG.md) |
+| UI architecture and regression checks | [Dashboard architecture](office_dashboard/README.md) · [Tests](tests/README.md) |
 
-`down` прерывает текущую работу; это не ожидание завершения задач. Для обновления с ожиданием
-используйте [updater в режиме `--managed`](UPDATE.md). Закрытие браузера сервис не останавливает.
-Дашборд слушает `127.0.0.1` и не требует входа; доступ к его адресу даёт доступ к логам и управлению.
+## Local data
 
-## Документация
+`config/` holds installation settings, `tmp/.env` holds secrets, `memory/` holds learned knowledge,
+and `logs/` holds history and runtime state. Dashboard JSON files store names, characters,
+prices, office/building names, and seating. These local files are excluded from Git.
 
-| Мне нужно | Документ |
-|---|---|
-| Задача зависла, демон не берёт задачу, снять паузу | [Runbook](docs/RUNBOOK.md) |
-| Все ключи, значения по умолчанию, ENV и сервисы | [Справочник конфигурации](docs/CONFIGURATION.md) |
-| Роли демонов, субагенты и инструкции этапов | [Промпты](docs/PROMPTS.md) |
-| Процессы, Windows, запуск, логи и архив | [Эксплуатация](docs/OPERATIONS.md) |
-| Ветки, ревью, зависимости, BLOCKED, ретраи и переделки | [Жизненный цикл задачи](docs/WORKFLOW.md) |
-| Повторное исследование изменённых story | [Исследование бэклога](docs/BACKLOG.md) |
-| Обработка замечаний и неопределённая отправка ответа | [Bitbucket](docs/BITBUCKET.md) |
-| Ограничения памяти, автоматическая проверка и ретроспектива | [Память](docs/MEMORY.md) |
-| Экраны, темы, город, рассадка и статистика | [Дашборд](docs/DASHBOARD.md) |
-| Обновить миник, сохранить память и настройки | [Обновление и восстановление](UPDATE.md) |
-| Что изменилось в выпусках | [CHANGELOG](CHANGELOG.md) |
-| Подготовить компактный репозиторий для GitHub | [Исходники и локальные данные](docs/REPOSITORY.md) |
-| Устройство интерфейса и проверки кода | [Архитектура дашборда](office_dashboard/README.md), [тесты](tests/README.md) |
-
-## Данные установки
-
-`config/` — конфиги, `tmp/.env` — секреты, `memory/` — знания, `logs/` — история и состояние.
-Имена, персонажи, цены, рассадка, названия офисов и корпусов хранятся в JSON-файлах
-`office_dashboard/`. Эти данные сохраняются штатным updater; не заменяйте рабочую папку
-распакованным архивом целиком. Внешние пути данных включайте в резервную копию через `--data-path`.
-
-Ассеты LennoxStudio и AI Artel разрешены для использования в продукте, но не для отдельного
-распространения. Сохраняйте исходные условия лицензий ассетов при переносе проекта.
+The updater preserves this data. Do not replace a working installation by unpacking an archive
+over the entire directory; include external data paths in backups with `--data-path`.
+Scene artwork has [separate license terms](office_dashboard/assets/LICENSE_EN.txt).

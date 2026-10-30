@@ -14,11 +14,12 @@ import time
 import uuid
 from datetime import datetime
 
-ROOT_FILES = ('README.md', 'UPDATE.md', 'CHANGELOG.md', '.gitignore', '.gitattributes', 'build_artel_release.py', 'office_dashboard/README.md',
+ROOT_FILES = ('README.md', 'README.ru.md', 'UPDATE.md', 'CHANGELOG.md', '.gitignore', '.gitattributes', 'build_artel_release.py', 'office_dashboard/README.md',
               'config/example.json.sample', 'config/example-services.json.sample', 'tests/README.md',
               'start-artel.cmd', 'stop-artel.cmd', 'artel.py', 'jira_to_gigacode.py', 'daemon_state.py', 'update_artel.py',
               'office_dashboard/server.py', 'office_dashboard/demo.py')
-TREES = {'docs': {'.md'}, 'subagents': {'.md'}, 'jira_gigacode': {'.py'}, 'office_dashboard/artel_dashboard': {'.py'},
+TREES = {'docs': {'.md'}, 'docs/images': {'.jpg', '.jpeg', '.png', '.webp', '.svg'},
+         'subagents': {'.md'}, 'jira_gigacode': {'.py'}, 'office_dashboard/artel_dashboard': {'.py'},
          'office_dashboard/static': {'.js', '.css', '.html', '.woff', '.woff2', '.ttf', '.svg', '.png', '.ico'},
          'office_dashboard/assets': {'.json', '.png', '.jpg', '.jpeg', '.webp', '.gif', '.svg', '.txt', '.md'}}
 RELEASE_MANIFEST = 'artel-release.json'
