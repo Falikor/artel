@@ -27,7 +27,7 @@ function harness(width=1200,height=600) {
     };
   }
   const document={activeElement:null,documentElement:{dataset:{theme:'light'}},hidden:false};
-  for(const id of ['cityCanvas','cityViewport','cityZoomIn','cityZoomOut','cityZoomValue','cityReset','cityFloors','cityPreview','cityStage','cityHint','cityBuildings','cityLabels','cityDistrictSummary','cityMotion','building','officeDirectory','buildingRooms','cityRenameOpen','cityNameBuilding','cityNameInput','cityNameStatus','cityNameForm','cityNameSave','cityNameCancel'])elements[id]=element(id);
+  for(const id of ['cityCanvas','cityViewport','cityZoomIn','cityZoomOut','cityZoomValue','cityReset','cityFloors','cityPreview','cityStage','cityHint','cityBuildings','cityLabels','cityDistrictSummary','cityMotion','building','officeDirectory','buildingRooms','cityRenameOpen','cityNameBuilding','cityNameInput','cityNameStatus','cityNameForm','cityNameSave','cityDeleteBuilding','cityNameCancel'])elements[id]=element(id);
   elements.cityNameForm.hidden=true;
   const env={tr:(ru,en)=>ru, uiLocale:()=>'ru-RU', translateServerMessage:message=>message, markFormClean(){}, document,window:{devicePixelRatio:2,listeners:{},addEventListener(type,fn){this.listeners[type]=fn;}},performance:{now:()=>clock},console,
     $:id=>elements[id],ResizeObserver:class {constructor(fn){this.fn=fn;}observe(){this.fn();}},IntersectionObserver:class {constructor(fn){this.fn=fn;}observe(){this.fn([{isIntersecting:true}]);}},requestAnimationFrame(){},
@@ -356,7 +356,7 @@ test('rename failures retain the draft and restore enabled controls for retry',a
     assert.equal(h.elements.cityNameStatus.textContent,offline?'Сеть недоступна':'Корпус недоступен');
     assert.equal(h.elements.cityNameForm.hidden,false);assert.equal(h.elements.cityNameForm['aria-busy'],'false');
     assert.equal(h.run('city.naming'),true);assert.equal(h.run('city.savingName'),false);
-    for(const id of ['cityNameBuilding','cityNameInput','cityNameSave','cityNameCancel','cityRenameOpen'])assert.equal(h.elements[id].disabled,false,id);
+    for(const id of ['cityNameBuilding','cityNameInput','cityNameSave','cityDeleteBuilding','cityNameCancel','cityRenameOpen'])assert.equal(h.elements[id].disabled,false,id);
   }
 });
 test('double submit makes one rename request, applies the snapshot and returns focus when saved',async()=>{
@@ -367,7 +367,7 @@ test('double submit makes one rename request, applies the snapshot and returns f
   assert.equal(h.requests.length,1);assert.equal(h.requests[0].url,'/api/buildings');assert.equal(h.requests[0].method,'POST');
   assert.deepEqual(JSON.parse(h.requests[0].body),{action:'rename',building:2,name});
   assert.equal(h.elements.cityNameForm['aria-busy'],'true');assert.equal(h.run('city.savingName'),true);
-  for(const id of ['cityNameBuilding','cityNameInput','cityNameSave','cityNameCancel','cityRenameOpen'])assert.equal(h.elements[id].disabled,true,id);
+  for(const id of ['cityNameBuilding','cityNameInput','cityNameSave','cityDeleteBuilding','cityNameCancel','cityRenameOpen'])assert.equal(h.elements[id].disabled,true,id);
   h.env.cityCloseNameEditor();assert.equal(h.elements.cityNameForm.hidden,false,'cannot dismiss a pending save');
   const snap={daemons:[],offices:h.env.fixture.map(r=>({...r,building_title:r.building_level>16?name:'Корпус 1'}))};
   finish({ok:true,json:async()=>snap});await Promise.all([first,second]);
@@ -375,7 +375,7 @@ test('double submit makes one rename request, applies the snapshot and returns f
   assert.equal(h.elements.cityNameForm.hidden,true);assert.equal(h.run('city.naming'),false);assert.equal(h.run('city.savingName'),false);
   assert.equal(h.elements.cityNameForm['aria-busy'],'false');assert.equal(h.document.activeElement,h.elements.cityRenameOpen);
   assert.equal(h.elements.cityNameStatus.textContent,'Название корпуса сохранено');
-  for(const id of ['cityNameBuilding','cityNameInput','cityNameSave','cityNameCancel','cityRenameOpen'])assert.equal(h.elements[id].disabled,false,id);
+  for(const id of ['cityNameBuilding','cityNameInput','cityNameSave','cityDeleteBuilding','cityNameCancel','cityRenameOpen'])assert.equal(h.elements[id].disabled,false,id);
   h.run('drawCity()');assert(h.elements.cityLabels.innerHTML.includes(name));
 });
 test('invalid names never send requests and empty catalogues cannot open the editor',async()=>{

@@ -33,7 +33,7 @@ function filteredDaemons(ds) {
 function replaceRosterContent(box, html) {
   if (box.innerHTML === html) return;
   const active = box.contains(document.activeElement) ? document.activeElement : null;
-  const data = active ? Object.entries(active.dataset).find(([k]) => ['id','room','resident','renameRoom','deleteRoom','moveRoom'].includes(k)) : null;
+  const data = active ? Object.entries(active.dataset).find(([k]) => ['id','room','resident','renameRoom','deleteRoom','moveRoom','relocateOffice'].includes(k)) : null;
   const scroll = box.scrollTop;
   box.innerHTML = html;
   box.scrollTop = scroll;
@@ -67,7 +67,7 @@ function renderBuilding() {
         return `<button type="button" draggable="false" class="resident ${needsAttention(d) ? 'resident-alert' : ''}" data-resident="${esc(d.id)}" aria-label="${esc(displayName(d))}: ${esc((STAGE[stage] || STAGE.idle).label)}. ${tr('Место', 'Seat')} ${Number.isInteger(d.office_slot) ? d.office_slot+1 : '—'}" title="${esc(displayName(d))} · ${esc((STAGE[stage] || STAGE.idle).label)}. ${tr('Перетащите мышью для переселения.', 'Drag to move to another office.')}">
           <img draggable="false" src="${appearanceThumb(d)}" alt=""><span class="resident-info"><span>${esc(displayName(d))}</span><small>${social.visits.has(d.id) ? tr("В гостях · ", "Visiting · ") : ''}${esc((STAGE[stage] || STAGE.idle).label)}</small></span><span class="resident-seat">${Number.isInteger(d.office_slot) ? d.office_slot+1 : '—'}</span></button>`;
       }).join('') || `<p class="room-empty">${tr('Офис свободен', 'Office available')}<span>${tr('Переселите сюда демона из другого офиса.', 'Move a daemon here from another office.')}</span></p>`}</div>
-      <div class="room-actions"><button type="button" class="btn" data-rename-room="${esc(r.id)}">${tr('Переименовать', 'Rename')}</button>
+      <div class="room-actions"><button type="button" class="btn" data-relocate-office="${esc(r.id)}">${tr('Перенести офис', 'Move entire office')}</button><button type="button" class="btn" data-rename-room="${esc(r.id)}">${tr('Переименовать', 'Rename')}</button>
         <button type="button" class="btn" data-move-room="${esc(r.id)}" ${!ds.length || rooms.length < 2 ? 'disabled' : ''}>${tr('Переселить…', 'Move…')}</button>
         <button type="button" class="btn room-delete" data-delete-room="${esc(r.id)}" ${(r.occupied || ds.length) ? `disabled title="${tr('Переселите всех закреплённых демонов, включая отсутствующих', 'Move all assigned daemons first, including offline daemons')}"` : ''}>${tr('Удалить', 'Delete')}</button>
         ${r.occupied > ds.length ? `<small>${tr(`Ещё ${r.occupied-ds.length} мест закреплено за отсутствующими демонами`, `${r.occupied-ds.length} more seats reserved for offline daemons`)}</small>` : ''}</div></article>`;
@@ -124,6 +124,8 @@ $('backBuilding').onclick = () => openOffice(null);
 $('officeSelect').onchange = e => openOffice(e.target.value);
 $('buildingRooms').onclick = e => {
   if (buildingView.busy || buildingView.dragging || Date.now() < (buildingView.suppressClickUntil || 0)) return;
+  const relocate = e.target.closest('[data-relocate-office]');
+  if (relocate) { editOfficeBuilding(relocate); return; }
   const rename = e.target.closest('[data-rename-room]');
   if (rename) { editRoomName(rename); return; }
   const move = e.target.closest('[data-move-room]');
@@ -293,7 +295,7 @@ async function chooseAppearance(id,variant) {
 $('officeCreateOpen')?.addEventListener('click', () => {
   const form = $('officeCreateForm');
   if (!form.hidden) { $('officeCreateCancel').click(); return; }
-  const buildings = cityLayout(lastSnapshot.offices || []);
+  const buildings = cityLayout(lastSnapshot.offices || [], lastSnapshot.buildings || []);
   $('officeCreateBuilding').innerHTML = buildings.map(b => `<option value="${b.number}" ${b.rooms.length >= CITY_FLOORS ? 'disabled' : ''}>${esc(b.title)} · ${b.rooms.length}/${CITY_FLOORS}</option>`).join('') + `<option value="new">${tr('Новый корпус', 'New building')}</option>`;
   $('officeCreateBuilding').value = 'new';
   $('officeCreateStatus').textContent = '';
@@ -324,3 +326,10 @@ $('officeCreateForm')?.addEventListener('submit', async event => {
     $('officeCreateStatus').textContent = '';
   } else $('officeCreateStatus').textContent = $('buildingStatus').textContent;
 });
+
+function editOfficeBuilding(button) {
+  const id=button.dataset.relocateOffice, room=lastSnapshot.offices.find(r=>r.id===id);
+  if (!room) return;
+  const targets=cityLayout(lastSnapshot.offices || [],lastSnapshot.buildings || []).filter(b=>b.number!==cityAddress(room).building);
+  roomInlineForm(button, `<label>${tr('Перенести весь офис в', 'Move entire office to')}<select name="building">${targets.map(b=>`<option value="${b.number}" ${b.rooms.length>=CITY_FLOORS?'disabled':''}>${esc(b.title)} · ${b.rooms.length}/${CITY_FLOORS}</option>`).join('')}<option value="new">${tr('Новый корпус','New building')}</option></select></label><p>${tr('Все демоны и закреплённые места переедут вместе с офисом.','All daemons and assigned seats move with the office.')}</p>`, data=>({body:{action:'move',room:id,building:data.get('building')==='new'?'new':Number(data.get('building'))},message:tr('Офис перенесён вместе с демонами.','Office moved with all its daemons.')}));
+}

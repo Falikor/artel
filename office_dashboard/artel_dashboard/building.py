@@ -1,6 +1,7 @@
 """Persistent room/seat and appearance assignments, independent of browser storage."""
 import hashlib
 import json
+import os
 import threading
 import unicodedata
 
@@ -17,6 +18,75 @@ class Building:
         self.lock = threading.Lock()
         self.rooms_path = path + '.rooms.json'
         self.buildings_path = path + '.buildings.json'
+        self.campuses_path = path + '.campuses.json'
+
+    def _campuses(self, rooms):
+        try:
+            with open(self.campuses_path, encoding='utf-8') as f:
+                data = json.load(f)
+            if (not isinstance(data, dict) or not isinstance(data.get('numbers'), list)
+                    or type(data.get('last')) is not int or data['last'] < 0
+                    or any(type(n) is not int or n < 1 or n > data['last'] for n in data['numbers'])):
+                raise ValueError('Некорректный каталог корпусов')
+        except FileNotFoundError:
+            data = {'numbers': [], 'last': 0}
+        before = json.dumps(data, sort_keys=True)
+        numbers = set(data['numbers'])
+        numbers.update((r['building_level'] - 1) // BUILDING_FLOORS + 1 for r in rooms.values()
+                       if type(r.get('building_level')) is int and r['building_level'] > 0)
+        data['numbers'] = sorted(numbers)
+        data['last'] = max([data['last']] + list(numbers))
+        if json.dumps(data, sort_keys=True) != before or not os.path.exists(self.campuses_path):
+            write_json(self.campuses_path, data)
+        return data
+
+    def list_buildings(self):
+        with self.lock:
+            rooms = self.load_rooms()
+            registry = self._campuses(rooms)
+            names = self.load_building_names()
+            return [{'number': n, 'title': names.get(str(n), f'Корпус {n}'),
+                     'custom': str(n) in names,
+                     'offices': sum((r.get('building_level', 0) - 1) // BUILDING_FLOORS + 1 == n
+                                    for r in rooms.values())} for n in registry['numbers']]
+
+    def delete_building(self, number):
+        with self.lock:
+            rooms = self.load_rooms()
+            registry = self._campuses(rooms)
+            if type(number) is not int or number not in registry['numbers']:
+                raise ValueError('Корпус не найден')
+            if any((r.get('building_level', 0) - 1) // BUILDING_FLOORS + 1 == number for r in rooms.values()):
+                raise ValueError('Сначала перенесите или удалите все офисы корпуса')
+            names = self.load_building_names()
+            registry['numbers'].remove(number)
+            write_json(self.campuses_path, registry)
+            names.pop(str(number), None)
+            write_json(self.buildings_path, names)
+
+    def move_room(self, room, building):
+        with self.lock:
+            rooms = self.load_rooms()
+            if room not in rooms:
+                raise ValueError('Офис не найден')
+            registry = self._campuses(rooms)
+            if building == 'new':
+                number = registry['last'] + 1
+            elif type(building) is int and building in registry['numbers']:
+                number = building
+            else:
+                raise ValueError('Корпус не найден')
+            if (rooms[room]['building_level'] - 1) // BUILDING_FLOORS + 1 == number:
+                return
+            used = {r.get('building_level') for r in rooms.values()}
+            level = next((n for n in range((number-1)*BUILDING_FLOORS+1, number*BUILDING_FLOORS+1)
+                          if n not in used), None)
+            if level is None:
+                raise ValueError('В корпусе нет свободных этажей')
+            rooms[room]['building_level'] = level
+            # Membership and seat records are deliberately untouched, including offline residents.
+            write_json(self.rooms_path, rooms)
+            self._campuses(rooms)
 
     @staticmethod
     def _building_name(name):
@@ -47,10 +117,7 @@ class Building:
         title = self._building_name(name)
         with self.lock:
             catalog = self.load_rooms()
-            existing = {(meta['building_level'] - 1) // BUILDING_FLOORS + 1
-                        for meta in catalog.values() if isinstance(meta, dict)
-                        and type(meta.get('building_level')) is int and meta['building_level'] > 0}
-            if number not in existing:
+            if number not in self._campuses(catalog)['numbers']:
                 raise ValueError('Корпус не найден')
             names = self.load_building_names()
             names[str(number)] = title
@@ -81,6 +148,7 @@ class Building:
             rooms = self.load_rooms()
             if room not in rooms:
                 raise ValueError('Офис не найден')
+            self._campuses(rooms)
             if action == 'rename':
                 if not isinstance(name, str) or not name.strip() or len(name.strip()) > 60:
                     raise ValueError('Название офиса: от 1 до 60 символов')
@@ -105,8 +173,8 @@ class Building:
                       if type(m.get('building_level')) is int and m['building_level'] > 0}
             numbers = {(level - 1) // BUILDING_FLOORS + 1 for level in levels}
             if building == 'new':
-                number = max(numbers, default=0) + 1
-            elif type(building) is int and building in numbers:
+                number = self._campuses(rooms)['last'] + 1
+            elif type(building) is int and building in self._campuses(rooms)['numbers']:
                 number = building
             else:
                 raise ValueError('Корпус не найден')
@@ -124,6 +192,7 @@ class Building:
             rooms[rid] = {'id': rid, 'group': group, 'floor': floor, 'project': 'Офисы',
                           'service': '', 'title': title, 'building_level': level}
             write_json(self.rooms_path, rooms)
+            self._campuses(rooms)
             return rid
 
     def set_variant(self, daemon_id, variant):
@@ -221,8 +290,12 @@ class Building:
                                           'project': project, 'service': service, 'daemons': []})['daemons'].append(d['id'])
             if json.dumps(data, sort_keys=True) != before:
                 write_json(self.path, data)
+            registry = self._campuses(catalog)
             next_level = max((m.get('building_level', 0) for m in catalog.values()
-                              if type(m.get('building_level')) is int and m['building_level'] > 0), default=0) + 1
+                              if type(m.get('building_level')) is int and m['building_level'] > 0), default=(min(registry['numbers'])-1)*BUILDING_FLOORS if registry['numbers'] else registry['last'] * BUILDING_FLOORS) + 1
+            # Do not reuse an explicitly deleted building number.
+            if (next_level - 1) // BUILDING_FLOORS + 1 not in registry['numbers']:
+                next_level = max(next_level, registry['last'] * BUILDING_FLOORS + 1)
             for rid, meta in catalog.items():
                 if type(meta.get('building_level')) is not int or meta['building_level'] < 1:
                     meta['building_level'] = next_level
@@ -238,4 +311,5 @@ class Building:
                                     and self.room_id(v['group'], v['seat']) == rid)
             if json.dumps(catalog, sort_keys=True) != catalog_before:
                 write_json(self.rooms_path, catalog)
+            self._campuses(catalog)
             return sorted(rooms.values(), key=lambda r: (r['project'], r['service'], r['title']))
