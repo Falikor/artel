@@ -48,7 +48,7 @@
   <div class="city-navigation">
     <nav id="cityBuildings" class="city-buildings" aria-label="Корпуса Артели" data-i18n-aria-label="Artel buildings"></nav>
     <button id="officeCreateOpen" type="button" class="btn primary" aria-expanded="false" aria-controls="officeCreateForm" data-i18n-en="Create office / building">Создать офис / корпус</button>
-    <button id="cityRenameOpen" type="button" class="btn city-rename-open" aria-expanded="false" aria-controls="cityNameForm" data-i18n-en="Building names">Названия корпусов</button>
+    <button id="cityRenameOpen" type="button" class="btn city-rename-open" aria-expanded="false" aria-controls="cityNameForm" data-i18n-en="Manage buildings">Управление корпусами</button>
   </div>
   <form id="officeCreateForm" class="city-name-form" hidden>
     <label><span data-i18n-en="Place office in">Разместить офис в</span><select id="officeCreateBuilding"></select></label>
@@ -60,8 +60,8 @@
   <form id="cityNameForm" class="city-name-form" hidden>
     <label><span data-i18n-en="Building">Корпус</span><select id="cityNameBuilding" name="building"></select></label>
     <label><span data-i18n-en="Name">Название</span><input id="cityNameInput" name="name" required autocomplete="off" aria-describedby="cityNameHelp"></label>
-    <div class="city-name-actions"><button id="cityNameSave" type="submit" class="btn primary" data-i18n-en="Save">Сохранить</button><button id="cityNameCancel" type="button" class="btn" data-i18n-en="Cancel">Отмена</button></div>
-    <p id="cityNameHelp" data-i18n-en="Up to 60 characters. Offices and assigned seats stay unchanged.">До 60 символов. Офисы и закреплённые места останутся прежними.</p>
+    <div class="city-name-actions"><button id="cityNameSave" type="submit" class="btn primary" data-i18n-en="Save">Сохранить</button><button id="cityDeleteBuilding" type="button" class="btn" disabled data-i18n-en="Delete empty building">Удалить пустой корпус</button><button id="cityNameCancel" type="button" class="btn" data-i18n-en="Cancel">Отмена</button></div>
+    <p id="cityNameHelp" data-i18n-en="Names: up to 60 characters. To delete a building, move or delete all its offices first, including empty ones.">Название: до 60 символов. Для удаления корпуса сначала перенесите или удалите все его офисы, включая пустые.</p>
   </form>
   <p id="cityNameStatus" class="city-name-status" role="status" aria-live="polite"></p>
   <div id="cityStage" class="city-stage">

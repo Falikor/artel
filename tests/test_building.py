@@ -54,6 +54,50 @@ class BuildingTest(DaemonTestCase):
         refill = self.building.create_room('Refill', 1)
         self.assertEqual(self.building.load_rooms()[refill]['building_level'], 1)
 
+    def test_move_entire_office_preserves_offline_seats_and_empty_building(self):
+        ds = self.residents(10)
+        room = self.building.resolve(ds)[0]['id']
+        before = self.building.load()
+        self.building.move_room(room, 'new')
+        self.assertEqual(self.building.load(), before)
+        restarted = self.Building(self.path)
+        rooms = restarted.resolve(ds[:3])
+        moved = next(r for r in rooms if r['id'] == room)
+        self.assertEqual(moved['building_level'], 17)
+        self.assertEqual(moved['occupied'], 10)
+        self.assertEqual([b['offices'] for b in restarted.list_buildings()], [0, 1])
+        with self.assertRaises(ValueError):
+            restarted.delete_building(2)
+        restarted.rename_building(1, 'Empty')
+        restarted.delete_building(1)
+        self.assertEqual([b['number'] for b in restarted.list_buildings()], [2])
+        self.assertNotIn('1', restarted.load_building_names())
+        restarted.move_room(room, 'new')
+        self.assertEqual(restarted.load_rooms()[room]['building_level'], 33)
+        self.assertEqual(restarted.load(), before)
+
+    def test_move_office_rejects_full_or_invalid_destination_without_changes(self):
+        room = self.building.create_room('Source')
+        self.building.create_room('Target', 'new')
+        for i in range(15):
+            self.building.create_room(str(i), 2)
+        before = self.building.load_rooms()
+        for target in (2, True, 0, '2', 99):
+            with self.assertRaises(ValueError):
+                self.building.move_room(room, target)
+            self.assertEqual(before, self.building.load_rooms())
+        self.building.move_room(room, 1)
+        self.assertEqual(before, self.building.load_rooms())
+
+    def test_last_empty_building_deleted_does_not_reappear_or_reuse_name(self):
+        room = self.building.create_room('Temporary')
+        self.building.edit_room(room, 'delete')
+        self.assertEqual(self.building.list_buildings()[0]['offices'], 0)
+        self.building.delete_building(1)
+        self.assertEqual(self.building.list_buildings(), [])
+        rooms = self.building.resolve(self.residents(1))
+        self.assertEqual(rooms[0]['building_level'], 17)
+
     def test_forty_have_four_rooms_unique_seats_and_looks(self):
         ds = self.residents()
         rooms = self.building.resolve(ds)
@@ -314,6 +358,17 @@ class BuildingTest(DaemonTestCase):
         with patch('artel_dashboard.handler.read_all', return_value={'daemons': ds}):
             handler.do_POST()
         return handler
+
+    def test_delete_building_api_keeps_residents_and_rejects_nonempty(self):
+        handler = self.post_building({'action': 'rename', 'building': 1, 'name': 'First'})
+        room = self.building.create_room('Temporary', 'new')
+        self.building.edit_room(room, 'delete')
+        handler = self.post_building({'action': 'delete', 'building': 2})
+        response = handler.send_json.call_args[0][0]
+        self.assertEqual([b['number'] for b in response['buildings']], [1])
+        self.assertEqual(len(response['daemons']), 1)
+        handler = self.post_building({'action': 'delete', 'building': 1})
+        self.assertIn('error', handler.send_json.call_args[0][0])
 
     def test_building_api_returns_current_state_when_daemon_control_disabled(self):
         handler = self.post_building({'action': 'rename', 'building': 1, 'name': 'Северный'})

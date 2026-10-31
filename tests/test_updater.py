@@ -106,7 +106,7 @@ class UpdaterTest(unittest.TestCase):
     def test_release_archive_contains_payload_and_excludes_runtime_data(self):
         import build_artel_release
         protected = ('config/private.json', 'config/private.json.sample', 'tmp/.env', 'memory/lesson.md',
-                     'office_dashboard/building.json', 'office_dashboard/building.json.buildings.json',
+                     'office_dashboard/building.json', 'office_dashboard/building.json.buildings.json', 'office_dashboard/building.json.campuses.json',
                      'logs/history.jsonl', 'logs/t-blocked.json', 'logs/t-notifications.json', 'logs/t-prompts.json', 'tests/test_private.py')
         for rel in protected:
             p = self.source / rel
@@ -142,7 +142,7 @@ class UpdaterTest(unittest.TestCase):
     def test_preserves_data_and_backups_originals(self):
         protected = ['config/t.json', 'config/private.json.sample', 'memory/t.md.store.json', 'memory/t.md.rules.md',
                      'logs/t-history.jsonl', 'logs/t-blocked.json', 'logs/t-notifications.json', 'logs/t-prompts.json', 'office_dashboard/names.json',
-                     'office_dashboard/building.json', 'office_dashboard/building.json.rooms.json', 'office_dashboard/building.json.buildings.json',
+                     'office_dashboard/building.json', 'office_dashboard/building.json.rooms.json', 'office_dashboard/building.json.buildings.json', 'office_dashboard/building.json.campuses.json',
                      'office_dashboard/characters.json', 'office_dashboard/prices.json', '.env']
         for rel in protected:
             for root, text in ((self.target, 'production'), (self.source, 'wrong')):

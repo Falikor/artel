@@ -22,7 +22,7 @@ function cityRoomMatches(room) {
 }
 function renderCityRooms(rooms) {
   city.rooms = [...rooms].sort((a,b) => (a.building_level || 0) - (b.building_level || 0) || a.id.localeCompare(b.id));
-  city.buildings = cityLayout(city.rooms);
+  city.buildings = cityLayout(city.rooms, lastSnapshot.buildings || []);
   city.scenery = citySurroundings(city.buildings);
   if (city.focus!==null && !city.buildings.some(b=>b.number===city.focus)) {city.focus=null;cityResetView();}
   city.eligible = new Set(rooms.filter(cityRoomMatches).map(r => r.id));
@@ -152,6 +152,7 @@ function cityOpenNameEditor() {
 function cityNameTargetChanged() {
   const b=city.buildings.find(b=>b.number===Number($('cityNameBuilding').value));
   $('cityNameInput').value=b?.title || '';
+  if ($('cityDeleteBuilding')) $('cityDeleteBuilding').disabled=!b || b.rooms.length>0;
   markFormClean($('cityNameForm'));
 }
 function cityCloseNameEditor() {
@@ -169,7 +170,7 @@ async function citySaveName(e) {
     status.textContent=tr("Введите название от 1 до 60 символов, без переносов строк.", "Enter a name of 1–60 characters, without line breaks.");return;
   }
   city.savingName=true;status.textContent=tr("Сохраняем название…", "Saving name…");
-  const controls=['cityNameBuilding','cityNameInput','cityNameSave','cityNameCancel','cityRenameOpen'];
+  const controls=['cityNameBuilding','cityNameInput','cityNameSave','cityNameCancel','cityRenameOpen','cityDeleteBuilding'];
   controls.forEach(id=>$(id).disabled=true);$('cityNameForm').setAttribute('aria-busy','true');
   let saved=false;
   try {
@@ -787,3 +788,25 @@ function cityFrame(now) {
 }
 initCityControls();
 requestAnimationFrame(cityFrame);
+
+$('cityDeleteBuilding')?.addEventListener('click',async()=>{
+  if(city.savingName)return;
+  const number=Number($('cityNameBuilding').value);
+  const b=city.buildings.find(b=>b.number===number);
+  if(!b || b.rooms.length)return;
+  city.savingName=true;
+  const controls=[...$('cityNameForm').querySelectorAll('input,select,button')];
+  controls.forEach(el=>el.disabled=true);
+  let saved=false;
+  try {
+    const response=await fetch('/api/buildings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:'delete',building:number})});
+    const snap=await response.json();
+    if(!response.ok || snap.error)throw new Error(translateServerMessage(snap.error)||tr('Не удалось удалить корпус','Could not delete building'));
+    apply(snap);saved=true;
+    $('cityNameStatus').textContent=tr('Пустой корпус удалён','Empty building deleted');
+  } catch(error){$('cityNameStatus').textContent=translateServerMessage(error.message);}
+  finally {
+    city.savingName=false;controls.forEach(el=>el.disabled=false);
+    if(saved)cityCloseNameEditor();else cityNameTargetChanged();
+  }
+});

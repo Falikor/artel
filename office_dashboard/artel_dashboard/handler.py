@@ -24,6 +24,7 @@ class Handler(BaseHTTPRequestHandler):
     def state(self):
         snap = read_all(self.server.logs, self.server.names, self.server.characters)
         snap['offices'] = self.server.building.resolve(snap['daemons'])
+        snap['buildings'] = self.server.building.list_buildings()
         snap['office_memberships'] = {k: self.server.building.room_id(v['group'], v['seat'])
                                       for k, v in self.server.building.load().items() if 'group' in v and 'seat' in v}
         return snap
@@ -227,9 +228,12 @@ class Handler(BaseHTTPRequestHandler):
                 return self.send_error(400)
             if parsed.path == '/api/buildings':
                 try:
-                    if body.get('action') != 'rename':
+                    if body.get('action') == 'delete':
+                        self.server.building.delete_building(body.get('building'))
+                    elif body.get('action') == 'rename':
+                        self.server.building.rename_building(body.get('building'), body.get('name'))
+                    else:
                         raise ValueError('Неизвестное действие')
-                    self.server.building.rename_building(body.get('building'), body.get('name'))
                 except ValueError as exc:
                     return self.send_json({'error': str(exc)})
                 return self.send_json(self.visible_state())
@@ -249,7 +253,9 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send_json({'error': str(e)})
             if parsed.path == '/api/offices' and body.get('action'):
                 try:
-                    if body['action'] == 'create':
+                    if body['action'] == 'move':
+                        self.server.building.move_room(body.get('room'), body.get('building'))
+                    elif body['action'] == 'create':
                         self.server.building.create_room(body.get('name'), body.get('building', 'new'))
                     else:
                         self.server.building.edit_room(body.get('room'), body['action'], body.get('name'))

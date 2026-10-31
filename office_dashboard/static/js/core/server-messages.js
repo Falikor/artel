@@ -140,3 +140,5 @@ registerServerMessagePatterns([
 
 registerServerMessages({"В корпусе нет свободных этажей": "This building has no available floors"});
 registerServerMessages({"Название офиса: от 1 до 60 символов, без переносов строк и управляющих символов": "Office names must contain 1–60 characters, without line breaks or control characters"});
+
+registerServerMessages({"Сначала перенесите или удалите все офисы корпуса":"Move or delete all offices in this building first", "Некорректный каталог корпусов":"Invalid building registry"});

@@ -363,4 +363,6 @@ checks, see the [test guide](../tests/README.en.md).
 
 ## Creating buildings manually
 
+In Manage offices and seating, click Move entire office, choose a building, and save. The office identifier and all assigned seats, including offline daemons, stay unchanged. You can also choose a new building. After its last office moves away, the original building remains empty. Select it in Manage buildings and click Delete empty building. Remaining offices, even those without daemons, must first be moved or deleted. Other building numbers stay unchanged. The registry is stored beside seating in `building.json.campuses.json` and preserved by the update script.
+
 In Team and offices, click Create office / building. Select an existing building or New building and enter an office name. A new building starts with an empty office on floor 1, even when earlier buildings are not full. Existing buildings use their first available floor (up to 16 offices). Move daemons into the office using the placement panel or drag and drop. Use Building names to rename the building. Addresses and seating are stored on the server; existing offices stay in place.

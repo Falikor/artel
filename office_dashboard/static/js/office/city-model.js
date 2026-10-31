@@ -15,7 +15,7 @@ function cityAddressLabel(room, fallback=1) {
 function cityRoomBuildingTitle(room, fallback=1) {
   return room.building_title_custom !== false && typeof room.building_title==='string' && room.building_title.trim() ? room.building_title : `${tr('Корпус', 'Building')} ${cityAddress(room,fallback).building}`;
 }
-function cityLayout(rooms) {
+function cityLayout(rooms, catalog=[]) {
   const groups=new Map();
   const sorted=[...rooms].sort((a,b)=>(a.building_level||0)-(b.building_level||0)||a.id.localeCompare(b.id));
   sorted.forEach((room,i)=>{
@@ -27,7 +27,12 @@ function cityLayout(rooms) {
     }
     const b=groups.get(number);b.rooms.push({room,floor:address.floor});b.floors=Math.max(b.floors,address.floor);
   });
-  return [...groups.values()];
+  catalog.forEach(b => {
+    if (groups.has(b.number)) return;
+    const number=b.number, near=number%2===0, y=near?520:0;
+    groups.set(number,{number,title:b.custom?b.title:`${tr('Корпус','Building')} ${number}`,near,x:(number-1)*500+y*.54/.94,y,rooms:[],floors:1});
+  });
+  return [...groups.values()].sort((a,b)=>a.number-b.number);
 }
 function cityPopulation(count) {
   const n=Math.max(1,count);
