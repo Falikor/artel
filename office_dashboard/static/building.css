@@ -15,6 +15,25 @@
 .city-preview,.city-motion,.city-caption,.city-hint { z-index:2; }
 .city-caption { position:absolute; top:24px; left:26px; display:grid; gap:4px; pointer-events:none; color:var(--city-ink,#405a62); font-size:12px; }
 .city-location { font-size:17px; font-weight:650; color:var(--city-title,#203d45); }
+/* Weather is the district's health; its colour matches what the clouds mean. */
+.city-weather { display:inline-flex; align-items:center; gap:7px; margin-top:6px; width:max-content; max-width:min(460px,calc(100vw - 80px)); padding:4px 10px 4px 8px; border-radius:10px; text-wrap:balance; background:var(--card); border:1px solid var(--line); box-shadow:var(--shadow-xs); color:var(--text); font-weight:550; line-height:1.4; }
+.city-weather:empty { display:none; }
+.city-weather::before { content:""; flex:none; width:8px; height:8px; border-radius:50%; background:var(--st-good); }
+.city-weather[data-level="1"]::before { background:#8a979d; }
+.city-weather[data-level="2"]::before { background:var(--st-warn); }
+.city-weather[data-level="3"]::before { background:var(--st-crit); }
+.city-happening { font-size:12px; font-style:italic; color:var(--city-ink,#405a62); }
+.city-happening:empty { display:none; }
+.city-ticker { list-style:none; margin:4px 0 0; padding:0; display:grid; gap:3px; max-width:440px; }
+.city-ticker li { color:var(--city-ink,#405a62); font-size:12px; line-height:1.45; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.city-ticker li b { font-weight:600; color:var(--city-title,#203d45); font-variant-numeric:tabular-nums; }
+.city-ticker li[data-stage="success"] b { color:var(--st-good); }
+.city-ticker li[data-stage="error"] b { color:var(--st-crit); }
+.city-ticker li[data-stage="rework"] b,.city-ticker li[data-stage="success-warn"] b { color:var(--st-warn); }
+.city-ticker li.is-new { animation:city-news 260ms var(--ease-out,ease-out); }
+@keyframes city-news { from { opacity:0; transform:translateY(-4px); } }
+@media(max-width:760px) { .city-ticker { display:none; } .city-weather { font-size:11px; } }
+@media(prefers-reduced-motion:reduce) { .city-ticker li.is-new { animation:none; } }
 :root[data-theme="dark"] .city-caption { --city-ink:#aac1c8; --city-title:#e3f2f2; }
 .city-map-controls { display:flex; align-items:center; flex-wrap:wrap; gap:10px; padding:12px 18px; border-top:1px solid var(--line); background:var(--card); }
 .city-map-controls .btn { min-height:44px; font-size:12px; white-space:nowrap; }

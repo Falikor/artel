@@ -1,16 +1,15 @@
 /* Browser preferences stay together and wrap instead of narrowing page content. */
-.ui-preferences { display:flex; align-items:center; gap:8px; flex:none; }
-.language-select { width:106px; font-size:12px; min-height:34px; padding:6px 22px 6px 9px; background:var(--card); border-color:var(--line); }
+.ui-preferences { display:flex; align-items:center; gap:6px; flex:none; }
+.language-select,.theme-select { width:auto; font-size:12px; font-weight:500; min-height:32px; padding:5px 28px 5px 10px; background-position:right 9px center; background-size:10px; }
 @media(max-width:1050px) { .top-status { gap:12px; }.summary { gap:8px; } }
 @media(max-width:760px) {
-  .top-bar { flex-wrap:wrap; gap:8px 12px; padding-block:12px; }
-  .top-status { flex-wrap:wrap; justify-content:flex-end; gap:8px; }
-  .language-select { width:100px; min-height:38px; }
+  .top-bar { flex-wrap:nowrap; gap:12px; padding-block:10px; }
+  .top-status { flex-wrap:nowrap; justify-content:flex-end; gap:8px; }
+  .language-select,.theme-select { min-height:36px; font-size:13px; }
 }
 @media(max-width:480px) {
-  .top-bar { align-items:flex-start; }
-  .top-status { max-width:100%; margin-left:auto; }
-  .ui-preferences { gap:6px; }
-  .language-select { width:91px; }
-  .theme-select { width:97px; }
+  .top-status { min-width:0; margin-left:auto; }
+  .brand h1 { font-size:18px; }
+  /* The dot and its title still report the connection; the label would push the header off-screen. */
+  .conn span { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
 }

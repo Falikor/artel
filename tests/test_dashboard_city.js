@@ -4,7 +4,7 @@ const assert=require('node:assert/strict');
 const vm=require('node:vm');
 const fs=require('node:fs');
 const path=require('node:path');
-const source=['city-model.js','city-controls.js','city.js'].map(name=>fs.readFileSync(path.join(__dirname,'../office_dashboard/static/js/office',name),'utf8')).join('\n');
+const source=['city-model.js','city-controls.js','city-happenings.js','city.js'].map(name=>fs.readFileSync(path.join(__dirname,'../office_dashboard/static/js/office',name),'utf8')).join('\n');
 function harness(width=1200,height=600) {
   const elements={}, draws=[], opened=[], writes=[],requests=[],applied=[];
   let clock=1000,fetchReply=()=>{throw new Error('Unexpected fetch in city test');};
@@ -568,4 +568,42 @@ test('Home, zoom, focus, resize and external camera updates cancel active gestur
     assert.deepEqual(viewValues(h),expected,`${action}: stale movement must not restore the old gesture`);
     assert.equal(h.run('city.focus'),focused,`${action}: a cancelled label gesture must not activate later`);
   }
+});
+test('the district reacts only to new events: history seeds the weather, news becomes effects',()=>{
+  const h=harness();h.env.fixture=rooms;
+  const daemon=(events,extra={})=>({id:'d1',name:'Олег',office_id:'api',stage:'idle',events,counters:{done:9},...extra});
+  const now=Date.now()/1000;
+  h.env.lastSnapshot={daemons:[daemon([{t:now-60,stage:'error',issue:'T-1'},{t:now-30,stage:'success',issue:'T-2',result:'ok'}])]};
+  h.run('renderCityRooms(fixture);drawCity()');
+  assert.equal(h.run('cityFx.effects.length'),0,'history must not replay as animation');
+  assert.equal(h.run('cityFx.health.get(1).level'),1,'one recent error clouds its building');
+  h.env.lastSnapshot={daemons:[daemon([{t:now-60,stage:'error',issue:'T-1'},{t:now-30,stage:'success',issue:'T-2',result:'ok'},
+    {t:now-5,stage:'git',issue:'T-3'},{t:now-2,stage:'success',issue:'T-3',result:'ok'},{t:now-1,stage:'polling'}],{counters:{done:10}})]};
+  h.run('renderCityRooms(fixture);drawCity()');
+  assert.deepEqual(JSON.parse(h.run('JSON.stringify(cityFx.effects.map(e=>e.kind+(e.text?":"+e.text:"")))')),['plane','chip:✓ T-3','burst','van','fireworks'],
+    'a push, a delivery and the tenth task each get one reaction; polling gets none');
+  h.run('renderCityRooms(fixture);drawCity()');
+  assert.equal(h.run('cityFx.effects.length'),5,'the same snapshot never reacts twice');
+  const errors=[1,2,3,4,5].map(i=>({t:now-.9+i*.1,stage:'error',issue:`E-${i}`}));
+  h.env.lastSnapshot={daemons:[daemon(errors,{alive:false,stage:'generating'})]};
+  h.run('renderCityRooms(fixture);drawCity()');
+  assert.equal(h.run('cityFx.health.get(1).level'),3,'many errors and a lost daemon bring a storm');
+  assert(h.run('cityFx.effects.some(e=>e.kind==="bolt")'),'a new error inside a storm strikes lightning');
+});
+test('every street happening draws through its whole timeline in both themes, and only on the scene clock',()=>{
+  for(const count of [1,17]) {
+    const h=harness();h.env.fixture=catalogue(count);h.run('renderCityRooms(fixture)');
+    const ids=JSON.parse(h.run('JSON.stringify(Object.keys(CITY_HAPPENINGS))'));
+    assert(ids.length>=15,`expected at least 15 happenings, got ${ids.length}`);
+    for(const theme of ['light','dark'])for(const id of ids)for(const at of [0,.12,.3,.5,.7,.88,.99]) {
+      h.run(`city.theme='${theme}';cityHappen('${id}',${at});drawCity()`);
+      assert.equal(h.run('cityHappenings.current&&cityHappenings.current.id'),id,`${id} at ${at} in ${theme}`);
+    }
+    h.run('cityHappenings.current=null');
+  }
+  // Nothing starts before its time, and the frozen clock of a paused scene never starts one.
+  const h=harness();h.env.fixture=rooms;h.run('renderCityRooms(fixture);cityHappenings.current=null;cityHappenings.next=null;drawCity()');
+  const next=h.run('cityHappenings.next');assert(next>h.run('city.time')+40,'the first happening waits about a minute');
+  h.env.social.paused=true;h.run('drawCity();drawCity()');assert.equal(h.run('cityHappenings.current'),null);
+  h.run(`city.time=${next+1};drawCity()`);assert(h.run('cityHappenings.current!==null'),'a happening starts once the scene clock reaches it');
 });

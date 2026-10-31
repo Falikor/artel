@@ -60,7 +60,7 @@
     <div id="cityViewport" class="city-map-viewport">
       <div id="cityLabels" class="city-labels" role="group" aria-label="Корпуса на карте" data-i18n-aria-label="Buildings on the map"></div>
       <canvas id="cityCanvas" tabindex="0" aria-label="Карта квартала Артели" aria-describedby="cityMapHelp cityHint" data-i18n-aria-label="Artel district map"></canvas>
-      <div class="city-caption"><span class="city-location" data-i18n-en="Artel district">Квартал Артели</span><span id="cityDistrictSummary" data-i18n-en="Your team on every floor">Каждый этаж — ваша команда</span></div>
+      <div class="city-caption"><span class="city-location" data-i18n-en="Artel district">Квартал Артели</span><span id="cityDistrictSummary" data-i18n-en="Your team on every floor">Каждый этаж — ваша команда</span><span id="cityWeather" class="city-weather" role="status" aria-live="polite" data-level="0"></span><span id="cityHappening" class="city-happening"></span><ol id="cityTicker" class="city-ticker" aria-label="Последние события офисов" data-i18n-aria-label="Recent office events"></ol></div>
     </div>
     <div class="city-map-controls" role="group" aria-label="Управление картой" data-i18n-aria-label="Map controls">
       <div class="city-zoom-controls">
@@ -188,6 +188,7 @@
 <script src="/static/js/office/city-model.js"></script>
 <script src="/static/js/office/building.js"></script>
 <script src="/static/js/office/city-controls.js"></script>
+<script src="/static/js/office/city-happenings.js"></script>
 <script src="/static/js/office/city.js"></script>
 <script src="/static/js/core/data.js"></script>
 <script src="/static/js/panel/cards.js"></script>

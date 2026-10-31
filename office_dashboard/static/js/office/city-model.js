@@ -41,7 +41,8 @@ function citySurroundings(buildings) {
   buildings.forEach((b,i)=>{
     const k=cityIso(b.x,b.y)[0], left=k+234;
     result.push(lot('house',left,-180,92,75,80+(i%3)*15),
-      lot('house',left,580,98,82,105+(i%2)*18),
+      // On the south bank the shop stands on the pavement in front; its house steps aside so the sign stays visible.
+      lot('house',b.near?left+168:left,580,98,82,105+(i%2)*18),
       lot('shop',left,b.near?448:174,112,70,40,{title:i%2?tr("КАФЕ", "CAFE"):tr("МАГАЗИН", "SHOP")}));
     if(i%4===0)result.push(lot('school',k-244,-400,190,92,63,{title:tr("ШКОЛА", "SCHOOL")}));
   });
@@ -51,6 +52,99 @@ function citySurroundings(buildings) {
     result.push(lot('house',k-222,-80,85,78,97),lot('shop',k-230,130,100,65,36,{title:tr("ПЕКАРНЯ", "BAKERY")}));
   }
   return result;
+}
+/* The district reacts to what daemons report. Only events newer than the first snapshot
+   become reactions; history seeds the weather but is never replayed as animation. */
+const CITY_WEATHER_WINDOW = 900;
+const CITY_REACTIONS = ['generating','rework','git','success','error'];
+const cityPulse = {ready:false, seen:new Map(), errors:[], deliveries:[], feed:[], done:new Map()};
+function cityIngest(daemons, now) {
+  const fresh=[], first=!cityPulse.ready;
+  for(const d of daemons) {
+    const events=Array.isArray(d.events)?d.events.filter(e=>Number.isFinite(e?.t)):[];
+    const known=cityPulse.seen.has(d.id), since=cityPulse.seen.get(d.id) ?? -Infinity;
+    for(const e of events) {
+      if(e.t<=since||!CITY_REACTIONS.includes(e.stage))continue;
+      const item={id:d.id,name:d.name||d.id,office:d.office_id,stage:e.stage,issue:e.issue||d.issue||'',result:e.result||null,t:e.t};
+      if(e.stage==='error')cityPulse.errors.push(item);
+      if(e.stage==='success')cityPulse.deliveries.push(item);
+      cityPulse.feed.push(item);
+      // A daemon seen for the first time brings its history, not news.
+      if(!first&&known)fresh.push(item);
+    }
+    const last=d.last_error;
+    if(Number.isFinite(last?.t)&&last.t>since&&!events.some(e=>e.stage==='error'&&Math.abs(e.t-last.t)<2))
+      cityPulse.errors.push({id:d.id,name:d.name||d.id,office:d.office_id,stage:'error',issue:last.issue||d.issue||'',t:last.t});
+    cityPulse.seen.set(d.id,Math.max(since,...events.map(e=>e.t),Number.isFinite(last?.t)?last.t:-Infinity));
+  }
+  const horizon=now-CITY_WEATHER_WINDOW;
+  const unique=list=>[...new Map(list.filter(e=>e.t>horizon).map(e=>[`${e.id}:${e.stage}:${e.t}`,e])).values()];
+  cityPulse.errors=unique(cityPulse.errors);cityPulse.deliveries=unique(cityPulse.deliveries);
+  cityPulse.feed=[...new Map(cityPulse.feed.map(e=>[`${e.id}:${e.stage}:${e.t}`,e])).values()].sort((a,b)=>a.t-b.t).slice(-12);
+  cityPulse.ready=true;
+  return fresh.sort((a,b)=>a.t-b.t);
+}
+// Weather is health over the last fifteen minutes: one cloud per error, a lost daemon weighs double.
+function cityHealth(buildings, daemons, now, attention=d=>d.alive===false&&d.stage!=='stopped') {
+  const officeBuilding=new Map(buildings.flatMap(b=>b.rooms.map(({room})=>[room.id,b.number])));
+  const health=new Map(buildings.map(b=>[b.number,{errors:0,attention:0,delivered:0,level:0}]));
+  for(const e of cityPulse.errors)if(e.t>now-CITY_WEATHER_WINDOW)health.get(officeBuilding.get(e.office))&&health.get(officeBuilding.get(e.office)).errors++;
+  for(const e of cityPulse.deliveries)if(e.t>now-CITY_WEATHER_WINDOW)health.get(officeBuilding.get(e.office))&&health.get(officeBuilding.get(e.office)).delivered++;
+  for(const d of daemons)if(attention(d))health.get(officeBuilding.get(d.office_id))&&health.get(officeBuilding.get(d.office_id)).attention++;
+  for(const h of health.values()) {
+    const score=h.errors+2*h.attention;
+    h.level=score>=5?3:score>=3?2:score>=1?1:0;
+  }
+  return health;
+}
+// Every tenth task delivered from a building is a milestone; the first snapshot only records the count.
+function cityMilestones(buildings, daemons) {
+  const officeBuilding=new Map(buildings.flatMap(b=>b.rooms.map(({room})=>[room.id,b.number]))), totals=new Map(), reached=[];
+  for(const d of daemons) {
+    const n=officeBuilding.get(d.office_id);
+    if(n!==undefined)totals.set(n,(totals.get(n)||0)+(Number(d.counters?.done)||0));
+  }
+  for(const [n,total] of totals) {
+    const before=cityPulse.done.get(n);
+    if(before!==undefined&&Math.floor(total/10)>Math.floor(before/10))reached.push({building:n,total:Math.floor(total/10)*10});
+    cityPulse.done.set(n,total);
+  }
+  return reached;
+}
+// Lawn trees are seeded by position, so the grove is identical on every load and only grows with the district.
+const cityGroveCache={key:'',trees:[]};
+function cityGrove(buildings,scenery) {
+  const key=buildings.map(b=>`${b.number}:${b.floors}`).join(',');
+  if(key===cityGroveCache.key)return cityGroveCache.trees;
+  const rand=(i,j,k)=>{const v=Math.sin(i*127.1+j*311.7+k*74.7)*43758.5453;return v-Math.floor(v);};
+  const inside=(x,y,l,t,r,b)=>x>=l&&x<=r&&y>=t&&y<=b;
+  const overlap=(a,b)=>a.left<b.right&&a.right>b.left&&a.top<b.bottom&&a.bottom>b.top;
+  const box=(x,y,w,d,h)=>{const pts=cityBounds(x,y,w,d,h),xs=pts.map(p=>p[0]),ys=pts.map(p=>p[1]);return {left:Math.min(...xs),right:Math.max(...xs),top:Math.min(...ys),bottom:Math.max(...ys)};};
+  // Anything a tree must never stand in front of: office facades and the signage of shops and schools.
+  const screens=[...buildings.map(b=>({depth:b.x+b.y+220,box:box(b.x-6,b.y-6,232,132,(92+b.floors*62)*CITY_HEIGHT)})),
+    ...scenery.filter(s=>s.kind!=='house').map(s=>({depth:s.x+s.y+s.d,box:box(s.x-4,s.y-4,s.w+8,s.d+8,s.h+34)}))];
+  const blocked=(x,y)=>buildings.some(b=>inside(x,y,b.x-70,b.y-70,b.x+300,b.y+235)||
+      (b.near?inside(x,y,b.x+215,472,b.x+275,b.y):inside(x,y,b.x+85,b.y+120,b.x+140,206)))||
+    scenery.some(s=>{
+      const extra=s.kind==='school'?130:40;
+      if(inside(x,y,s.x-42,s.y-42,s.x+s.w+42,s.y+s.d+extra))return true;
+      const mid=s.x+s.w/2;
+      return s.y+s.d<204?inside(x,y,mid-22,s.y+s.d,mid+22,206):s.y>472&&inside(x,y,mid-22,472,mid+22,s.y);
+    });
+  const left=Math.min(...buildings.map(b=>b.x))-900, right=Math.max(...buildings.map(b=>b.x))+1100, trees=[];
+  const rows=[];for(let y=-620;y<=150;y+=62)rows.push(y);for(let y=530;y<=1060;y+=62)rows.push(y);
+  for(const [j,row] of rows.entries())for(let i=0,x0=left;x0<=right;i++,x0+=62) {
+    // A slow wave gathers trees into groves and leaves open meadows between them.
+    const grove=(Math.sin(x0*.0045+j*.7)+Math.cos(row*.011+x0*.0023))/2;
+    if(rand(i,j,1)>.06+.24*Math.max(0,grove))continue;
+    const x=x0+(rand(i,j,2)-.5)*40, y=row+(rand(i,j,3)-.5)*34;
+    if((row<204&&y>176)||(row>472&&y<506)||blocked(x,y))continue;
+    const size=.78+rand(i,j,4)*.45, crown=box(x-22,y-22,44,44,(36+22)*size);
+    if(screens.some(s=>x+y+10>s.depth&&overlap(crown,s.box)))continue;
+    trees.push({x,y,size,kind:rand(i,j,5)<.22?'cypress':'round'});
+  }
+  cityGroveCache.key=key;cityGroveCache.trees=trees;
+  return trees;
 }
 function cityIso(x,y,z=0) {return [x*.94-y*.54,x*.23+y*.39-z];}
 function cityBounds(x,y,w,d,h) {

@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "artel-demo",
+      "runtimeExecutable": "python3",
+      "runtimeArgs": ["office_dashboard/server.py", "--demo", "6", "--port", "8765"],
+      "port": 8765
+    }
+  ]
+}
