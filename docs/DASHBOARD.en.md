@@ -360,3 +360,7 @@ sits beside daemons, and meows when clicked. Daemons call to her and approach to
 
 For deployment and upgrades, see the [update guide](../UPDATE.en.md). For implementation
 checks, see the [test guide](../tests/README.en.md).
+
+## Creating buildings manually
+
+In Team and offices, click Create office / building. Select an existing building or New building and enter an office name. A new building starts with an empty office on floor 1, even when earlier buildings are not full. Existing buildings use their first available floor (up to 16 offices). Move daemons into the office using the placement panel or drag and drop. Use Building names to rename the building. Addresses and seating are stored on the server; existing offices stay in place.

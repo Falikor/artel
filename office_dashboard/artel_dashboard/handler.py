@@ -249,7 +249,10 @@ class Handler(BaseHTTPRequestHandler):
                     return self.send_json({'error': str(e)})
             if parsed.path == '/api/offices' and body.get('action'):
                 try:
-                    self.server.building.edit_room(body.get('room'), body['action'], body.get('name'))
+                    if body['action'] == 'create':
+                        self.server.building.create_room(body.get('name'), body.get('building', 'new'))
+                    else:
+                        self.server.building.edit_room(body.get('room'), body['action'], body.get('name'))
                 except ValueError as e:
                     return self.send_json({'error': str(e)})
                 return self.send_json(self.visible_state())

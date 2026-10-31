@@ -23,6 +23,37 @@ class BuildingTest(DaemonTestCase):
         self.characters.resolve(ds)
         return ds
 
+    def test_manual_building_before_previous_is_full_and_restart(self):
+        ds = self.residents(40)
+        original = self.building.resolve(ds)
+        rid = self.building.create_room('Testing', 'new')
+        rooms = self.Building(self.path).resolve(ds)
+        self.assertEqual(next(r for r in rooms if r['id'] == rid)['building_level'], 17)
+        self.assertEqual({r['id']: r['building_level'] for r in original},
+                         {r['id']: r['building_level'] for r in rooms if r['id'] != rid})
+        self.building.move(ds[0]['id'], room=rid)
+        self.building.resolve(ds)
+        self.assertEqual(ds[0]['office_id'], rid)
+        self.building.rename_building(2, 'Testing building')
+        self.assertEqual(self.Building(self.path).load_building_names()['2'], 'Testing building')
+
+    def test_explicit_building_capacity_and_duplicate_names(self):
+        first = self.building.create_room('Testing')
+        second = self.building.create_room('Testing', 1)
+        self.assertNotEqual(first, second)
+        for i in range(14):
+            self.building.create_room('Testing', 1)
+        with self.assertRaises(ValueError):
+            self.building.create_room('Overflow', 1)
+        for value in (True, 0, -1, '1', 2):
+            with self.assertRaises(ValueError):
+                self.building.create_room('Bad', value)
+        rid = self.building.create_room('Next', 'new')
+        self.assertEqual(self.building.load_rooms()[rid]['building_level'], 17)
+        self.building.edit_room(first, 'delete')
+        refill = self.building.create_room('Refill', 1)
+        self.assertEqual(self.building.load_rooms()[refill]['building_level'], 1)
+
     def test_forty_have_four_rooms_unique_seats_and_looks(self):
         ds = self.residents()
         rooms = self.building.resolve(ds)

@@ -47,8 +47,16 @@
   <div class="building-head"><div><h2 data-i18n-en="Team and offices">Команда и офисы</h2><p data-i18n-en="Hover over a floor to preview its office, then open it from the preview.">Наведите на этаж, чтобы увидеть офис. Откройте его из предпросмотра.</p></div><span id="buildingTotals"></span></div>
   <div class="city-navigation">
     <nav id="cityBuildings" class="city-buildings" aria-label="Корпуса Артели" data-i18n-aria-label="Artel buildings"></nav>
+    <button id="officeCreateOpen" type="button" class="btn primary" aria-expanded="false" aria-controls="officeCreateForm" data-i18n-en="Create office / building">Создать офис / корпус</button>
     <button id="cityRenameOpen" type="button" class="btn city-rename-open" aria-expanded="false" aria-controls="cityNameForm" data-i18n-en="Building names">Названия корпусов</button>
   </div>
+  <form id="officeCreateForm" class="city-name-form" hidden>
+    <label><span data-i18n-en="Place office in">Разместить офис в</span><select id="officeCreateBuilding"></select></label>
+    <label><span data-i18n-en="Office name">Название офиса</span><input id="officeCreateName" required maxlength="60" autocomplete="off"></label>
+    <div class="city-name-actions"><button type="submit" class="btn primary" data-i18n-en="Create">Создать</button><button id="officeCreateCancel" type="button" class="btn" data-i18n-en="Cancel">Отмена</button></div>
+    <p data-i18n-en="A new building starts with this office on floor 1. Existing offices keep their floors and seats.">Новый корпус появится с этим офисом на первом этаже. Этажи и рассадка существующих офисов сохранятся.</p>
+    <p id="officeCreateStatus" role="status" aria-live="polite"></p>
+  </form>
   <form id="cityNameForm" class="city-name-form" hidden>
     <label><span data-i18n-en="Building">Корпус</span><select id="cityNameBuilding" name="building"></select></label>
     <label><span data-i18n-en="Name">Название</span><input id="cityNameInput" name="name" required autocomplete="off" aria-describedby="cityNameHelp"></label>

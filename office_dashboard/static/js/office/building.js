@@ -288,3 +288,39 @@ async function chooseAppearance(id,variant) {
     renderCharPicker(); renderBuilding(); refreshDrawer(false);
   } catch(e) { const box=$('drawerChars'); box.insertAdjacentHTML('beforeend',`<p class="warn">${esc(e.message)}</p>`); }
 }
+
+// Create the building together with its first office, using a persistent address.
+$('officeCreateOpen')?.addEventListener('click', () => {
+  const form = $('officeCreateForm');
+  if (!form.hidden) { $('officeCreateCancel').click(); return; }
+  const buildings = cityLayout(lastSnapshot.offices || []);
+  $('officeCreateBuilding').innerHTML = buildings.map(b => `<option value="${b.number}" ${b.rooms.length >= CITY_FLOORS ? 'disabled' : ''}>${esc(b.title)} · ${b.rooms.length}/${CITY_FLOORS}</option>`).join('') + `<option value="new">${tr('Новый корпус', 'New building')}</option>`;
+  $('officeCreateBuilding').value = 'new';
+  $('officeCreateStatus').textContent = '';
+  form.hidden = false;
+  $('officeCreateOpen').setAttribute('aria-expanded', 'true');
+  $('officeCreateName').focus();
+});
+$('officeCreateCancel')?.addEventListener('click', () => {
+  if (buildingView.busy) return;
+  const form = $('officeCreateForm');
+  form.reset(); markFormClean(form); form.hidden = true;
+  $('officeCreateOpen').setAttribute('aria-expanded', 'false');
+  $('officeCreateOpen').focus();
+});
+$('officeCreateForm')?.addEventListener('submit', async event => {
+  event.preventDefault();
+  if (buildingView.busy) return;
+  const form = event.currentTarget, choice = $('officeCreateBuilding').value;
+  const name = $('officeCreateName').value.trim();
+  if (!name) { $('officeCreateName').focus(); return; }
+  const controls = [...form.querySelectorAll('input,select,button')];
+  controls.forEach(el => el.disabled = true);
+  $('officeCreateStatus').textContent = tr('Создаём…', 'Creating…');
+  const ok = await roomAction({action:'create', name, building:choice === 'new' ? 'new' : Number(choice)}, tr('Офис создан. Теперь можно переселить в него демонов.', 'Office created. You can now move daemons into it.'));
+  controls.forEach(el => el.disabled = false);
+  if (ok) {
+    $('officeCreateCancel').click();
+    $('officeCreateStatus').textContent = '';
+  } else $('officeCreateStatus').textContent = $('buildingStatus').textContent;
+});

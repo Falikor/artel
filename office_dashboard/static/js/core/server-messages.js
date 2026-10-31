@@ -137,3 +137,6 @@ registerServerMessagePatterns([
   {match:/^Не удалось выполнить Git: ([^\r\n]+)$/, translate:command=>`Could not run Git: ${command}`},
   {match:/^Постоянные правила ([^\r\n]+) длиннее memory\.max_chars=(\d+)$/, translate:(path,limit)=>`Permanent rules in ${path} exceed memory.max_chars=${limit}`},
 ]);
+
+registerServerMessages({"В корпусе нет свободных этажей": "This building has no available floors"});
+registerServerMessages({"Название офиса: от 1 до 60 символов, без переносов строк и управляющих символов": "Office names must contain 1–60 characters, without line breaks or control characters"});

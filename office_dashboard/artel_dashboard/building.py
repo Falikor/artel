@@ -94,6 +94,38 @@ class Building:
                 raise ValueError('Неизвестное действие')
             write_json(self.rooms_path, rooms)
 
+    def create_room(self, name, building='new'):
+        try:
+            title = self._building_name(name)
+        except ValueError:
+            raise ValueError('Название офиса: от 1 до 60 символов, без переносов строк и управляющих символов')
+        with self.lock:
+            rooms = self.load_rooms()
+            levels = {m['building_level'] for m in rooms.values()
+                      if type(m.get('building_level')) is int and m['building_level'] > 0}
+            numbers = {(level - 1) // BUILDING_FLOORS + 1 for level in levels}
+            if building == 'new':
+                number = max(numbers, default=0) + 1
+            elif type(building) is int and building in numbers:
+                number = building
+            else:
+                raise ValueError('Корпус не найден')
+            level = next((n for n in range((number - 1) * BUILDING_FLOORS + 1,
+                                          number * BUILDING_FLOORS + 1) if n not in levels), None)
+            if level is None:
+                raise ValueError('В корпусе нет свободных этажей')
+            # A separate stable group allows identical office names in different buildings.
+            group = json.dumps(['Офисы', title], ensure_ascii=False)
+            floors = {m['floor'] for m in rooms.values() if m.get('group') == group}
+            floor = 0
+            while floor in floors:
+                floor += 1
+            rid = self.room_id(group, floor * CAPACITY)
+            rooms[rid] = {'id': rid, 'group': group, 'floor': floor, 'project': 'Офисы',
+                          'service': '', 'title': title, 'building_level': level}
+            write_json(self.rooms_path, rooms)
+            return rid
+
     def set_variant(self, daemon_id, variant):
         if type(variant) is not int or not 0 <= variant < VARIANTS:
             raise ValueError('Неизвестная палитра персонажа')
