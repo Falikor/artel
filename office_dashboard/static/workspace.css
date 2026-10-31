@@ -4,39 +4,44 @@
 .stats-inner { display: flex; flex-direction: column; gap: 20px; }
 .workspace > h2 { font-size: 26px; line-height: 1.25; font-weight: 650; letter-spacing: -.6px; margin: 0 0 8px; }
 #workspaceHint { max-width: 76ch; margin: 0 0 24px; }
-#workspaceStatus, #statsStatus { font-size: 12px; line-height: 1.5; color: var(--muted); min-height: 18px; margin: 10px 0 18px; overflow-wrap: anywhere; }
+#workspaceStatus, #statsStatus { font-size: 12px; line-height: 1.5; color: var(--muted); min-height: 18px; margin: 2px 2px 16px; overflow-wrap: anywhere; }
 #statsStatus { margin: 0; }
-.workspace .filters, .stats .filters { gap: 10px; padding: 14px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.workspace .filters, .stats .filters { gap: 10px; padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--card); box-shadow: var(--shadow-xs); }
 .workspace .filters > *, .stats .filters > * { min-width: 0; max-width: 100%; box-sizing: border-box; }
 .workspace .filters input, .stats .filters input { flex: 1 1 210px; }
 .workspace .filters select, .stats .filters select { flex: 0 1 220px; }
 .stats .filters > .muted { font-size: 12px; flex: 1 0 100%; order: 10; }
-.workspace > .muted:not(#workspaceHint) { font-size: 12px; margin: 8px 0 0; }
-.workspace input, .workspace select, .workspace textarea, .stats input, .stats select { font: inherit; color: var(--text); background: var(--card); border: 1px solid var(--line); border-radius: 6px; padding: 9px 11px; min-width: 0; max-width: 100%; }
-.workspace :is(input, select, textarea, button):focus-visible, .stats :is(input, select, textarea, button):focus-visible, .table-wrap:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+.workspace > .muted:not(#workspaceHint) { font-size: 12px; margin: 10px 2px 0; }
+.workspace input, .workspace select, .workspace textarea, .stats input, .stats select { font: inherit; color: var(--text); background-color: var(--card); border: 1px solid var(--field-line); border-radius: var(--radius); padding: 8px 11px; min-width: 0; max-width: 100%; }
+.workspace select, .stats select { padding-right: 32px; }
+.workspace button:focus-visible, .stats button:focus-visible, .table-wrap:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .workspace :is(input, select, textarea, button):disabled, .stats :is(input, select, textarea, button):disabled { opacity: .5; cursor: not-allowed; }
 #workspaceBody { min-width: 0; }
 #statsBody { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
-.workspace .kpis, .stats .kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 0; margin: 0 0 24px; background: var(--card); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; }
+/* Tiles grow to fill their row, so an incomplete last row never leaves a hole; 1px gaps draw the rules. */
+.workspace .kpis, .stats .kpis { display: flex; flex-wrap: wrap; gap: 1px; margin: 0 0 24px; background: var(--line); border: 1px solid var(--line); border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-xs); }
 .stats .kpis { margin: 0; }
-.workspace .kpi, .stats .kpi { min-width: 0; padding: 18px 20px; border: 0; border-radius: 0; background: transparent; box-shadow: none; }
-.workspace .kpi + .kpi, .stats .kpi + .kpi { border-left: 1px solid var(--line); }
-.workspace .kpi:nth-child(n+5), .stats .kpi:nth-child(n+5) { border-top: 1px solid var(--line); }
-.workspace .kpi:nth-child(4n+1), .stats .kpi:nth-child(4n+1) { border-left: 0; }
+.workspace .kpi, .stats .kpi { flex: 1 1 calc(25% - 1px); min-width: 180px; padding: 18px 20px; border: 0; border-radius: 0; background: var(--card); box-shadow: none; }
 .workspace .kpi-label, .stats .kpi-label { font-size: 12px; font-weight: 550; line-height: 1.45; color: var(--muted); }
 .workspace .kpi-value, .stats .kpi-value { font: 650 27px/1.3 var(--ui, system-ui); font-variant-numeric: tabular-nums; letter-spacing: -.6px; margin-top: 7px; overflow-wrap: anywhere; }
 .workspace .kpi-sub, .stats .kpi-sub { font-size: 12px; line-height: 1.5; color: var(--muted); margin-top: 5px; }
-.workspace-empty { padding: 40px 24px; border: 1px dashed var(--line); border-radius: 10px; color: var(--muted); background: var(--card); }
-.workspace-empty strong { display: block; font-size: 16px; font-weight: 600; color: var(--text); }
-.workspace-empty p { max-width: 65ch; line-height: 1.65; margin: 8px 0 0; font-size: 14px; }
+/* Empty states teach the next step; each section has its own illustration (body[data-view]). */
+.workspace-empty { --empty-art: url(/static/illustrations/idle.png); display: grid; grid-template-columns: 128px minmax(0, 1fr); grid-template-rows: auto auto; align-content: center; column-gap: 28px; padding: 28px 32px; border: 1px solid var(--line); border-radius: 12px; color: var(--muted); background: var(--card); box-shadow: var(--shadow-xs); }
+.workspace-empty::before { content: ""; grid-row: 1 / 3; align-self: center; width: 128px; aspect-ratio: 1; background: var(--empty-art) center / contain no-repeat; }
+body[data-view="requirements"] .workspace-empty { --empty-art: url(/static/illustrations/rework.png); }
+body[data-view="analytics"] .workspace-empty, body[data-view="retro"] .workspace-empty { --empty-art: url(/static/illustrations/retro.png); }
+body[data-view="memory"] .workspace-empty { --empty-art: url(/static/illustrations/memory.png); }
+.workspace-empty strong { display: block; align-self: end; font-size: 16px; font-weight: 600; color: var(--text); text-wrap: balance; }
+.workspace-empty p { align-self: start; max-width: 62ch; line-height: 1.6; margin: 6px 0 0; font-size: 14px; color: var(--ink-2); }
+:is(.table-card, .chart-card) .workspace-empty { border: 0; box-shadow: none; padding: 8px 0; background: transparent; }
 .workspace-loading { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; padding: 16px 0; }
 .workspace-loading span { min-height: 110px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg-2); }
 .workspace-loading.compact span { min-height: 60px; }
-.workspace .table-wrap { border: 1px solid var(--line); border-radius: 10px; background: var(--card); }
+.workspace .table-wrap { border: 1px solid var(--line); border-radius: 10px; background: var(--card); box-shadow: var(--shadow-xs); }
 .table-wrap { max-width: 100%; overflow: auto; overscroll-behavior-x: contain; }
 .workspace-table { width: 100%; border-collapse: collapse; text-align: left; font-size: 13px; }
 .workspace-table th, .workspace-table td { padding: 14px 16px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.55; }
-.workspace-table th { font-size: 12px; font-weight: 600; color: var(--muted); background: var(--bg-2); white-space: nowrap; }
+.workspace-table th { font-size: 12px; font-weight: 600; color: var(--muted); background: var(--row-head); white-space: nowrap; }
 .workspace-table td { min-width: 95px; max-width: 380px; overflow-wrap: anywhere; }
 .workspace-table tr:last-child td { border-bottom: 0; }
 .workspace-table tbody tr:hover, .stats .tbl tbody tr:hover { background: var(--bg); }
@@ -81,14 +86,14 @@
 .state-queued, .state-running { color: var(--accent); }
 .state-cancelled { color: var(--muted); }
 .workspace pre { max-width: 100%; max-height: 300px; overflow: auto; white-space: pre-wrap; overflow-wrap: anywhere; padding: 14px; border: 1px solid var(--line); border-radius: 6px; background: var(--bg-2); color: var(--text); font: 12px/1.65 ui-monospace, monospace; }
-.stats .chart-card, .stats .table-card { border: 1px solid var(--line); border-radius: 10px; background: var(--card); padding: 20px; margin: 0; min-width: 0; }
+.stats .chart-card, .stats .table-card { border: 1px solid var(--line); border-radius: 10px; background: var(--card); padding: 20px; margin: 0; min-width: 0; box-shadow: var(--shadow-xs); }
 .stats .table-card h3, .stats .chart-card figcaption { font-size: 15px; font-weight: 650; line-height: 1.5; margin: 0 0 18px; }
 .stats .table-card h3 .muted { display: block; font-size: 12px; line-height: 1.6; margin-top: 4px; }
-.stats .table-card .kpis { border: 0; background: var(--bg); margin-bottom: 20px; }
+.stats .table-card .kpis { margin-bottom: 20px; box-shadow: none; }
 .stats .quality-card .chart-card { border: 0; padding: 12px 0; }
 .stats .quality-card .chart-row { margin-bottom: 20px; }
 .stats .tbl { width: 100%; border-collapse: collapse; font-size: 13px; }
-.stats .tbl th { padding: 10px 12px; color: var(--muted); font-size: 12px; white-space: nowrap; border-bottom: 1px solid var(--line); background: var(--bg-2); text-align: left; }
+.stats .tbl th { padding: 10px 12px; color: var(--muted); font-size: 12px; font-weight: 600; white-space: nowrap; border-bottom: 1px solid var(--line); background: var(--row-head); text-align: left; }
 .stats .tbl td { padding: 12px; border-bottom: 1px solid var(--line); vertical-align: top; line-height: 1.55; }
 .stats .tbl .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .stats .tbl .msg { white-space: pre-wrap; min-width: 210px; max-width: 380px; overflow-wrap: anywhere; color: var(--text); }
@@ -114,9 +119,7 @@ th[aria-sort=ascending] .table-sort, th[aria-sort=descending] .table-sort { colo
 #chDemons:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 .chart-scroll-hint { font-size: 12px; margin: -6px 0 10px; }
 @media (max-width: 1050px) {
-  .workspace .kpis, .stats .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .workspace .kpi:nth-child(n+3), .stats .kpi:nth-child(n+3) { border-top: 1px solid var(--line); }
-  .workspace .kpi:nth-child(2n+1), .stats .kpi:nth-child(2n+1) { border-left: 0; }
+  .workspace .kpi, .stats .kpi { flex-basis: calc(50% - 1px); min-width: 0; }
 }
 @media (max-width: 700px) {
   .workspace > h2 { font-size: 23px; }
@@ -126,7 +129,9 @@ th[aria-sort=ascending] .table-sort, th[aria-sort=descending] .table-sort { colo
   .workspace .filters input, .stats .filters input { flex-basis: 100%; }
   .workspace .kpi, .stats .kpi { padding: 15px 12px; }
   .workspace .kpi-value, .stats .kpi-value { font-size: 24px; }
-  .workspace-empty { padding: 28px 18px; }
+  .workspace-empty { grid-template-columns: 1fr; padding: 24px 20px; text-align: center; }
+  .workspace-empty::before { grid-row: auto; justify-self: center; width: 104px; margin-bottom: 12px; }
+  .workspace-empty p { justify-self: center; }
   .workspace-loading { gap: 8px; grid-template-columns: 1fr 1fr; }
   .workspace-loading span { min-height: 90px; }
   .workspace-loading span:nth-child(3) { display: none; }

@@ -466,6 +466,7 @@ function setView(view) {
   showWorkspace(view);
   if (typeof showPrompts === 'function') showPrompts(view);
   document.body.classList.toggle('view-stats', isStats || extra || view === 'prompts');
+  document.body.dataset.view = view;
   $('stats').hidden = !isStats;
   document.querySelectorAll('.view-tab').forEach(b => {
     const active = b.dataset.view === view; b.classList.toggle('on', active);
